@@ -1,1 +1,1 @@
-# amazing-race
+# amazingrace

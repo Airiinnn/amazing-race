@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block css %}
+    <link href="static/styles/style.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <header>
+        <p class="bbcs black">Building<span class="white">Blocs</span>2020</p>
+        <p class="race">Amazing Race</p>
+        <p class="details">Complete as many stages as you can. Good luck and have fun!</p>
+    </header>
+    
+    <section>
+        {% for i in range(stages|length) %}
+            <a href="{{ stages[i][1]|safe }}">
+            {% if i <= maxstage %}
+                <button class="stage unlocked">{{ stages[i][0] }}</button>
+            {% else %}
+                <button class="stage locked">{{ stages[i][0] }} (Locked)</button>
+            {% endif %}
+            </a>
+        {% endfor %}
+        <br>
+        <a href="/logout"><button class="logout">Logout</button></a>
+    </section>
+    
+{% endblock %}}

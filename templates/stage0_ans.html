@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block css %}
+    <link href="static/styles/stage0.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block body %}
+<p class="title">Marks = {{marks}}</p>
+
+{% if marks >= 1 %}
+Good job! You passed!
+{% endif %}
+
+{% if marks < 1 %}
+You failed!
+<a href = '/stage0'>Try again!</a>
+{% endif %}
+
+
+{% endblock %}
