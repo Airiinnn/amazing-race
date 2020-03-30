@@ -60,8 +60,6 @@ def index():
         maxstage = cursor.fetchone()[0]
         connection.close()
 
-        print(maxstage)
-
         with open("stages.csv", 'r') as file:
             reader = csv.reader(file)
             stages = list(reader)
@@ -76,16 +74,16 @@ def stage0():
     with open("stage0.csv", 'r') as file:
         reader = csv.reader(file)
         questions = [read[0:5] for read in reader]
-    print(questions)    
-    return render_template('stage0.html',questions = questions)
+    # print(questions)    
+    return render_template("stage0.html",questions = questions)
 
-@app.route("/submit", methods=['POST'])
+@app.route("/stage0/submission", methods=['POST'])
 @login_required
-def submit():
+def stage0submit():
     with open("stage0.csv", 'r') as file:
         reader = csv.reader(file)
         answers = [read[-1] for read in reader]
-    #print(answers)    
+    # print(answers)    
     correct = []
     marks = 0
     for i in range(len(answers)):
@@ -95,9 +93,58 @@ def submit():
         else:
             marks += 1
             correct.append('y')
-    #print(correct)
-    return render_template('stage0_ans.html',correct = correct,marks = marks)
+    # print(correct)
+    return render_template("stage0_ans.html", correct=correct, marks=marks)
+"""
+@app.route("/stage1")
+@login_required
+def stage1():
+    connection = sqlite3.connect("sqlite_db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT stage FROM user WHERE id='{}'".format(current_user.id))
+    maxstage = cursor.fetchone()[0]
+    connection.close()
+    
+    if maxstage < 1:
+        return render_template("submit.html")
+"""
 
+@app.route("/stage2")
+@login_required
+def stage2():
+    connection = sqlite3.connect("sqlite_db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT stage FROM user WHERE id='{}'".format(current_user.id))
+    maxstage = cursor.fetchone()[0]
+    connection.close()
+    
+    if maxstage < 2:
+        return render_template("submit.html")
+    
+    return render_template("stage2.html")
+
+@app.route("/submission", methods=["POST"])
+@login_required
+def submission():
+    psw = request.form.get("psw")
+
+    connection = sqlite3.connect("sqlite_db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT stage FROM user WHERE id='{}'".format(current_user.id))
+    maxstage = cursor.fetchone()[0]
+    with open("stages.csv", 'r') as file:
+        reader = csv.reader(file)
+        lines = list(reader)
+    if psw == lines[maxstage+1][3]:
+        cursor.execute("UPDATE user SET stage=stage+1 WHERE id=(?)", (current_user.id,))
+        connection.commit()
+        connection.close()
+        return redirect(lines[maxstage+1][2])
+    else:
+        connection.close()
+        return render_template("failure.html")
+
+    
 
 
 

@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block css %}
+    <link href="static/styles/style.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <header>
+        <h1>Next stage</h1>
+        <h3>So you want to move on to the next stage? Password please.</h3>
+    </header>
+
+    <section>
+        <h2 class="wob">Super secret password:</h2>
+        <form action="/submission" method="post">
+            <input type="text" class="text" name="psw" placeholder="Password" autocomplete="off" autofocus required>
+            <br>
+            <input type="submit" class="submit" value="Submit">
+        </form>
+    </section>
+{% endblock %}

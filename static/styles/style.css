@@ -21,28 +21,31 @@ section {
     padding: 64px;
 }
 
-.bbcs {
+h1 {
     font-size: 56px;
     margin: 24px;
+    font-weight: lighter;
 }
 
-.black {
+h2 {
+    font-size: 24px;
+    margin: 24px;
+    font-weight: lighter;
+}
+
+h3 {
+    font-size: 16px;
+    margin: 24px;
+    font-weight: lighter;
+    font-style: italic;
+}
+
+.bow {
     color: #363636;
 }
 
-.white {
+.wob {
     color: #f0f0f0;
-}
-
-.race {
-    font-size: 24px;
-    margin: 24px;
-}
-
-.details {
-    font-size: 16px;
-    margin: 24px;
-    font-style: italic;
 }
 
 .stage {
@@ -93,4 +96,36 @@ section {
     border: 3px solid #E8C4B8;
     width: 204px;
     height: 51px;
+}
+
+.text {
+    width: 200px;
+    height: 50px;
+    border: 3px solid #E8C4B8;
+    border-radius: 25px;
+    background-color: #f0f0f0;
+    margin: 20px;
+    font-size: 16px;
+    text-align: center;
+}
+
+.submit {
+    width: 80px;
+    height: 30px;
+    border: 2px solid #f0f0f0;
+    border-radius: 25px;
+    background-color: #363636;
+    color: #f0f0f0;
+    padding: 5px;
+    margin: 20px;
+    font-size: 16px;
+    font-family: 'Barlow', sans-serif;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+.submit:hover {
+    background-color: #f0f0f0;
+    color: #363636;
+    border: 2px solid #E8C4B8;
 }

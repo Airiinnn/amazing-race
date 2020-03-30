@@ -7,7 +7,7 @@
 
 {% block body %}
 <h1 class="title0">Questions</h1>
-<form action = '/submit' method="POST">
+<form action = '/stage0/submission' method="POST">
         {% for question in questions %}
             <fieldset id = {{loop.index}} class="questions">
             Question: {{question[0]}}<br>

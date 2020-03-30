@@ -6,18 +6,18 @@
 
 {% block body %}
     <header>
-        <p class="bbcs black">Building<span class="white">Blocs</span>2020</p>
-        <p class="race">Amazing Race</p>
-        <p class="details">Complete as many stages as you can. Good luck and have fun!</p>
+        <h1 class="bow">Building<span class="wob">Blocs</span>2020</h1>
+        <h2 class="race">Amazing Race</h2>
+        <h3 class="details">Complete as many stages as you can. Good luck and have fun!</h3>
     </header>
     
     <section>
         {% for i in range(stages|length) %}
-            <a href="{{ stages[i][1]|safe }}">
+            <a href="{{ stages[i][2]|safe }}">
             {% if i <= maxstage %}
-                <button class="stage unlocked">{{ stages[i][0] }}</button>
+                <button class="stage unlocked">{{ stages[i][1] }}</button>
             {% else %}
-                <button class="stage locked">{{ stages[i][0] }} (Locked)</button>
+                <button class="stage locked">{{ stages[i][1] }} (Locked)</button>
             {% endif %}
             </a>
         {% endfor %}
