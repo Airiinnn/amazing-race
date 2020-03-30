@@ -1,14 +1,22 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
 
-{% block css %}
-    <link href="static/styles/login.css" rel="stylesheet">
-{% endblock %}
+<html lang="en">
+    <head>
+        <title>Amazing Race</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="static/styles/login.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Oxygen:300,400&display=swap" rel="stylesheet">
+    </head>
     
-{% block body %}
-    <div class="box">
-        <h1>Welcome to The Amazing Race</h1>
-        <div class="box-bottom">
-            <a href="/login" class="login">Login to get started</a>
+    <body>
+        <div class="box">
+            <img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo">
+            <h1 class="black">BuildingBlo<span class="white">CS</span>2020</h1>
+            <h2>Welcome to The Amazing Race</h2>
+            <div class="box-bottom">
+                <a href="/login" class="login">Login to get started</a>
+            </div>
         </div>
-    </div>
-{% endblock %}
+    </body>
+</html>

@@ -79,23 +79,29 @@ def stage0():
 
 @app.route("/stage0/submission", methods=['POST'])
 @login_required
-def stage0submit():
+def stage0_submission():
     with open("stage0.csv", 'r') as file:
         reader = csv.reader(file)
-        answers = [read[-1] for read in reader]
-    # print(answers)    
+        everything = [read for read in reader]
+        questions = [read[0:5] for read in everything]
+        answers = [read[-2] for read in everything]
+        tips = [read[-1] for read in everything]
+    #print(answers)    
     correct = []
     marks = 0
     for i in range(len(answers)):
         #print(request.form[str(i+1)])
-        if request.form[str(i+1)] != answers[i]:
-            correct.append(request.form[str(i+1)])
-        else:
+        if str(request.form[str(i+1)]) == answers[i]:
             marks += 1
             correct.append('y')
-    # print(correct)
-    return render_template("stage0_ans.html", correct=correct, marks=marks)
-"""
+
+        else:
+            correct.append(request.form[str(i+1)])
+
+    print(correct)
+    print(answers)
+    return render_template("stage0_ans.html", correct=correct, marks=marks, questions = questions,answers = answers,tips = tips)
+
 @app.route("/stage1")
 @login_required
 def stage1():
@@ -107,7 +113,22 @@ def stage1():
     
     if maxstage < 1:
         return render_template("submit.html")
-"""
+    return render_template("stage1.html")
+
+@app.route("/stage1/submission", methods=["POST"])
+@login_required
+def stage1_submission():
+    inject = request.form.get("inject")
+    connection = sqlite3.connect("sqlite_db")
+    cursor = connection.cursor()
+    n = ("test2", "staffkuanxin")
+    cursor.execute("INSERT INTO sql_test (name, password) VALUES (?, ?)", n)  
+    sq = "SELECT * FROM sql_test WHERE name=\'" + inject + "\'"
+    print(sq)
+    cursor.execute(sq)
+    results = cursor.fetchall()
+    connection.close()
+    return render_template("stage1_result.html", results=results)
 
 @app.route("/stage2")
 @login_required
@@ -120,8 +141,36 @@ def stage2():
     
     if maxstage < 2:
         return render_template("submit.html")
-    
     return render_template("stage2.html")
+
+@app.route("/stage2/submission", methods=["POST"])
+@login_required
+def stage2_submission():
+    correct = ["31", "37777", "45", "5", "8", "83", "buildingblocs", "42"]
+    answers = []
+    results = []
+    score = 0
+    answers.append(request.form.get("ans1"))
+    answers.append(request.form.get("ans2"))
+    answers.append(request.form.get("ans3"))
+    answers.append(request.form.get("ans4"))
+    answers.append(request.form.get("ans5"))
+    answers.append(request.form.get("ans6"))
+    answers.append(request.form.get("ans7"))
+    answers.append(request.form.get("ans8"))
+    
+    for i in range(8):
+        if correct[i] == answers[i]:
+            results.append(True)
+            score += 1
+        else:
+            results.append(False)
+        
+    print(answers)
+
+    return render_template("stage2_results.html", answers=answers, results=results, score=score)
+
+
 
 @app.route("/submission", methods=["POST"])
 @login_required

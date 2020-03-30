@@ -1,29 +1,60 @@
 body {
     font-family: "Oxygen", sans-serif;
     text-align: center;
-    background-color: #363636;
-    color: #E8C4B8;
+    background-color: #B3DCE2;
+    color: #363636;
     margin: 0;
     padding: 0;
 }
 
+h1 {
+    font-size: 56px;
+    font-weight: lighter;
+}
+
+h2 {
+    font-size: 24px;
+    font-weight: lighter;
+}
+
+.black {
+    color: #363636;
+}
+
+.white {
+    color: white;
+}
+
+.main-logo {
+    height: 100px;
+    width: 100x;
+}
+
 .box {
     width: 50%;
+    height: 300px;
     margin: 14% auto;
     padding: 10px 30px;
     text-align: center;
     font-size: 28px;
+    border: 2px solid #B3DCE2;
+    border-radius: 5px;
 }
 
 .box-bottom {
-    border-top: 3px solid #f0f0f0;
+    border-top: 2px solid white;
     border-radius: 0px;
     font-size: 14px;
-    padding: 40px 0px;
+    padding: 60px 0px;
+    margin: 40px;
 }
 
 .login {
-    color: #E8C4B8;
+    color: #66B9D2;
+    background-color: white;
+    border: 2px solid white;
+    border-radius: 16px;
+    padding: 20px;
     text-decoration: none;
     font-size: 24px;
     font-family: 'Barlow', sans-serif;
@@ -32,5 +63,7 @@ body {
 }
 
 .login:hover {
-    font-size: 26px;
+    font-size: 25px;
+    color: white;
+    background-color: #EEB9C1;
 }

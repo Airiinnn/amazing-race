@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block css %}
+    <link href="../static/styles/style.css" rel="stylesheet">
+    <link href="../static/styles/stage2.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <header>
+        {% if score == 8 %}
+            <h1>Congratulations</h1>
+            <h2>Password: hi3</h2>
+            <h3>Looks like you're ready to move on!</h3>
+        {% else %}
+            <h1>Uh oh...</h1>
+            <h3>Looks like you got some wrong. Look below and try again!</h3>
+        {% endif %}
+    </header>
+
+    <section>
+        <div class="input-output">
+            <h2>Input to output</h2>
+            {% for i in range(1, 6) %}
+                <img src="/static/images/stage2/qn{{ i }}.png" alt="Question {{ i }}" class="qn">
+                <br>
+                <h4>{{ answers[i-1] }}</h4>
+                {% if results[i-1] == False %}
+                    <h4 class="red">Wrong answer</h4>
+                {% else %}
+                    <h4 class="green">Correct</h4>
+                {% endif %}
+            {% endfor %}
+        </div>
+        
+        <div class="output-input">
+            <h2>Output to input</h2>
+            {% for i in range(6, 9) %}
+                <img src="/static/images/stage2/qn{{ i }}.png" alt="Question {{ i }}" class="qn">
+                <br>
+                <h4>{{ answers[i-1] }}</h4>
+                {% if results[i-1] == False %}
+                    <h4 class="red">Wrong answer</h4>
+                {% else %}
+                    <h4 class="green">Correct</h4>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <a href="/"><button class="submit">Return home</button></a>
+    </section>
+{% endblock %}
