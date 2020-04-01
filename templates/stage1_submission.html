@@ -14,11 +14,9 @@
     </form>
 
 
-    <h1>Results</h1>
+    <h2>Results</h2>
     {% for result in results %}
-        <div class="sql_result">
-            <p>Username: {{ result[0] }}</p>
-            <p>Password: {{ result[1] }}</p>
-        </div>
+        <h4>Username: {{ result[0] }}</h4>
+        <h4>Password: {{ result[1] }}</h4>
     {% endfor %}
 {% endblock %}

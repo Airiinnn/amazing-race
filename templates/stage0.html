@@ -7,21 +7,22 @@
 
 {% block body %}
 <header>
-    <h1 class="title0">Questions</h1>
+    <h1>Stage 0: Cyber ethics and security</h1>
+    <h3>Before we get start coding, let us learn about ethical and security issues that comes with it.</h3>
 </header>
 <section>
     <form action = '/stage0/submission' method="POST">
             {% for question in questions %}
                 <fieldset id = {{loop.index}} class="questions">
-                Question: {{question[0]}}<br>
+                    <h2 class="question">Question: {{ question[0] }}</h2>
                     <input type="radio" id="0" name = {{loop.index}} value = "0" required>
-                    <label for='0'>{{question[1]}}</label><br>
+                    <label for='0'>{{ question[1] }}</label><br>
                     <input type="radio" id="1" name = {{loop.index}} value = "1">
-                    <label for='1'>{{question[2]}}</label><br>
+                    <label for='1'>{{ question[2] }}</label><br>
                     <input type="radio" id="2" name = {{loop.index}} value = "2">
-                    <label for='2'>{{question[3]}}</label><br>
+                    <label for='2'>{{ question[3] }}</label><br>
                     <input type="radio" id="3" name = {{loop.index}} value = "3">
-                    <label for='3'>{{question[4]}}</label><br>
+                    <label for='3'>{{ question[4] }}</label><br>
                 </fieldset>
             {% endfor %}
         <input type = "submit" value = "Submit" class="submit">

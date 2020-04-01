@@ -52,7 +52,7 @@ h2 {
 .login {
     color: #66B9D2;
     background-color: white;
-    border: 2px solid white;
+    border: 2px solid none;
     border-radius: 16px;
     padding: 20px;
     text-decoration: none;

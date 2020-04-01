@@ -19,7 +19,9 @@
                 {% for i in range(1, 6) %}
                     <img src="/static/images/stage2/qn{{ i }}.png" alt="Question {{ i }}" class="qn">
                     <br>
-                    <input type="text" name="ans{{ i }}" class="text" placeholder="Answer" autocomplete="off" required>
+                    <div style="width:100%;">
+                        <input type="text" name="ans{{ i }}" class="text" placeholder="Answer" autocomplete="off" required>
+                    </div>
                 {% endfor %}
             </div>
             
@@ -29,7 +31,9 @@
                 {% for i in range(6, 9) %}
                     <img src="/static/images/stage2/qn{{ i }}.png" alt="Question {{ i }}" class="qn">
                     <br>
-                    <input type="text" name="ans{{ i }}" class="text" placeholder="Answer" autocomplete="off" required>
+                    <div style="width:100%;">
+                        <input type="text" name="ans{{ i }}" class="text" placeholder="Answer" autocomplete="off" required>
+                    </div>
                 {% endfor %}
             </div>
 

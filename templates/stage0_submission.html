@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+
+{% block css %}
+    <link href="../static/styles/style.css" rel="stylesheet">
+    <link href="../static/styles/stage0.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block body %}
+    <header>
+        {% if marks >= 3 %}
+            <h1>Congratulations</h1>
+            <h2>Password: hi1</h2>
+            <h3>Looks like you're ready to move on!</h3>
+        {% else %}
+            <h1>Uh oh...</h1>
+            <h3>Looks like you got some wrong. Look below and try again!</h3>
+        {% endif %}
+    </header>
+
+    <section>
+        {% for question in questions %}
+            <fieldset id = {{loop.index}} class="questions">
+            <h2 class="question">Question: {{question[0]}}</h4><br>
+            {% if answers[loop.index-1] == '0' and correct[loop.index-1]=='y'%}
+                <div class = 'correct'>
+                    <input type="radio" id="0" name = {{loop.index}} value = "0" disabled checked>
+                    <label for='0'>{{question[1]}}</label><br>
+                </div>
+            {% elif correct[loop.index-1] == '0' %}
+            <div class = 'wrong'>
+                <input type="radio" id="0" name = {{loop.index}} value = "0" disabled checked>
+                <label for='0'>{{question[1]}}</label><br>
+            </div>
+            {% else %}
+            <input type="radio" id="0" name = {{loop.index}} value = "0" disabled>
+            <label for='0'>{{question[1]}}</label><br>
+            {% endif %}
+
+
+            {% if  answers[loop.index-1] == '1' and correct[loop.index-1]=='y'%}
+                <div class = 'correct'>
+                    <input type="radio" id="1" name = {{loop.index}} value = "1" disabled checked>
+                    <label for='1'>{{question[2]}}</label><br>
+                </div>
+            {% elif correct[loop.index-1] == '1' %}
+            <div class = 'wrong'>
+                <input type="radio" id="1" name = {{loop.index}} value = "1" disabled checked>
+                <label for='1'>{{question[2]}}</label><br>
+            </div>
+            {% else %}
+            <input type="radio" id="1" name = {{loop.index}} value = "1" disabled>
+            <label for='1'>{{question[2]}}</label><br>
+            {% endif %}
+
+
+            {% if  answers[loop.index-1] == '2' and correct[loop.index-1]=='y'%}
+                <div class = 'correct'>
+                    <input type="radio" id="2" name = {{loop.index}} value = "2" disabled checked>
+                    <label for='2'>{{question[3]}}</label><br>
+                </div>
+            {% elif correct[loop.index-1] == '2' %}
+            <div class = 'wrong'>
+                <input type="radio" id="2" name = {{loop.index}} value = "2" disabled checked>
+                <label for='2'>{{question[3]}}</label><br>
+            </div>
+            {% else %}
+            <input type="radio" id="2" name = {{loop.index}} value = "2" disabled>
+            <label for='2'>{{question[3]}}</label><br>
+            {% endif %}
+
+
+            {% if  answers[loop.index-1] == '3' and correct[loop.index-1]=='y'%}
+                <div class = 'correct'>
+                    <input type="radio" id="3" name = {{loop.index}} value = "3" disabled checked> 
+                    <label for='3'>{{question[4]}}</label><br>
+                </div>
+            {% elif correct[loop.index-1] == '3' %}
+            <div class = 'wrong'>
+                <input type="radio" id="3" name = {{loop.index}} value = "3" disabled checked>
+                <label for='3'>{{question[4]}}</label><br>
+            </div>
+            {% else %}
+            <input type="radio" id="3" name = {{loop.index}} value = "3" disabled>
+            <label for='3'>{{question[4]}}</label><br>
+            {% endif %}
+            </fieldset>
+            {% if correct[loop.index-1]!='y'%}
+            <p>Tip! {{tips[loop.index-1]}}</p>
+            {% endif %}
+        {% endfor %}
+
+        <br><br>
+        {% if marks >= 3 %}
+            <h2>Good job! You passed!</h2>
+            <h3>The password is "hi1".</h3>
+            <a href="/"><button class="back">Return to main page</button></a>
+        {% endif %}
+
+        {% if marks < 3 %}
+            <h2>You failed!</h2>
+            <h3>Please try again.</h3>
+            <a href="/stage0"><button class="back">Try again!</button></a>
+        {% endif %}
+
+    </section>
+
+{% endblock %}

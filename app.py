@@ -21,8 +21,8 @@ from db import init_db_command
 from user import User
 
 # Configuration
-GOOGLE_CLIENT_ID = os.environ.get("CLIENT_ID")
-GOOGLE_CLIENT_SECRET = os.environ.get("CLIENT_SECRET")
+GOOGLE_CLIENT_ID = "685992959593-701prlcssas6vu8h87srulmbr6t40hg2.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET = "zKHCQ2IYsBdn50r7Umyy2ZUM"
 GOOGLE_DISCOVERY_URL = (
     "https://accounts.google.com/.well-known/openid-configuration"
 )
@@ -100,7 +100,7 @@ def stage0_submission():
 
     print(correct)
     print(answers)
-    return render_template("stage0_ans.html", correct=correct, marks=marks, questions = questions,answers = answers,tips = tips)
+    return render_template("stage0_submission.html", correct=correct, marks=marks, questions = questions,answers = answers,tips = tips)
 
 @app.route("/stage1")
 @login_required
@@ -128,7 +128,7 @@ def stage1_submission():
     cursor.execute(sq)
     results = cursor.fetchall()
     connection.close()
-    return render_template("stage1_result.html", results=results)
+    return render_template("stage1_submission.html", results=results)
 
 @app.route("/stage2")
 @login_required
@@ -158,6 +158,8 @@ def stage2_submission():
     answers.append(request.form.get("ans6"))
     answers.append(request.form.get("ans7"))
     answers.append(request.form.get("ans8"))
+
+    # SHORTEN CODE ABOVE
     
     for i in range(8):
         if correct[i] == answers[i]:
@@ -168,7 +170,7 @@ def stage2_submission():
         
     print(answers)
 
-    return render_template("stage2_results.html", answers=answers, results=results, score=score)
+    return render_template("stage2_submission.html", answers=answers, results=results, score=score)
 
 
 
