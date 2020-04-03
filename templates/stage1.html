@@ -6,10 +6,17 @@
 {% endblock %}
 
 {% block body %}
-    <h1> SQL Injection</h1>
-    <p>SQL search can be done through ...<!--Insert SQL TEACHINGS --></p>
-    <form action="/stage1/submission" method="POST">
-        <p><input class= "inject" name="inject" type = "text" placeholder="Enter your username to check password"></p>
-        <input type = "submit" value = "Submit" class="submit">
-    </form>
+    <header>
+        <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
+        <h1>Stage 5: Databases</h1>
+        <h3>SQL or NoSQL? Hmm...</h3>
+    </header>
+    
+    <section>
+        <h2>SQL search can be done through ...<!--Insert SQL TEACHINGS --></h2>
+        <form action="/stage1/submission" method="POST">
+            <p><input class= "inject" name="inject" type = "text" placeholder="Enter your username to check password"></p>
+            <input type = "submit" value = "Submit" class="submit">
+        </form>
+    </section>
 {% endblock %}

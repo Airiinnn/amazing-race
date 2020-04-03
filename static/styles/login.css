@@ -1,8 +1,8 @@
 body {
     font-family: "Oxygen", sans-serif;
     text-align: center;
-    background-color: #B3DCE2;
-    color: #363636;
+    background-color: #8A0303;
+    color: white;
     margin: 0;
     padding: 0;
 }
@@ -27,7 +27,7 @@ h2 {
 
 .main-logo {
     height: 100px;
-    width: 100x;
+    width: 100px;
 }
 
 .box {
@@ -37,7 +37,7 @@ h2 {
     padding: 10px 30px;
     text-align: center;
     font-size: 28px;
-    border: 2px solid #B3DCE2;
+    border: 2px solid transparent;
     border-radius: 5px;
 }
 
@@ -50,9 +50,9 @@ h2 {
 }
 
 .login {
-    color: #66B9D2;
+    color: #8A0303;
     background-color: white;
-    border: 2px solid none;
+    border: 2px solid white;
     border-radius: 16px;
     padding: 20px;
     text-decoration: none;
@@ -63,7 +63,6 @@ h2 {
 }
 
 .login:hover {
-    font-size: 25px;
     color: white;
-    background-color: #EEB9C1;
+    background-color: #8A0303;
 }

@@ -7,6 +7,7 @@
 
 {% block body %}
     <header>
+        <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
         {% if score == 8 %}
             <h1>Congratulations</h1>
             <h2>Password: hi3</h2>
@@ -46,6 +47,10 @@
             {% endfor %}
         </div>
 
-        <a href="/"><button class="submit">Return home</button></a>
+        {% if score == 8 %}
+            <a href="/"><button class="submit">Return home</button></a>
+        {% else %}
+            <a href="/stage2"><button class="submit">Try again</button></a>
+        {% endif %}
     </section>
 {% endblock %}

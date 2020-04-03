@@ -2,7 +2,7 @@ body {
     font-family: "Oxygen", sans-serif;
     text-align: center;
     background-color: white;
-    color: #363636;
+    color: white;
     margin: 0;
     padding: 0;
     position: relative;
@@ -15,7 +15,7 @@ a {
 }
 
 header {
-    background-color: #B3DCE2;
+    background-color: #8A0303;
     padding: 64px;
     box-shadow: inset 0 -15px 5px -16px grey;
 }
@@ -23,6 +23,7 @@ header {
 section {
     padding: 5%;
     padding-bottom: 264px;
+    color: #363636;
 }
 
 footer {
@@ -30,7 +31,7 @@ footer {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-color: #B3DCE2;
+    background-color: #8A0303;
     padding: 20px 0px;
     box-shadow: inset 0 15px 5px -16px grey;
     position: absolute;
@@ -110,7 +111,7 @@ h5 {
 
 .link {
     text-decoration: none;
-    color: #363636;
+    color: white;
     margin-right: 5px;
 }
 
@@ -138,24 +139,24 @@ h5 {
 }
 
 .unlocked {
-    color: #66B9D2;
+    color: #8A0303;
     background-color: white;
-    border: 3px solid #B3DCE2;
+    border: 3px solid #8A0303;
 }
 
 .locked {
     color: white;
-    background-color: #EEB9C1;
-    border: 3px solid #EEB9C1;
+    background-color: #8A0303;
+    border: 3px solid #8A0303;
 }
 
 .logout {
     width: 200px;
     height: 50px;
-    border: 2px solid #B3DCE2;
+    border: 2px solid #8A0303;
     border-radius: 25px;
     background-color: white;
-    color: #66B9D2;
+    color: #8A0303;
     padding: 5px;
     margin: 20px;
     font-size: 20px;
@@ -165,7 +166,7 @@ h5 {
 }
 
 .logout:hover {
-    background-color: #B3DCE2;
+    background-color: #8A0303;
     color: white;
     width: 204px;
     height: 51px;

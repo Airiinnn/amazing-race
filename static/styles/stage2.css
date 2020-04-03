@@ -1,5 +1,5 @@
 .qn {
-    width: 90%;
+    width: 70%;
 }
 
 .output-input {
@@ -12,7 +12,7 @@
     border-right: None;
     border-left: None;
     border-bottom-width: 3px;
-    border-bottom-color: #B3DCE2;
+    border-bottom-color: #8A0303;
     margin: 20px;
     padding: 10px;
     font-size: 16px;
@@ -23,10 +23,10 @@
 .submit {
     width: 150px;
     height: 50px;
-    background-color: #B3DCE2;
-    color: white;
-    border: 2px solid #B3DCE2;
+    border: 2px solid #8A0303;
     border-radius: 25px;
+    background-color: white;
+    color: #8A0303;
     padding: 5px;
     margin: 20px;
     font-size: 16px;
@@ -36,8 +36,8 @@
 }
 
 .submit:hover {
-    background-color: #E8C4B8;
-    border: 3px solid #E8C4B8;
+    background-color: #8A0303;
+    color: white;
 }
 
 .red {

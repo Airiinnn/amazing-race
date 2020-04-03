@@ -158,8 +158,6 @@ def stage2_submission():
     answers.append(request.form.get("ans6"))
     answers.append(request.form.get("ans7"))
     answers.append(request.form.get("ans8"))
-
-    # SHORTEN CODE ABOVE
     
     for i in range(8):
         if correct[i] == answers[i]:
