@@ -13,13 +13,30 @@
     </header>
 
     <section>
-        <h2>SQL search can be done through ...<!--Insert SQL TEACHINGS --></h2>
         <form action="/stage1/submission" method="POST">
+            <h2><b>STAGE 1</b></h2>
+            <h2>Fill in the blanks</h2>
+            <br>
+            <h2>Q1: How to select everything in a table?</h2>
+            <p><input class="inject" name = "q1" type="text" placeholder="SELECT {fill in} FROM sql_data"></p>
+            <br>
+            <h2>Q2: How to select items from a column in a table, with given conditions?</h2>
+            <p><input class="inject" name = "q2" type="text" placeholder="SELECT {fill in} FROM sql_data {fill in} id=1"></p>
+            <br>
+            <h2>Q3: How to insert new data into the table?</h2>
+            <p><input class="inject" name = "q3" type="text" placeholder="{fill in} {fill in} sql_data (id) {fill in} (1)"></p>
+            <br>
+            <br>
+            <h2><b>STAGE 2</b></h2>
+            <h2>GET THE FLAG (PS: Its one of the passwords)</h2>
             <p><input class= "inject" name="inject" type = "text" placeholder="Enter your username to check password"></p>
             <input type = "submit" value = "Submit" class="submit">
         </form>
         
         <h2>Results</h2>
+        {% if res %}
+            <h4>{{ res }}</h4>
+        {% endif %}
         {% if results %}
             {% for result in results %}
                 <h4>Username: {{ result[0] }}</h4>
@@ -27,7 +44,8 @@
             {% endfor %}
         {% else %}
             <h3>No results found</h3>
-        {% endif%}
+        {% endif %}
+        
     </section>
 
     
