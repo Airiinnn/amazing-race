@@ -118,17 +118,41 @@ def stage1():
 @app.route("/stage1/submission", methods=["POST"])
 @login_required
 def stage1_submission():
+    corr1 = True
+    corr2 = True
+    corr3 = True
+    q1 = request.form.get("q1")
+    q2 = request.form.get("q2")
+    q3 = request.form.get("q3")
+    if q1 != "SELECT * FROM sql_data":
+        corr1 = False
+    if q2 != "SELECT * FROM sql_data WHERE id=1":
+        corr2 = False
+    if q3 != "INSERT INTO sql_data (id) VALUES (1)":
+        corr3 = False
     inject = request.form.get("inject")
     connection = sqlite3.connect("sqlite_db")
     cursor = connection.cursor()
-    n = ("test2", "staffkuanxin")
-    cursor.execute("INSERT INTO sql_test (name, password) VALUES (?, ?)", n)  
-    sq = "SELECT * FROM sql_test WHERE name=\'" + inject + "\'"
+    #n = ("test2", "staffkuanxin")
+    #cursor.execute("INSERT INTO sql_test (name, password) VALUES (?, ?)", n)  
+    sq = "SELECT * FROM sql_users WHERE name=\'" + inject + "\'"
+    #ans: 'or''='
     print(sq)
     cursor.execute(sq)
     results = cursor.fetchall()
+    res = ""
+    if not corr1:
+        res = "Error, please enter correct answer for Q1 first"
+        results = None
+    elif not corr2:
+        res = "Error, please enter correct answer for Q2 first"
+        results = None
+    elif not corr3:
+        res = "Error, please enter correcct answer for Q3 first"
+        results = None
+
     connection.close()
-    return render_template("stage1_submission.html", results=results)
+    return render_template("stage1_submission.html", results=results, res = res)
 
 @app.route("/stage2")
 @login_required
