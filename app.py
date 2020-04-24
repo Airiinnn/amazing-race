@@ -67,6 +67,8 @@ def index():
         return render_template("index.html", maxstage=maxstage, stages=stages)
     else:
         return render_template("login.html")
+
+#STAGE 0: Cyber Security, KEY: --NIL--
         
 @app.route("/stage0")
 @login_required
@@ -102,57 +104,32 @@ def stage0_submission():
     print(answers)
     return render_template("stage0_submission.html", correct=correct, marks=marks, questions = questions,answers = answers,tips = tips)
 
+
+
+
+#STAGE 1: PYTHON BASICS, KEY: hi1
+
 @app.route("/stage1")
 @login_required
 def stage1():
-    connection = sqlite3.connect("sqlite_db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT stage FROM user WHERE id='{}'".format(current_user.id))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
-    
-    if maxstage < 1:
-        return render_template("submit.html")
-    return render_template("stage1.html")
+    #type here
+    pass
+
+
+
 
 @app.route("/stage1/submission", methods=["POST"])
 @login_required
 def stage1_submission():
-    corr1 = True
-    corr2 = True
-    corr3 = True
-    q1 = request.form.get("q1")
-    q2 = request.form.get("q2")
-    q3 = request.form.get("q3")
-    if q1 != "SELECT * FROM sql_data":
-        corr1 = False
-    if q2 != "SELECT * FROM sql_data WHERE id=1":
-        corr2 = False
-    if q3 != "INSERT INTO sql_data (id) VALUES (1)":
-        corr3 = False
-    inject = request.form.get("inject")
-    connection = sqlite3.connect("sqlite_db")
-    cursor = connection.cursor()
-    #n = ("test2", "staffkuanxin")
-    #cursor.execute("INSERT INTO sql_test (name, password) VALUES (?, ?)", n)  
-    sq = "SELECT * FROM sql_users WHERE name=\'" + inject + "\'"
-    #ans: 'or''='
-    print(sq)
-    cursor.execute(sq)
-    results = cursor.fetchall()
-    res = ""
-    if not corr1:
-        res = "Error, please enter correct answer for Q1 first"
-        results = None
-    elif not corr2:
-        res = "Error, please enter correct answer for Q2 first"
-        results = None
-    elif not corr3:
-        res = "Error, please enter correcct answer for Q3 first"
-        results = None
+    #type here
+    pass
 
-    connection.close()
-    return render_template("stage1_submission.html", results=results, res = res)
+
+
+
+
+
+#STAGE 2: COMPUTATIONAL THINKING, KEY: hi2
 
 @app.route("/stage2")
 @login_required
@@ -195,6 +172,188 @@ def stage2_submission():
     return render_template("stage2_submission.html", answers=answers, results=results, score=score)
 
 
+
+
+
+#STAGE 3: SQL, KEY: hi3
+
+@app.route("/stage3")
+@login_required
+def stage3():
+    connection = sqlite3.connect("sqlite_db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT stage FROM user WHERE id='{}'".format(current_user.id))
+    maxstage = cursor.fetchone()[0]
+    connection.close()
+    
+    if maxstage < 1:
+        return render_template("submit.html")
+    return render_template("stage3.html")
+
+@app.route("/stage3/submission", methods=["POST"])
+@login_required
+def stage3_submission():
+    corr1 = True
+    corr2 = True
+    corr3 = True
+    q1 = request.form.get("q1")
+    q2 = request.form.get("q2")
+    q3 = request.form.get("q3")
+    if q1 != "SELECT * FROM sql_data":
+        corr1 = False
+    if q2 != "SELECT * FROM sql_data WHERE id=1":
+        corr2 = False
+    if q3 != "INSERT INTO sql_data (id) VALUES (1)":
+        corr3 = False
+    inject = request.form.get("inject")
+    connection = sqlite3.connect("sqlite_db")
+    cursor = connection.cursor()
+    #n = ("test2", "staffkuanxin")
+    #cursor.execute("INSERT INTO sql_test (name, password) VALUES (?, ?)", n)  
+    sq = "SELECT * FROM sql_users WHERE name=\'" + inject + "\'"
+    #ans: 'or''='
+    print(sq)
+    cursor.execute(sq)
+    results = cursor.fetchall()
+    res = ""
+    if not corr1:
+        res = "Error, please enter correct answer for Q1 first"
+        results = None
+    elif not corr2:
+        res = "Error, please enter correct answer for Q2 first"
+        results = None
+    elif not corr3:
+        res = "Error, please enter correcct answer for Q3 first"
+        results = None
+
+    connection.close()
+    return render_template("stage3_submission.html", results=results, res = res)
+
+
+
+
+#STAGE 4: NOSQL, KEY: hi4
+
+@app.route("/stage4")
+@login_required
+def stage4():
+    #type here
+    pass
+
+
+
+
+@app.route("/stage4/submission", methods=["POST"])
+@login_required
+def stage4_submission():
+    #type here
+    pass
+
+
+
+
+
+
+#STAGE 5: COMPETITIVE PROGRAMMING, KEY: hi5
+
+@app.route("/stage5")
+@login_required
+def stage5():
+    #type here
+    pass
+
+
+
+
+@app.route("/stage5/submission", methods=["POST"])
+@login_required
+def stage5_submission():
+    #type here
+    pass
+
+
+
+
+
+
+#STAGE 6: SOCKET PROGRAMMING, KEY: hi6
+
+@app.route("/stage6")
+@login_required
+def stage6():
+    #type here
+    pass
+
+
+
+
+@app.route("/stage6/submission", methods=["POST"])
+@login_required
+def stage6_submission():
+    #type here
+    pass
+
+
+
+
+
+
+
+
+
+#STAGE 7: HTML / CSS, KEY: hi7
+
+@app.route("/stage7")
+@login_required
+def stage7():
+    #type here
+    pass
+
+
+
+
+@app.route("/stage7/submission", methods=["POST"])
+@login_required
+def stage7_submission():
+    #type here
+    pass
+
+
+
+
+
+
+
+
+
+
+
+#STAGE 8: JAVASCRIPT, KEY: hi8
+
+@app.route("/stage8")
+@login_required
+def stage8():
+    #type here
+    pass
+
+
+
+
+@app.route("/stage8/submission", methods=["POST"])
+@login_required
+def stage8_submission():
+    #type here
+    pass
+
+
+
+
+
+
+
+
+
+#KEY INSERT, TO GET TO NEXT STAGE
 
 @app.route("/submission", methods=["POST"])
 @login_required
