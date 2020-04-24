@@ -109,8 +109,20 @@ def stage0_submission():
 
 #STAGE 1: PYTHON BASICS, KEY: hi1
 
+@app.route("/stage1")
+@login_required
+def stage1():
+    #type here
+    pass
 
 
+
+
+@app.route("/stage1/submission", methods=["POST"])
+@login_required
+def stage1_submission():
+    #type here
+    pass
 
 
 
@@ -222,6 +234,20 @@ def stage3_submission():
 
 #STAGE 4: NOSQL, KEY: hi4
 
+@app.route("/stage4")
+@login_required
+def stage4():
+    #type here
+    pass
+
+
+
+
+@app.route("/stage4/submission", methods=["POST"])
+@login_required
+def stage4_submission():
+    #type here
+    pass
 
 
 
@@ -230,6 +256,20 @@ def stage3_submission():
 
 #STAGE 5: COMPETITIVE PROGRAMMING, KEY: hi5
 
+@app.route("/stage5")
+@login_required
+def stage5():
+    #type here
+    pass
+
+
+
+
+@app.route("/stage5/submission", methods=["POST"])
+@login_required
+def stage5_submission():
+    #type here
+    pass
 
 
 
@@ -237,6 +277,23 @@ def stage3_submission():
 
 
 #STAGE 6: SOCKET PROGRAMMING, KEY: hi6
+
+@app.route("/stage6")
+@login_required
+def stage6():
+    #type here
+    pass
+
+
+
+
+@app.route("/stage6/submission", methods=["POST"])
+@login_required
+def stage6_submission():
+    #type here
+    pass
+
+
 
 
 
@@ -246,6 +303,25 @@ def stage3_submission():
 
 #STAGE 7: HTML / CSS, KEY: hi7
 
+@app.route("/stage7")
+@login_required
+def stage7():
+    #type here
+    pass
+
+
+
+
+@app.route("/stage7/submission", methods=["POST"])
+@login_required
+def stage7_submission():
+    #type here
+    pass
+
+
+
+
+
 
 
 
@@ -253,6 +329,22 @@ def stage3_submission():
 
 
 #STAGE 8: JAVASCRIPT, KEY: hi8
+
+@app.route("/stage8")
+@login_required
+def stage8():
+    #type here
+    pass
+
+
+
+
+@app.route("/stage8/submission", methods=["POST"])
+@login_required
+def stage8_submission():
+    #type here
+    pass
+
 
 
 
