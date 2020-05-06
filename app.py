@@ -256,17 +256,28 @@ def stage4_submission():
 
 #STAGE 5: COMPETITIVE PROGRAMMING, KEY: hi5
 
-@app.route("/stage5")
-@login_required
+@app.route("/stage5", methods=["GET", "POST"])
+# @login_required
 def stage5():
-    #type here
-    pass
+    if request.method == "GET":
+        return render_template("stage5.html")
+    else:
+        code = request.form.get("code")
+        with open("paint/paint.py", 'w') as file:
+            file.writelines(code)
 
+        # exec(open("paint.py").read())
+        # return code
+        cmd = "podman build -t paint-python ."
+        os.system(cmd)
+        cmd = "podman run -p 3333:3333 hello-world-python"
+        os.system(cmd)
 
+        return yes
 
 
 @app.route("/stage5/submission", methods=["POST"])
-@login_required
+# login_required
 def stage5_submission():
     #type here
     pass
@@ -469,4 +480,9 @@ def logout():
     return redirect(url_for("index"))
 
 if __name__ == "__main__":
-    app.run(ssl_context="adhoc", debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    #app.debug = False
+    #for normal local testing use this run
+    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    #for deployment to heroku app use this
+    app.run(host='0.0.0.0', port=port, debug=True)
