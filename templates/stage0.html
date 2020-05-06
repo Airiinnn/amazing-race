@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 
-{% block head %}
-    <link href="static/styles/style.css" rel="stylesheet">
-    <link href="static/styles/stage0.css" rel="stylesheet">
+{% block css %}
+    <link href="../static/styles/style.css" rel="stylesheet">
+    <link href="../static/styles/stage0.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -13,20 +13,16 @@
     </header>
     
     <section>
-        <form action = '/stage0/submission' method="POST">
-                {% for question in questions %}
-                    <fieldset id = {{loop.index}} class="questions">
-                        <h2 class="question">Question: {{ question[0] }}</h2>
-                        <input type="radio" id="0" name = {{loop.index}} value = "0" required>
-                        <label for='0'>{{ question[1] }}</label><br>
-                        <input type="radio" id="1" name = {{loop.index}} value = "1">
-                        <label for='1'>{{ question[2] }}</label><br>
-                        <input type="radio" id="2" name = {{loop.index}} value = "2">
-                        <label for='2'>{{ question[3] }}</label><br>
-                        <input type="radio" id="3" name = {{loop.index}} value = "3">
-                        <label for='3'>{{ question[4] }}</label><br>
-                    </fieldset>
-                {% endfor %}
+        <form action = '/stage0/{{question_id}}/submission' method="POST">
+                <h2 class="question">Question: {{ question[0] }}</h2>
+                <input type="radio" id="0" name = 'question' value = "0" required>
+                <label for='0'>{{ question[1] }}</label><br>
+                <input type="radio" id="1" name = 'question' value = "1">
+                <label for='1'>{{ question[2] }}</label><br>
+                <input type="radio" id="2" name = 'question' value = "2">
+                <label for='2'>{{ question[3] }}</label><br>
+                <input type="radio" id="3" name = 'question' value = "3">
+                <label for='3'>{{ question[4] }}</label><br>
             <input type = "submit" value = "Submit" class="submit">
         </form>
     </section>

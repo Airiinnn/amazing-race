@@ -3,6 +3,7 @@ import json
 import os
 import sqlite3
 import csv
+import random
 
 # Third-party libraries
 from flask import Flask, render_template, redirect, request, url_for
@@ -70,40 +71,56 @@ def index():
 
 #STAGE 0: Cyber Security, KEY: --NIL--
         
-@app.route("/stage0")
+#STAGE 0: Cyber Security, KEY: --NIL--
+
+#All questions
+questions = []
+with open("stage0.csv", 'r') as file:
+    reader = csv.reader(file)
+    print('once!')
+    questions = [read for read in reader]
+    
+@app.route('/stage0')
 @login_required
-def stage0():
-    with open("stage0.csv", 'r') as file:
-        reader = csv.reader(file)
-        questions = [read[0:5] for read in reader]
-    # print(questions)    
-    return render_template("stage0.html",questions = questions)
+def stage0_main():
+    if questions:
+        qn = random.randint(0,len(questions)-1)
+    else:
+        return redirect('stage0/winner')
+    return redirect('stage0/'+str(qn))
 
-@app.route("/stage0/submission", methods=['POST'])
+     
+
+@app.route("/stage0/<int:question_id>")
+#@login_required
+def stage0(question_id):
+    question = questions[question_id]
+    print(question)    
+    return render_template("stage0.html",question = question,question_id = question_id)
+
+
+@app.route("/stage0/<int:question_id>/submission", methods=['POST'])
 @login_required
-def stage0_submission():
-    with open("stage0.csv", 'r') as file:
-        reader = csv.reader(file)
-        everything = [read for read in reader]
-        questions = [read[0:5] for read in everything]
-        answers = [read[-2] for read in everything]
-        tips = [read[-1] for read in everything]
-    #print(answers)    
-    correct = []
-    marks = 0
-    for i in range(len(answers)):
-        #print(request.form[str(i+1)])
-        if str(request.form[str(i+1)]) == answers[i]:
-            marks += 1
-            correct.append('y')
+def stage0_submission(question_id):
+    question = questions[question_id]
+    tip = question[-1]
+    answer = request.form['question']
+    correct = question[-2]
+    #print(answer)
+    if answer == correct:
+        correct = 'y'
 
-        else:
-            correct.append(request.form[str(i+1)])
+        del questions[question_id]
+        #print(current_user.questions)
+    
+    return render_template("stage0_submission.html", correct=correct, answer = answer,tip = tip, question = question)
 
-    print(correct)
-    print(answers)
-    return render_template("stage0_submission.html", correct=correct, marks=marks, questions = questions,answers = answers,tips = tips)
-
+@app.route('/stage0/winner')
+@login_required
+def stage0_winner():
+    if questions:
+        return render_template("stage0_error.html")
+    return render_template('stage0_winner.html')
 
 
 
@@ -273,7 +290,7 @@ def stage5():
         cmd = "podman run -p 3333:3333 hello-world-python"
         os.system(cmd)
 
-        return yes
+        return 'yes'
 
 
 @app.route("/stage5/submission", methods=["POST"])
