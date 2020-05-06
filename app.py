@@ -479,6 +479,8 @@ def logout():
     logout_user()
     return redirect(url_for("index"))
 
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     #app.debug = False
