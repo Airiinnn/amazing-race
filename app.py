@@ -268,12 +268,12 @@ def stage5():
 
         # exec(open("paint.py").read())
         # return code
-        cmd = "podman build -t paint-python ."
+        cmd = "docker build -t paint-python ."
         os.system(cmd)
-        cmd = "podman run -p 3333:3333 hello-world-python"
+        cmd = "docker run -p 3333:3333 hello-world-python"
         os.system(cmd)
 
-        return yes
+        return "yes"
 
 
 @app.route("/stage5/submission", methods=["POST"])
