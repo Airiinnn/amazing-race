@@ -5,6 +5,7 @@ import sqlite3
 import csv
 import time
 import random
+import subprocess
 
 # Third-party libraries
 from flask import Flask, render_template, redirect, request, url_for
@@ -78,7 +79,7 @@ def index():
 questions = []
 with open("stage0.csv", 'r') as file:
     reader = csv.reader(file)
-    print('once!')
+    # print('once!')
     questions = [read for read in reader]
     
 @app.route('/stage0')
@@ -281,16 +282,25 @@ def stage5():
         return render_template("stage5.html")
     else:
         code = request.form.get("code")
+        with open("paint.py", 'w') as file:
+            file.write(code)
 
         run = True
-        for line in code:
-            if "sqlite3" in code:
-                run = False
-                break
+        """
+        if "sqlite3" in code:
+            run = False
+        """
         
         if run:
-            exec(code, {})
-            return "yes"
+            paintInput = open("paint.in")
+            try:
+                output = subprocess.check_output("python paint.py", timeout=3, stdin=paintInput)
+            except subprocess.TimeoutExpired:
+                return "TLE"
+            except subprocess.CalledProcessError:
+                return "error"
+            
+            return output
         else:
             return "no"
 
