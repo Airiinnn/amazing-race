@@ -6,6 +6,7 @@ import csv
 import time
 import random
 import subprocess
+import sys
 
 # Third-party libraries
 from flask import Flask, render_template, redirect, request, url_for
@@ -282,27 +283,46 @@ def stage5():
         return render_template("stage5.html")
     else:
         code = request.form.get("code")
-        with open("paint.py", 'w') as file:
-            file.write(code)
 
-        run = True
-        """
-        if "sqlite3" in code:
-            run = False
-        """
+        # prevent user for accessing files
+        if "open(" in code or "file" in code:
+            output = "No trying to open files!"
+            return render_template("stage5.html", output=output)
         
-        if run:
-            paintInput = open("paint.in")
-            try:
-                output = subprocess.check_output("python paint.py", timeout=3, stdin=paintInput)
-            except subprocess.TimeoutExpired:
-                return "TLE"
-            except subprocess.CalledProcessError:
-                return "error"
-            
-            return output
         else:
-            return "no"
+            with open("castle/castle.py", 'w') as file:
+                file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\n") # prevent importing os and sqlite3
+                file.write(code)
+
+            castleInput = open("castle/castle.in")
+            try:
+                output = subprocess.check_output("python castle/castle.py", timeout=3, stdin=castleInput).decode("utf-8")
+            except subprocess.TimeoutExpired:
+                output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
+                return render_template("stage5.html", output=output)
+            except subprocess.CalledProcessError:
+                output = "There's an error in your code."
+                return render_template("stage5.html", output=output)
+            
+            # check answers
+            with open("castle/castle-ans.txt", 'r') as file:
+                ans = list(file)
+            
+            output = output.split("\n")
+            n = len(output) - 1
+
+            correct = True
+            for i in range(n):
+                output[i].strip()
+                output[i] = output[i].replace("\r", "")
+
+                if output[i] != ans[i].strip():
+                    correct = False
+
+            print(correct)
+
+            return render_template("stage5.html", output=output, correct=correct)
+
 
 
 @app.route("/stage5/submission", methods=["POST"])

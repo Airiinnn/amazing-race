@@ -31,3 +31,8 @@ section {
     background-color: #8A0303;
     color: white;
 }
+
+.output {
+    margin: 0;
+    padding: 0;
+}

@@ -24,6 +24,21 @@
 
             <input type="submit" class="submit" name="Submit">
         </form>
+
+        {% if output %}
+            <h2>Your output:</h2>
+            <pre>
+                {% for line in output %}
+                    <h2 class="output">{{ line }}</h2>
+                {% endfor %}
+            </pre>
+        {% endif %}
+
+        {% if correct %}
+            <h2>Correct!</h2>
+        {% elif correct == False %}
+            <h2>Incorrect!</h2>
+        {% endif %}
     </section>
 
     <script>
