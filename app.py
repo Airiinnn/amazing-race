@@ -99,7 +99,7 @@ def stage0_main():
 def stage0(question_id):
     question = questions[question_id]
     print(question)    
-    return render_template("stage0.html",question = question,question_id = question_id)
+    return render_template("stage0.html", question = question,question_id = question_id)
 
 
 @app.route("/stage0/<int:question_id>/submission", methods=['POST'])
