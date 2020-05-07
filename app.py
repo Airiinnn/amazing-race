@@ -3,6 +3,7 @@ import json
 import os
 import sqlite3
 import csv
+import time
 
 # Third-party libraries
 from flask import Flask, render_template, redirect, request, url_for
@@ -263,17 +264,18 @@ def stage5():
         return render_template("stage5.html")
     else:
         code = request.form.get("code")
-        with open("paint/paint.py", 'w') as file:
-            file.writelines(code)
 
-        # exec(open("paint.py").read())
-        # return code
-        cmd = "docker build -t paint-python ."
-        os.system(cmd)
-        cmd = "docker run -p 3333:3333 hello-world-python"
-        os.system(cmd)
-
-        return "yes"
+        run = True
+        for line in code:
+            if "sqlite3" in code:
+                run = False
+                break
+        
+        if run:
+            exec(code, {})
+            return "yes"
+        else:
+            return "no"
 
 
 @app.route("/stage5/submission", methods=["POST"])
@@ -485,6 +487,6 @@ if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     #app.debug = False
     #for normal local testing use this run
-    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     #for deployment to heroku app use this
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #app.run(host='0.0.0.0', port=port, debug=True)
