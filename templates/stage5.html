@@ -25,10 +25,14 @@
             <input type="submit" class="submit" name="Submit">
         </form>
 
-        {% if output %}
+        {% if error %}
+            <h2 class="output">{{ error }}</h2>
+        {% endif %}
+
+        {% if userans %}
             <h2>Your output:</h2>
             <pre>
-                {% for line in output %}
+                {% for line in userans %}
                     <h2 class="output">{{ line }}</h2>
                 {% endfor %}
             </pre>

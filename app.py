@@ -287,7 +287,7 @@ def stage5():
         # prevent user for accessing files
         if "open(" in code or "file" in code:
             output = "No trying to open files!"
-            return render_template("stage5.html", output=output)
+            return render_template("stage5.html", error=output)
         
         else:
             with open("castle/castle.py", 'w') as file:
@@ -299,10 +299,10 @@ def stage5():
                 output = subprocess.check_output("python castle/castle.py", timeout=3, stdin=castleInput).decode("utf-8")
             except subprocess.TimeoutExpired:
                 output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
-                return render_template("stage5.html", output=output)
+                return render_template("stage5.html", error=output)
             except subprocess.CalledProcessError:
                 output = "There's an error in your code."
-                return render_template("stage5.html", output=output)
+                return render_template("stage5.html", error=output)
             
             # check answers
             with open("castle/castle-ans.txt", 'r') as file:
@@ -321,7 +321,7 @@ def stage5():
 
             print(correct)
 
-            return render_template("stage5.html", output=output, correct=correct)
+            return render_template("stage5.html", userans=output, correct=correct)
 
 
 
