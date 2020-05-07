@@ -296,7 +296,7 @@ def stage5():
 
             castleInput = open("castle/castle.in")
             try:
-                output = subprocess.check_output("python castle/castle.py", timeout=3, stdin=castleInput).decode("utf-8")
+                output = subprocess.check_output("python castle/castle.py", shell=True, timeout=3, stdin=castleInput).decode("utf-8")
             except subprocess.TimeoutExpired:
                 output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
                 return render_template("stage5.html", error=output)
