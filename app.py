@@ -3,10 +3,8 @@ import json
 import os
 import sqlite3
 import csv
-import time
 import random
 import subprocess
-import sys
 
 # Third-party libraries
 from flask import Flask, render_template, redirect, request, url_for
