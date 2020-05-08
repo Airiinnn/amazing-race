@@ -83,14 +83,10 @@ h5 {
     transition-duration: 0.4s;
 }
 
-.small-logo:hover {
-    height: 88px;
-    width: 88px;
-}
-
 .github-logo {
     height: 24px;
     width: 24px;
+    margin-right: 10px;
 }
 
 .footer-details {

@@ -1,6 +1,18 @@
+h2, h3 {
+    margin: 0;
+}
+
+a {
+    color: blue;
+}
+
 section {
     padding-left: 20%;
     padding-right: 20%;
+}
+
+img {
+    height: 25;
 }
 
 #codeeditor {
@@ -35,4 +47,35 @@ section {
 .output {
     margin: 0;
     padding: 0;
+}
+
+.question {
+    line-height: 16pt;
+    text-align: left;
+}
+
+.IDE {
+    margin: 24px;
+}
+
+.subtasks {
+    text-align: left;
+}
+
+.subtask {
+    height: 32px;
+    padding: 12px;
+    border-radius: 16px;
+}
+
+.correct {
+    background-color: limegreen;
+}
+
+.incorrect {
+    background-color: crimson;
+}
+
+.reward {
+    text-align: left;
 }

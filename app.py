@@ -283,46 +283,52 @@ def stage5():
         return render_template("stage5.html")
     else:
         code = request.form.get("code")
+        if code:
+            # prevent user for accessing files
+            if "open(" in code or "file" in code:
+                output = "No trying to open files!"
+                return render_template("stage5.html", code=code, error=output)
+            
+            else:
+                subtasks = []
 
-        # prevent user for accessing files
-        if "open(" in code or "file" in code:
-            output = "No trying to open files!"
-            return render_template("stage5.html", error=output)
+                with open("castle/castle.py", 'w') as file:
+                    file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\n") # prevent importing os and sqlite3
+                    file.write(code)
+
+                for i in range(3):
+                    castleInput = open("castle/castle-{}.in".format(i))
+                    try:
+                        output = subprocess.check_output(["python", "castle/castle.py"], timeout=3, stdin=castleInput).decode("utf-8")
+                    except subprocess.TimeoutExpired:
+                        output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
+                        return render_template("stage5.html", code=code, error=output)
+                    except subprocess.CalledProcessError:
+                        output = "There's an error in your code."
+                        return render_template("stage5.html", code=code, error=output)
+                    
+                    # check answers
+                    with open("castle/castle-ans-{}.txt".format(i), 'r') as file:
+                        ans = list(file)
+                    
+                    output = output.split("\n")
+                    n = len(output) - 1
+
+                    correct = True
+                    for i in range(n):
+                        output[i].strip()
+                        output[i] = output[i].replace("\r", "")
+
+                        if output[i] != ans[i].strip():
+                            correct = False
+
+                    subtasks.append(correct)
+
+                print(subtasks)
+                return render_template("stage5.html", code=code, userans=output, subtasks=subtasks)
         
-        else:
-            with open("castle/castle.py", 'w') as file:
-                file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\n") # prevent importing os and sqlite3
-                file.write(code)
-
-            castleInput = open("castle/castle.in")
-            try:
-                output = subprocess.check_output("python castle/castle.py", shell=True, timeout=3, stdin=castleInput).decode("utf-8")
-            except subprocess.TimeoutExpired:
-                output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
-                return render_template("stage5.html", error=output)
-            except subprocess.CalledProcessError:
-                output = "There's an error in your code."
-                return render_template("stage5.html", error=output)
-            
-            # check answers
-            with open("castle/castle-ans.txt", 'r') as file:
-                ans = list(file)
-            
-            output = output.split("\n")
-            n = len(output) - 1
-
-            correct = True
-            for i in range(n):
-                output[i].strip()
-                output[i] = output[i].replace("\r", "")
-
-                if output[i] != ans[i].strip():
-                    correct = False
-
-            print(correct)
-
-            return render_template("stage5.html", userans=output, correct=correct)
-
+        else: # empty input
+            return render_template("stage5.html")
 
 
 @app.route("/stage5/submission", methods=["POST"])

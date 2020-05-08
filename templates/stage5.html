@@ -17,31 +17,122 @@
     </header>
     
     <section>
+        <h2><b>Castle</b></h1>
+        <div class="question">
+            <h2>Problem Description</h2>
+            <h4>
+                As you continue along with your journey to escape this cyber world, you encounter a tycoon looking to build his castle.
+                He is looking for the cheapest possible way to build his castle but is overwhelmed with all the math.
+                He turns to you, a smart young coder, for help and promising to reward you handsomely.
+                <br><br>
+                In order to build a castle, there are several jobs a builder has to do, such as:
+                <ul>
+                    <li>gathering the materials,</li>
+                    <li>laying the foundation,</li>
+                    <li>painting,</li>
+                    <li>etc.</li>
+                </ul>
+                Each job can be started and finished on the same day, but in due to the difficulty of the job, at most one job can be done every day.
+                <br><br>
+                The tycoon face the following problem. The builder charge a certain amount for each job, but is increasing the price every day by an amount that depends on the job.
+                <br><br>
+                For example, he may charge $100 for gathering the materials on the first day, and increase the price by $2 on each day, resulting in a price of $102 on the second day, 
+                $104 on the third day, etc.
+                For laying the foundation, he may charge $200 on the first day, and increase the priuce by $4 on each day, resulting in a price of $204 on the second day,
+                $208 on the third day, etc.
+                <br><br>
+                The tycoon, despite having billions, is quite thrifty and wants to complete all jobs in the cheapest possible way.
+            </h4>
+            <br>
+
+            <h2>Input</h2>
+            <h4>
+                The first line of the input contains one integer, T, ranging from 3 to 10, which specifies the number of test cases.
+                <br><br>
+                For each test case, the first line contains one integer, n, ranging from 2 to 20000, which specifies the number of jobs. We identify the jobs by numbers, ranging from job 1 to 
+                job n, regardless of when they are executed.
+                <br><br>
+                The following line contains n numbers, each ranging from 1 to 1000. The ith number in this line specifies the price for the job i.
+                <br><br>
+                The last line contains n numbers, each ranging from 0 to 10. The jth number in this line specifies the amound of money by which the price for job j increases every day.
+            </h4>
+            <br>
+
+            <h2>Output</h2>
+            <h4>
+                The required output consists of a single number, specifying the smallest amount of money sufficient to complete all jobs.
+            </h4>
+            <br>
+
+            <h2>Limits</h2>
+            <h4>
+                3 <= T <= 10<br>
+                2 <= n <= 20 000
+            </h4>
+            <br>
+
+            <h2>Sample Input</h2>
+            <h4>
+                2<br>
+                7<br>
+                100 200 500 300 400 200 100<br>
+                5 2 0 5 7 1 3<br>
+                4<br>
+                758 878 568 547<br>
+                10 10 0 5
+            </h4>
+            <br>
+
+            <h2>Sample Output</h2>
+            <h4>
+                1837<br>
+                2771
+            </h4>
+            <br>
+
+            <h3>Note: No importing "os", "sqlite3" & "subprocess" or opening files.</h3>
+            <br>
+            <h3>Question adapted from <a href="https://dunjudge.me">dunjudge.me</a>'s paint</h3>
+        </div>
+
+        <h2 class="IDE"><b>Submit Solution / IDE</b></h2>
+
         <form action="/stage5" method="post">
             <div class="editor">
-                <textarea id="codeeditor" name="code"></textarea>
+                <textarea id="codeeditor" name="code">{{ code }}</textarea>
             </div>
 
             <input type="submit" class="submit" name="Submit">
         </form>
+        <br>
 
         {% if error %}
             <h2 class="output">{{ error }}</h2>
         {% endif %}
-
-        {% if userans %}
-            <h2>Your output:</h2>
-            <pre>
-                {% for line in userans %}
-                    <h2 class="output">{{ line }}</h2>
+        
+        {% if subtasks %}
+            <div class="subtasks">
+                {% for i in range(subtasks|length) %}
+                    {% if subtasks[i] %}
+                        <div class="subtask correct">
+                            <h2>Subtask {{ i }}: Correct</h2>
+                        </div>
+                        <br>
+                    {% else %}
+                        <div class="subtask incorrect">
+                            <h2>Subtask {{ i }}: Incorrect</h2><br>
+                        </div>
+                        <br>
+                    {% endif %}
                 {% endfor %}
-            </pre>
-        {% endif %}
+            </div>
+            <br>
 
-        {% if correct %}
-            <h2>Correct!</h2>
-        {% elif correct == False %}
-            <h2>Incorrect!</h2>
+            {% if subtasks[0] and subtasks[1] and subtasks[2] %}
+                <h2><b>Reward</b></h2>
+                <h4>The tycoon is very impressed by your work. He hands you a magical coin as a reward for your hard work.</h4>
+                <img src="static/images/stage5/inspectelement.png" alt="fastgame" height=256>
+            {% endif %}
         {% endif %}
     </section>
 
