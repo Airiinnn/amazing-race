@@ -119,6 +119,11 @@ h5 {
     color: white;
 }
 
+.stage-header {
+    color: #363636;
+    font-size: 32px;
+}
+
 .stage {
     width: 60%;
     margin: 30px auto;

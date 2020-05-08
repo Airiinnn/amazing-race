@@ -62,15 +62,17 @@ def index():
         maxstage = cursor.fetchone()[0]
         connection.close()
 
-        with open("stages.csv", 'r') as file:
+        with open("stages-main.csv", 'r') as file:
             reader = csv.reader(file)
-            stages = list(reader)
+            main_stages = list(reader)
 
-        return render_template("index.html", maxstage=maxstage, stages=stages)
+        with open("stages-bonus.csv", 'r') as file:
+            reader = csv.reader(file)
+            bonus_stages = list(reader)
+
+        return render_template("index.html", maxstage=maxstage, main_stages=main_stages, bonus_stages=bonus_stages)
     else:
         return render_template("login.html")
-
-#STAGE 0: Cyber Security, KEY: --NIL--
         
 #STAGE 0: Cyber Security, KEY: --NIL--
 
@@ -310,7 +312,7 @@ def stage5():
                         ans = list(file)
                     
                     output = output.split("\n")
-                    n = len(output) - 1
+                    n = min(len(output), len(ans))
 
                     correct = True
                     for i in range(n):
@@ -530,6 +532,6 @@ if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     #app.debug = False
     #for normal local testing use this run
-    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     #for deployment to heroku app use this
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #app.run(host='0.0.0.0', port=port, debug=True)

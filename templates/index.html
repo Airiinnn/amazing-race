@@ -13,12 +13,25 @@
     </header>
     
     <section>
-        {% for i in range(stages|length) %}
-            <a href="{{ stages[i][2]|safe }}">
+        <p class="stage-header">Main stages:</p>
+        {% for i in range(main_stages|length) %}
+            <a href="{{ main_stages[i][2]|safe }}">
             {% if i <= maxstage %}
-                <button class="stage unlocked">{{ stages[i][1] }}</button>
+                <button class="stage unlocked">{{ main_stages[i][1] }}</button>
             {% else %}
-                <button class="stage locked">{{ stages[i][1] }} (Locked)</button>
+                <button class="stage locked">{{ main_stages[i][1] }} (Locked)</button>
+            {% endif %}
+            </a>
+        {% endfor %}
+        <br>
+
+        <p class="stage-header" style="margin-top:128px;">Bonus stages:</p>
+        {% for i in range(bonus_stages|length) %}
+            <a href="{{ bonus_stages[i][2]|safe }}">
+            {% if bonus_stages[i][0]|int <= maxstage %}
+                <button class="stage unlocked">{{ bonus_stages[i][1] }}</button>
+            {% else %}
+                <button class="stage locked">{{ bonus_stages[i][1] }} (Locked)</button>
             {% endif %}
             </a>
         {% endfor %}
