@@ -18,4 +18,4 @@ for _ in range(T):
     for i in range(n):
         cost += increase[i] * (n-i-1) + start[i]
         
-    print(cost)
+    print(cost)
