@@ -27,8 +27,8 @@
 
         <p class="stage-header" style="margin-top:128px;">Bonus stages:</p>
         {% for i in range(bonus_stages|length) %}
-            <a href="/stage{{ bonus_stages[i][0] }}">
-            {% if bonus_stages[i][0]|int <= maxstage %}
+            <a href="/bonus{{ bonus_stages[i][0] }}">
+            {% if bonus_stages[i][2]|int <= maxstage %}
                 <button class="stage unlocked">{{ bonus_stages[i][1] }}</button>
             {% else %}
                 <button class="stage locked">{{ bonus_stages[i][1] }} (Locked)</button>
