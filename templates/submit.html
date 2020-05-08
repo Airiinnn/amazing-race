@@ -13,22 +13,21 @@
     </header>
 
     <section>
-        <h2 class="black">Super secret password:</h2>
-        <form action="/submission" method="post">
-            <input type="text" class="text" name="psw" placeholder="Password" autocomplete="off" required>
-            <br>
-            <input type="submit" class="submit" value="Submit">
-        </form>
+        {% if success == True %}
+            <h2 class="black">Nice work! You've unlocked the next stage!</h2>
+            <a href="/"><button class="submit">Home</button></a>
+        
+        {% elif success == False %}
+            <h2 class="black">Incorrect password!</h2>
+            <a href="/submit"><button class="submit">Try again</button></a>
+        
+        {% else %}
+            <h2 class="black">Super secret password:</h2>
+            <form action="/submit" method="post">
+                <input type="text" class="text" name="psw" placeholder="Password" autocomplete="off" required>
+                <br>
+                <input type="submit" class="submit" value="Submit">
+            </form>
+        {% endif %}
     </section>
-
-    <footer>
-        <a href="https://buildingblocs.github.io/2020/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="small-logo"></a>
-        <div class="footer-details">
-            <div class="links">
-                <a href="https://github.com/Airiinnn/amazing-race" class="link"><img src="/static/images/githubdark.png" alt="GitHub" class="github-logo"></a>
-                <a href="https://github.com/Airiinnn/amazing-race" class="link"><h4>GitHub</h4></a>
-            </div>
-            <h5>Brought to you by BuildingBloCS2020</h5>
-        </div>
-    </footer>
 {% endblock %}

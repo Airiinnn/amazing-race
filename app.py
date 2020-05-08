@@ -5,6 +5,7 @@ import sqlite3
 import csv
 import random
 import subprocess
+import datetime
 
 # Third-party libraries
 from flask import Flask, render_template, redirect, request, url_for
@@ -58,17 +59,15 @@ def index():
     if current_user.is_authenticated:
         connection = sqlite3.connect("sqlite_db")
         cursor = connection.cursor()
-        cursor.execute("SELECT stage FROM user WHERE id='{}'".format(current_user.id))
+        cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
         maxstage = cursor.fetchone()[0]
+        
+        cursor.execute("SELECT * FROM mainstage")
+        main_stages = cursor.fetchall()
+
+        cursor.execute("SELECT * FROM bonusstage")
+        bonus_stages = cursor.fetchall()
         connection.close()
-
-        with open("stages-main.csv", 'r') as file:
-            reader = csv.reader(file)
-            main_stages = list(reader)
-
-        with open("stages-bonus.csv", 'r') as file:
-            reader = csv.reader(file)
-            bonus_stages = list(reader)
 
         return render_template("index.html", maxstage=maxstage, main_stages=main_stages, bonus_stages=bonus_stages)
     else:
@@ -156,12 +155,12 @@ def stage1_submission():
 def stage2():
     connection = sqlite3.connect("sqlite_db")
     cursor = connection.cursor()
-    cursor.execute("SELECT stage FROM user WHERE id='{}'".format(current_user.id))
+    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
     maxstage = cursor.fetchone()[0]
     connection.close()
     
     if maxstage < 2:
-        return render_template("submit.html")
+        return redirect("/submit")
     return render_template("stage2.html")
 
 @app.route("/stage2/submission", methods=["POST"])
@@ -202,12 +201,12 @@ def stage2_submission():
 def stage3():
     connection = sqlite3.connect("sqlite_db")
     cursor = connection.cursor()
-    cursor.execute("SELECT stage FROM user WHERE id='{}'".format(current_user.id))
+    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
     maxstage = cursor.fetchone()[0]
     connection.close()
     
-    if maxstage < 1:
-        return render_template("submit.html")
+    if maxstage < 3:
+        return redirect("/submit")
     return render_template("stage3.html")
 
 @app.route("/stage3/submission", methods=["POST"])
@@ -247,7 +246,7 @@ def stage3_submission():
         results = None
 
     connection.close()
-    return render_template("stage3_submission.html", results=results, res = res)
+    return render_template("stage3_submission.html", results=results, res=res)
 
 
 
@@ -280,12 +279,21 @@ def stage4_submission():
 # @login_required
 def stage5():
     if request.method == "GET":
+        connection = sqlite3.connect("sqlite_db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
+        maxstage = cursor.fetchone()[0]
+        connection.close()
+
+        if maxstage < 5:
+            return redirect("/submit")
         return render_template("stage5.html")
+    
     else:
         code = request.form.get("code")
         if code:
             # prevent user for accessing files
-            if "open(" in code or "file" in code:
+            if "open" in code or "file" in code:
                 output = "No trying to open files!"
                 return render_template("stage5.html", code=code, error=output)
             
@@ -367,9 +375,6 @@ def stage7():
     #type here
     pass
 
-
-
-
 @app.route("/stage7/submission", methods=["POST"])
 @login_required
 def stage7_submission():
@@ -378,61 +383,70 @@ def stage7_submission():
 
 
 
-
-
-
-
-
-
-
-
-#STAGE 8: JAVASCRIPT, KEY: hi8
-
-@app.route("/stage8")
+# Bonus 0: Computational thinking:
+@app.route("/bonus0")
 @login_required
-def stage8():
-    #type here
+def bonus0():
     pass
 
 
 
 
-@app.route("/stage8/submission", methods=["POST"])
+# Bonus 1: SQL:
+@app.route("/bonus1")
 @login_required
-def stage8_submission():
-    #type here
+def bonus1():
     pass
 
 
 
 
 
+# Bonus 2: Competitive programming:
+@app.route("/bonus2")
+@login_required
+def bonus2():
+    pass
 
 
+
+
+
+# Bonus 3: HTML / CSS:
+@app.route("/bonus3")
+@login_required
+def bonus3():
+    pass
 
 
 #KEY INSERT, TO GET TO NEXT STAGE
 
-@app.route("/submission", methods=["POST"])
+@app.route("/submit", methods=["GET", "POST"])
 @login_required
-def submission():
-    psw = request.form.get("psw")
-
-    connection = sqlite3.connect("sqlite_db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT stage FROM user WHERE id='{}'".format(current_user.id))
-    maxstage = cursor.fetchone()[0]
-    with open("stages.csv", 'r') as file:
-        reader = csv.reader(file)
-        lines = list(reader)
-    if psw == lines[maxstage+1][3]:
-        cursor.execute("UPDATE user SET stage=stage+1 WHERE id=(?)", (current_user.id,))
-        connection.commit()
-        connection.close()
-        return redirect(lines[maxstage+1][2])
+def submit():
+    if request.method == "GET":
+        return render_template("submit.html")
+    
     else:
-        connection.close()
-        return render_template("failure.html")
+        userpsw = request.form.get("psw")
+
+        connection = sqlite3.connect("sqlite_db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
+        maxstage = cursor.fetchone()[0]
+
+        cursor.execute("SELECT psw FROM mainstage WHERE stageid='{}'".format(maxstage))
+        psw = cursor.fetchone()[0]
+
+        if userpsw == psw:
+            cursor.execute("UPDATE progress SET mainstage=mainstage+1, lastupdated=(?) WHERE email=(?)", (datetime.datetime.now(), current_user.email,))
+            connection.commit()
+            connection.close()
+            return render_template("submit.html", success=True)
+
+        else:
+            connection.close()
+            return render_template("submit.html", success=False)
 
     
 
@@ -532,6 +546,6 @@ if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     #app.debug = False
     #for normal local testing use this run
-    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     #for deployment to heroku app use this
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #app.run(host='0.0.0.0', port=port, debug=True)

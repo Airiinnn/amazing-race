@@ -26,8 +26,8 @@ class User(UserMixin):
     def create(id_, name, email):
         db = get_db()
         db.execute(
-            "INSERT INTO user (id, name, email, stage) "
-            "VALUES (?, ?, ?, ?)",
-            (id_, name, email, 0),
+            "INSERT INTO user (id, name, email) "
+            "VALUES (?, ?, ?)",
+            (id_, name, email),
         )
         db.commit()
