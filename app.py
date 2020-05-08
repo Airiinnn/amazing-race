@@ -291,13 +291,13 @@ def stage5():
                 subtasks = []
 
                 with open("castle/castle.py", 'w') as file:
-                    file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\n") # prevent importing os and sqlite3
+                    file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\nsys.modules['flask']=None\nsys.modules['subprocess']=None\nsys.modules['sys']=None\ndel sys\n") # prevent importing os and sqlite3
                     file.write(code)
 
                 for i in range(3):
                     castleInput = open("castle/castle-{}.in".format(i))
                     try:
-                        output = subprocess.check_output(["python", "castle/castle.py"], timeout=3, stdin=castleInput).decode("utf-8")
+                        output = subprocess.check_output(["python", "castle/castle.py"], timeout=1, stdin=castleInput).decode("utf-8")
                     except subprocess.TimeoutExpired:
                         output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
                         return render_template("stage5.html", code=code, error=output)
@@ -326,13 +326,6 @@ def stage5():
         
         else: # empty input
             return render_template("stage5.html")
-
-
-@app.route("/stage5/submission", methods=["POST"])
-# login_required
-def stage5_submission():
-    #type here
-    pass
 
 
 
@@ -537,6 +530,6 @@ if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     #app.debug = False
     #for normal local testing use this run
-    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     #for deployment to heroku app use this
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #app.run(host='0.0.0.0', port=port, debug=True)
