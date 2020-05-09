@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link href="static/styles/style.css" rel="stylesheet">
+    <link href="static/styles/stage2.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <header>
+        <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
+        <h1>Stage 2: Computational Thinking</h1>
+        <h3>Big think</h3>
+    </header>
+
+    <section>
+        <h2>Good job!</h2>
+        <h4>
+            Doctor Huh is impressed by your programming abilities. He tells you that the portal is hidden far, far away, on a secluded island. 
+            <br>
+            He suggests you go to the library to ask the librarian, Ms Gogle, if she knows how to get there.
+        </h4>
+
+        <h2>Doctor Huh hands you a map to the library. Find the password to get to the next stage.</h2>
+        <img src="static/images/stage2/map.png" alt="map" height=256>
+        <br>
+        <a href="/"><button class="submit">Home</button></a>
+    </section>
+{% endblock %}

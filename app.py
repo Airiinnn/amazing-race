@@ -73,7 +73,7 @@ def index():
     else:
         return render_template("login.html")
         
-#STAGE 0: Cyber Security, KEY: --NIL--
+#STAGE 0: Cyber Security, KEY: protecc
 connection = sqlite3.connect("sqlite_db")
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM stage0questions")
@@ -92,7 +92,7 @@ def stage0_main():
         
         stage0_incomplete = [i for i in range(1, 21) if stage0_progress[i] == 0]
         if len(stage0_incomplete) == 0:
-            return render_template("stage0_winner.html")
+            return render_template("stage0_success.html")
 
         else:
             return render_template("stage0.html", question=STAGE0_QUESTIONS[random.choice(stage0_incomplete)-1], progress=20-len(stage0_incomplete))
@@ -103,7 +103,7 @@ def stage0_main():
         progress = request.form.get("progress")
 
         for question in STAGE0_QUESTIONS:
-            if question[1] == qn:
+            if question[0] == qn:
                 if ans == question[6]: # correct
                     connection = sqlite3.connect("sqlite_db")
                     connection.execute("UPDATE stage0 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
@@ -140,8 +140,13 @@ def stage1_submission():
 
 
 #STAGE 2: COMPUTATIONAL THINKING, KEY: hi2
+connection = sqlite3.connect("sqlite_db")
+cursor = connection.cursor()
+cursor.execute("SELECT * FROM stage2questions")
+STAGE2_QUESTIONS = cursor.fetchall()
+connection.close()
 
-@app.route("/stage2")
+@app.route("/stage2", methods=["GET", "POST"])
 @login_required
 def stage2():
     connection = sqlite3.connect("sqlite_db")
@@ -152,7 +157,41 @@ def stage2():
     
     if maxstage < 2:
         return redirect("/submit")
-    return render_template("stage2.html")
+
+    else:
+        if request.method == "GET":
+            connection = sqlite3.connect("sqlite_db")
+            cursor = connection.cursor()
+            cursor.execute("SELECT * FROM stage2 WHERE email='{}'".format(current_user.email))
+            stage2_progress = cursor.fetchone()
+            connection.close()
+
+            print(STAGE2_QUESTIONS)
+            print(stage2_progress)
+
+            for i in range(1, 9):
+                if stage2_progress[i] == 0:
+                    return render_template("stage2.html", question=STAGE2_QUESTIONS[i-1], progress=i-1)
+
+            return render_template("stage2_success.html")
+        
+        else:
+            qn = request.form.get("qn")
+            ans = request.form.get("ans")
+            progress = request.form.get("progress")
+
+            for question in STAGE2_QUESTIONS:
+                if question[0] == qn:
+                    if ans == question[2]: # correct
+                        connection = sqlite3.connect("sqlite_db")
+                        connection.execute("UPDATE stage2 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
+                        connection.commit()
+                        connection.close()
+
+                        return redirect("/stage2")
+
+                    else: # incorrect
+                        return render_template("stage2.html", question=question, correct=False, progress=progress)
 
 @app.route("/stage2/submission", methods=["POST"])
 @login_required

@@ -27,7 +27,7 @@
         <br>
 
         <form action="/stage0" method="POST">
-            <input type="hidden" name="qn" value="{{ question[1] }}">
+            <input type="hidden" name="qn" value="{{ question[0] }}">
             <input type="hidden" name="progress" value="{{ progress }}">
             
             <div class="options">
@@ -46,19 +46,11 @@
                 <label for='3'>{{ question[5] }}</label><br>
             </div>
             
-            
-            {% if correct != True %}
-                <input type="submit" value="Submit" class="submit">
-            {% endif %}
+            <input type="submit" value="Submit" class="submit">
         </form>
-
-        {% if correct == True %}
-            <h2 class="correct">Correct!</h2>
-            <a href="/stage0"><button class="submit">Next</button></a>
         
-        {% elif correct == False %}
+        {% if correct == False %}
             <h2 class="incorrect">Incorrect! Try again!</h2>
-        
         {% endif %}
     </section>
 {% endblock %}

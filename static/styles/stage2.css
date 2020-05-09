@@ -1,9 +1,10 @@
-.qn {
-    width: 70%;
+section {
+    padding-left: 20%;
+    padding-right: 20%;
 }
 
-.output-input {
-    margin-top: 80px;
+.qn {
+    width: 100%;
 }
 
 .text {
@@ -40,10 +41,11 @@
     color: white;
 }
 
-.red {
+.correct {
+    color: limegreen;
+}
+
+.incorrect {
     color: crimson;
 }
 
-.green {
-    color: limegreen;
-}
