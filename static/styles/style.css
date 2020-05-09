@@ -83,14 +83,10 @@ h5 {
     transition-duration: 0.4s;
 }
 
-.small-logo:hover {
-    height: 88px;
-    width: 88px;
-}
-
 .github-logo {
     height: 24px;
     width: 24px;
+    margin-right: 10px;
 }
 
 .footer-details {
@@ -123,6 +119,11 @@ h5 {
     color: white;
 }
 
+.stage-header {
+    color: #363636;
+    font-size: 32px;
+}
+
 .stage {
     width: 60%;
     margin: 30px auto;
@@ -148,6 +149,12 @@ h5 {
     color: white;
     background-color: #8A0303;
     border: 3px solid #8A0303;
+}
+
+.completed {
+    color: white;
+    background-color: limegreen;
+    border: 3px solid limegreen;
 }
 
 .logout {

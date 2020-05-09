@@ -3,21 +3,18 @@ label {
     font-weight: lighter;
 }
 
-.questions {
-    border: none;
-    color: #363636;
-    background-color: white;
-    margin: 25px auto;
-    border-radius: 25px;
-    padding: 20px;
-    width: 75%;
-    font-size: 20px;
-    text-align: left;
+section {
+    padding-left: 20%;
+    padding-right: 20%;
 }
 
 .question {
     margin: 24px 0px;
     font-weight: normal;
+}
+
+.options {
+    text-align: left;
 }
 
 .submit {
@@ -61,11 +58,9 @@ label {
 }
 
 .correct {
-    background-color: green;
-    color: white;
+    color: limegreen;
 }
 
-.wrong {
-    background-color: red;
-    color: white;
+.incorrect {
+    color: crimson;
 }

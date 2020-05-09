@@ -1,0 +1,81 @@
+h2, h3 {
+    margin: 0;
+}
+
+a {
+    color: blue;
+}
+
+section {
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+img {
+    height: 25;
+}
+
+#codeeditor {
+    text-align: left;
+    border: 2px solid black;
+}
+
+.editor {
+    text-align: left;
+}
+
+.submit {
+    width: 150px;
+    height: 50px;
+    border: 2px solid #8A0303;
+    border-radius: 25px;
+    background-color: white;
+    color: #8A0303;
+    padding: 5px;
+    margin: 20px;
+    font-size: 16px;
+    font-family: 'Barlow', sans-serif;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+.submit:hover {
+    background-color: #8A0303;
+    color: white;
+}
+
+.output {
+    margin: 0;
+    padding: 0;
+}
+
+.question {
+    line-height: 16pt;
+    text-align: left;
+}
+
+.IDE {
+    margin: 24px;
+}
+
+.subtasks {
+    text-align: left;
+}
+
+.subtask {
+    height: 32px;
+    padding: 12px;
+    border-radius: 16px;
+}
+
+.correct {
+    background-color: limegreen;
+}
+
+.incorrect {
+    background-color: crimson;
+}
+
+.reward {
+    text-align: left;
+}

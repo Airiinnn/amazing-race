@@ -1,33 +1,56 @@
 {% extends "layout.html" %}
 
-{% block css %}
-    <link href="static/styles/style.css" rel="stylesheet">
-    <link href="static/styles/stage0.css" rel="stylesheet">
+{% block head %}
+    <link href="../static/styles/style.css" rel="stylesheet">
+    <link href="../static/styles/stage0.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
     <header>
         <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
-        <h1>Stage 0: Cyber ethics and security</h1>
-        <h3>Before we get start coding, let us learn about ethical and security issues that comes with it.</h3>
+        <h1>Stage 0: Cyber Security, Ethics & Practices</h1>
+        <h3>Gotta use protection</h3>
     </header>
     
     <section>
-        <form action = '/stage0/submission' method="POST">
-                {% for question in questions %}
-                    <fieldset id = {{loop.index}} class="questions">
-                        <h2 class="question">Question: {{ question[0] }}</h2>
-                        <input type="radio" id="0" name = {{loop.index}} value = "0" required>
-                        <label for='0'>{{ question[1] }}</label><br>
-                        <input type="radio" id="1" name = {{loop.index}} value = "1">
-                        <label for='1'>{{ question[2] }}</label><br>
-                        <input type="radio" id="2" name = {{loop.index}} value = "2">
-                        <label for='2'>{{ question[3] }}</label><br>
-                        <input type="radio" id="3" name = {{loop.index}} value = "3">
-                        <label for='3'>{{ question[4] }}</label><br>
-                    </fieldset>
-                {% endfor %}
-            <input type = "submit" value = "Submit" class="submit">
+        <h4>
+            Before you roam this vast cyber world, you need to understand this world a little better and know how to keep yourself safe!
+            <br>
+            You refer to your device to learn more about this world.
+        </h4>
+
+        <h3>
+            Answer the following questions and you will be teleported to see the village elder.
+            <br><br>
+            Progress: {{ progress }} / 20
+        </h3>
+        <br>
+
+        <form action="/stage0" method="POST">
+            <input type="hidden" name="qn" value="{{ question[0] }}">
+            <input type="hidden" name="progress" value="{{ progress }}">
+            
+            <div class="options">
+                <h2 class="question">{{ question[1] }}</h2>
+
+                <input id='0' type="radio" name="ans" value="{{ question[2] }}" required>
+                <label for='0'>{{ question[2] }}</label><br>
+                
+                <input id='1' type="radio" name="ans" value="{{ question[3] }}">
+                <label for='1'>{{ question[3] }}</label><br>
+                
+                <input id='2' type="radio" name="ans" value="{{ question[4] }}">
+                <label for='2'>{{ question[4] }}</label><br>
+                
+                <input id='3' type="radio" name="ans" value="{{ question[5] }}">
+                <label for='3'>{{ question[5] }}</label><br>
+            </div>
+            
+            <input type="submit" value="Submit" class="submit">
         </form>
+        
+        {% if correct == False %}
+            <h2 class="incorrect">Incorrect! Try again!</h2>
+        {% endif %}
     </section>
 {% endblock %}

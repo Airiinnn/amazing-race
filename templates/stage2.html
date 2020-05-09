@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 
-{% block css %}
+{% block head %}
     <link href="static/styles/style.css" rel="stylesheet">
     <link href="static/styles/stage2.css" rel="stylesheet">
 {% endblock %}
@@ -9,36 +9,46 @@
     <header>
         <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
         <h1>Stage 2: Computational Thinking</h1>
-        <h3>Now we'll be familiarizing ourselves with code<br>and how to think like a computer scientist!</h3>
+        <h3>Big think</h3>
     </header>
 
     <section>
-        <form action="/stage2/submission" method="post">
-            <div class="input-output">
-                <h2>Input to output</h2>
-                <h3>Here's some code snippets! Try to figure out it's output!<br>Feel free to try them out in your IDLE!</h3>
-                {% for i in range(1, 6) %}
-                    <img src="/static/images/stage2/qn{{ i }}.png" alt="Question {{ i }}" class="qn">
-                    <br>
-                    <div style="width:100%;">
-                        <input type="text" name="ans{{ i }}" class="text" placeholder="Answer" autocomplete="off" required>
-                    </div>
-                {% endfor %}
-            </div>
-            
-            <div class="output-input">
-                <h2>Output to input</h2>
-                <h3>Here's some challenging ones! Instead of finding out the output, you now have to find out the input!</h3>
-                {% for i in range(6, 9) %}
-                    <img src="/static/images/stage2/qn{{ i }}.png" alt="Question {{ i }}" class="qn">
-                    <br>
-                    <div style="width:100%;">
-                        <input type="text" name="ans{{ i }}" class="text" placeholder="Answer" autocomplete="off" required>
-                    </div>
-                {% endfor %}
+        <h4>
+            You head over to the neighbouring village to visit Doctor Huh to ask about the portal that leads back to your world.
+            <br>
+            Upon reaching his office, you see him staring at his monitor screen in deep focus. He doesn't like being interrupted while he is thinking.
+        </h4>
+
+        <h3>
+            Help him solve these problems so he can answer your answer about the portal.
+            <br><br>
+            Progress: {{ progress }} / 8
+        </h3>
+        <br>
+
+        {% if question[0] <= "q5" %}
+            <h2>Input to output</h2>
+            <h3>Try to figure out it's output!<br>Feel free to try them out in an IDE!</h3>    
+        {% else %}
+            <h2>Output to input</h2>
+            <h3>Here's some challenging ones! Instead of finding out the output, you now have to find out the input!</h3>
+        {% endif %}
+
+        <form action="/stage2" method="post">
+            <input type="hidden" name="qn" value="{{ question[0] }}">
+            <input type="hidden" name="progress" value="{{ progress }}">
+
+            <img src="/static/images/stage2/{{ question[1] }}" alt="Question" class="qn">
+            <br>
+            <div style="width:100%;">
+                <input type="text" name="ans" class="text" placeholder="Answer" autocomplete="off" required>
             </div>
 
             <input type="submit" name="Submit" class="submit">
         </form>
+
+        {% if correct == False %}
+            <h2 class="incorrect">Incorrect! Try again!</h2>
+        {% endif %}
     </section>
 {% endblock %}
