@@ -276,7 +276,7 @@ def stage4_submission():
 #STAGE 5: COMPETITIVE PROGRAMMING, KEY: hi5
 
 @app.route("/stage5", methods=["GET", "POST"])
-# @login_required
+@login_required
 def stage5():
     if request.method == "GET":
         connection = sqlite3.connect("sqlite_db")
@@ -320,17 +320,20 @@ def stage5():
                         ans = list(file)
                     
                     output = output.split("\n")
-                    n = min(len(output), len(ans))
+                    n = len(output) - 1
+                    if n != len(ans):
+                        subtasks.append(False)
+                    
+                    else:
+                        correct = True
+                        for i in range(n):
+                            output[i].strip()
+                            output[i] = output[i].replace("\r", "")
 
-                    correct = True
-                    for i in range(n):
-                        output[i].strip()
-                        output[i] = output[i].replace("\r", "")
+                            if output[i] != ans[i].strip():
+                                correct = False
 
-                        if output[i] != ans[i].strip():
-                            correct = False
-
-                    subtasks.append(correct)
+                        subtasks.append(correct)
 
                 return render_template("stage5.html", code=code, userans=output, subtasks=subtasks)
         
