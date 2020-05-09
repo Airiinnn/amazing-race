@@ -77,7 +77,9 @@ def index():
         return render_template("index.html", progress=progress, main_stages=main_stages, bonus_stages=bonus_stages)
     else:
         return render_template("login.html")
-        
+
+
+
 #STAGE 0: Cyber Security, KEY: protecc
 connection = sqlite3.connect("sqlite_db")
 cursor = connection.cursor()
@@ -123,7 +125,6 @@ def stage0_main():
 
 
 #STAGE 1: PYTHON BASICS, KEY: hi1
-
 @app.route("/stage1")
 @login_required
 def stage1():
@@ -195,8 +196,9 @@ def stage2():
                     else: # incorrect
                         return render_template("stage2.html", question=question, correct=False, progress=progress)
 
-#STAGE 3: SQL, KEY: hi3
 
+
+#STAGE 3: SQL, KEY: hi3
 @app.route("/stage3")
 @login_required
 def stage3():
@@ -251,31 +253,23 @@ def stage3_submission():
 
 
 
-
-#STAGE 4: NOSQL, KEY: hi4
-
+#STAGE 4: NOSQL, KEY: 3213b5
 @app.route("/stage4")
 @login_required
 def stage4():
-    #type here
-    pass
+    connection = sqlite3.connect("sqlite_db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
+    maxstage = cursor.fetchone()[0]
+    connection.close()
 
-
-
-
-@app.route("/stage4/submission", methods=["POST"])
-@login_required
-def stage4_submission():
-    #type here
-    pass
-
-
-
+    if maxstage < 4:
+        return redirect("/submit")
+    return render_template("stage4.html")
 
 
 
 #STAGE 5: COMPETITIVE PROGRAMMING, KEY: hi5
-
 @app.route("/stage5", methods=["GET", "POST"])
 @login_required
 def stage5():
@@ -343,11 +337,7 @@ def stage5():
 
 
 
-
-
-
 #STAGE 6: SOCKET PROGRAMMING, KEY: hi6
-
 @app.route("/stage6")
 @login_required
 def stage6():
@@ -365,14 +355,7 @@ def stage6_submission():
 
 
 
-
-
-
-
-
-
 #STAGE 7: HTML / CSS, KEY: hi7
-
 @app.route("/stage7")
 @login_required
 def stage7():
@@ -418,13 +401,13 @@ def bonus0():
             else:
                 return render_template("bonus0.html", correct=False)
 
+
+
 # Bonus 1: SQL:
 @app.route("/bonus1")
 @login_required
 def bonus1():
     pass
-
-
 
 
 
@@ -502,7 +485,6 @@ def bonus2():
 
 
 
-
 # Bonus 3: HTML / CSS:
 @app.route("/bonus3")
 @login_required
@@ -510,7 +492,6 @@ def bonus3():
     pass
 
 
-#KEY INSERT, TO GET TO NEXT STAGE
 
 @app.route("/submit", methods=["GET", "POST"])
 @login_required
