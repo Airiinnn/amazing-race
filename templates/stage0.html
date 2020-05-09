@@ -19,11 +19,16 @@
             You refer to your device to learn more about this world.
         </h4>
 
-        <h3>Answer the following questions and you will be teleported to see the village elder.</h3>
+        <h3>
+            Answer the following questions and you will be teleported to see the village elder.
+            <br><br>
+            Progress: {{ progress }} / 20
+        </h3>
         <br>
 
         <form action="/stage0" method="POST">
             <input type="hidden" name="qn" value="{{ question[1] }}">
+            <input type="hidden" name="progress" value="{{ progress }}">
             
             <div class="options">
                 <h2 class="question">{{ question[1] }}</h2>
