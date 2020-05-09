@@ -1,0 +1,137 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link href="static/styles/style.css" rel="stylesheet">
+    <link href="static/styles/stage5.css" rel="stylesheet">
+    <link href="static/styles/codemirror.css" rel="stylesheet">
+    <link href="static/styles/monokai.css" rel="stylesheet">
+    <script src="static/scripts/codemirror.js"></script>
+    <script src="static/scripts/python.js"></script>
+{% endblock %}
+
+{% block body %}
+    <header>
+        <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
+        <h1>Bonus 2: Competitive Programming</h1>
+        <h3>Gotta go faster</h3>
+    </header>
+    
+    <section>
+        <h2><b>Fibo</b></h1>
+        <div class="question">
+            <h2>Problem Description</h2>
+            <h4>
+                Along your journey, you meet a troubled mathematician, Ms Plus. She encountered a math problem that is difficult to solve by hand. She asks you for some help.
+                <br><br>
+                You are given a natural number N. Write a program that outputs the Nth Fibonacci number.
+                <br><br>
+                For those unaware, the Fibonacci sequence is generated as follows:
+                <br><br>
+                f(0) = 0<br>
+                f(1) = 1<br>
+                f(i) = f(i-1) + f(i-2) for i ≥ 2
+                <br><br>
+                The first ten numbers in the Fibonacci sequence is as follows:
+                <br><br>
+                0, 1, 1, 2, 3, 5, 8, 13, 21, 34
+                <br><br>
+                You are supposed to output an integer f(N).
+            </h4>
+            <br>
+
+            <h2>Input</h2>
+            <h4>
+                The first line of the input contains one integer, T, ranging from 1 to 40, which specifies the number of test cases.
+                <br><br>
+                For each test case, the first and only line contains an integer N, ranging from 1 to 2000, and another integer M, ranging from 1 to 300000.
+            </h4>
+            <br>
+
+            <h2>Output</h2>
+            <h4>
+                On the first and only line, output the integer f(N) mod M.
+            </h4>
+            <br>
+
+            <h2>Limits</h2>
+            <h4>
+                1 <= T <= 40<br>
+                1 <= N <= 2000<br>
+                1 <= M <= 300 000<br>
+                Time limit = 1s
+            </h4>
+            <br>
+
+            <h2>Sample Input</h2>
+            <h4>
+                2<br>
+                3 10<br>
+                1000 1000
+            </h4>
+            <h3>Note: To take in a line of numbers, use input().split() instead of int(input()).</h3>
+            <br>
+
+            <h2>Sample Output</h2>
+            <h4>
+                2<br>
+                875
+            </h4>
+            <br>
+
+            <h3>Note: No importing "os", "sqlite3", "flask" & "subprocess" or opening files.</h3>
+            <br>
+            <h3>Question taken from <a href="https://dunjudge.me">dunjudge.me</a>'s fibo</h3>
+        </div>
+
+        <h2 class="IDE"><b>Submit Solution / IDE</b></h2>
+        <h4>Python3</h4>
+
+        <form action="/bonus2" method="post">
+            <div class="editor">
+                <textarea id="codeeditor" name="code">{{ code }}</textarea>
+            </div>
+
+            <input type="submit" class="submit" name="Submit">
+        </form>
+        <br>
+
+        {% if error %}
+            <h2 class="output">{{ error }}</h2>
+        {% endif %}
+        
+        {% if subtasks %}
+            <div class="subtasks">
+                {% for i in range(subtasks|length) %}
+                    {% if subtasks[i] %}
+                        <div class="subtask correct">
+                            <h2>Subtask {{ i }}: Correct</h2>
+                        </div>
+                        <br>
+                    {% else %}
+                        <div class="subtask incorrect">
+                            <h2>Subtask {{ i }}: Incorrect</h2><br>
+                        </div>
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <br>
+
+            {% if subtasks[0] and subtasks[1] %}
+                <h2><b>Reward</b></h2>
+                <h4>Mr Math is impressed by your work. She hands you a lucky charm to boost your luck!</h4>
+                <br><br>
+                <a href="/"><button class="submit">Home</button></a>
+            {% endif %}
+        {% endif %}
+    </section>
+
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("codeeditor"), {
+            mode: "python",
+            indentUnit: 4,
+            lineNumbers: true,
+            theme: "monokai"
+        });
+    </script>
+{% endblock %}

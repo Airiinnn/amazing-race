@@ -53,14 +53,19 @@ client = WebApplicationClient(GOOGLE_CLIENT_ID)
 @login_manager.user_loader
 def load_user(user_id):
     return User.get(user_id)
+
+# Redirect unauthorized users to login
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect('/')
     
 @app.route("/")
 def index():
     if current_user.is_authenticated:
         connection = sqlite3.connect("sqlite_db")
         cursor = connection.cursor()
-        cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-        maxstage = cursor.fetchone()[0]
+        cursor.execute("SELECT mainstage, bonus0, bonus1, bonus2, bonus3 FROM progress WHERE email='{}'".format(current_user.email))
+        progress = cursor.fetchone()
         
         cursor.execute("SELECT * FROM mainstage")
         main_stages = cursor.fetchall()
@@ -69,7 +74,7 @@ def index():
         bonus_stages = cursor.fetchall()
         connection.close()
 
-        return render_template("index.html", maxstage=maxstage, main_stages=main_stages, bonus_stages=bonus_stages)
+        return render_template("index.html", progress=progress, main_stages=main_stages, bonus_stages=bonus_stages)
     else:
         return render_template("login.html")
         
@@ -139,7 +144,7 @@ def stage1_submission():
 
 
 
-#STAGE 2: COMPUTATIONAL THINKING, KEY: hi2
+#STAGE 2: COMPUTATIONAL THINKING, KEY: bigbraintime
 connection = sqlite3.connect("sqlite_db")
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM stage2questions")
@@ -166,9 +171,6 @@ def stage2():
             stage2_progress = cursor.fetchone()
             connection.close()
 
-            print(STAGE2_QUESTIONS)
-            print(stage2_progress)
-
             for i in range(1, 9):
                 if stage2_progress[i] == 0:
                     return render_template("stage2.html", question=STAGE2_QUESTIONS[i-1], progress=i-1)
@@ -192,37 +194,6 @@ def stage2():
 
                     else: # incorrect
                         return render_template("stage2.html", question=question, correct=False, progress=progress)
-
-@app.route("/stage2/submission", methods=["POST"])
-@login_required
-def stage2_submission():
-    correct = ["31", "37777", "45", "5", "8", "83", "buildingblocs", "42"]
-    answers = []
-    results = []
-    score = 0
-    answers.append(request.form.get("ans1"))
-    answers.append(request.form.get("ans2"))
-    answers.append(request.form.get("ans3"))
-    answers.append(request.form.get("ans4"))
-    answers.append(request.form.get("ans5"))
-    answers.append(request.form.get("ans6"))
-    answers.append(request.form.get("ans7"))
-    answers.append(request.form.get("ans8"))
-    
-    for i in range(8):
-        if correct[i] == answers[i]:
-            results.append(True)
-            score += 1
-        else:
-            results.append(False)
-        
-    print(answers)
-
-    return render_template("stage2_submission.html", answers=answers, results=results, score=score)
-
-
-
-
 
 #STAGE 3: SQL, KEY: hi3
 
@@ -436,11 +407,76 @@ def bonus1():
 
 
 # Bonus 2: Competitive programming:
-@app.route("/bonus2")
+@app.route("/bonus2", methods=["GET", "POST"])
 @login_required
 def bonus2():
-    pass
+    if request.method == "GET":
+        connection = sqlite3.connect("sqlite_db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
+        maxstage = cursor.fetchone()[0]
+        connection.close()
 
+        if maxstage < 5:
+            return redirect("/submit")
+        return render_template("bonus2.html")
+    
+    else:
+        code = request.form.get("code")
+        if code:
+            # prevent user for accessing files
+            if "open" in code or "file" in code:
+                output = "No trying to open files!"
+                return render_template("bonus2.html", code=code, error=output)
+            
+            else:
+                subtasks = []
+
+                with open("fibo/fibo.py", 'w') as file:
+                    file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\nsys.modules['flask']=None\nsys.modules['subprocess']=None\nsys.modules['sys']=None\ndel sys\n") # prevent importing os and sqlite3
+                    file.write(code)
+
+                for i in range(2):
+                    fiboInput = open("fibo/fibo-{}.in".format(i))
+                    try:
+                        output = subprocess.check_output(["python", "fibo/fibo.py"], timeout=1, stdin=fiboInput).decode("utf-8")
+                    except subprocess.TimeoutExpired:
+                        output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
+                        return render_template("bonus2.html", code=code, error=output)
+                    except subprocess.CalledProcessError:
+                        output = "There's an error in your code."
+                        return render_template("bonus2.html", code=code, error=output)
+                    
+                    # check answers
+                    with open("fibo/fibo-ans-{}.txt".format(i), 'r') as file:
+                        ans = list(file)
+                    
+                    output = output.split("\n")
+                    n = len(output) - 1
+                    if n != len(ans):
+                        subtasks.append(False)
+                    
+                    else:
+                        correct = True
+                        for i in range(n):
+                            output[i].strip()
+                            output[i] = output[i].replace("\r", "")
+
+                            if output[i] != ans[i].strip():
+                                correct = False
+
+                        subtasks.append(correct)
+
+                if subtasks[0] == True and subtasks[1] == True:
+                    connection = sqlite3.connect("sqlite_db")
+                    connection.execute("UPDATE progress SET bonus2=(?) WHERE email=(?)", (datetime.datetime.now(), current_user.email))
+                    connection.commit()
+                    connection.close()
+
+                return render_template("bonus2.html", code=code, subtasks=subtasks)
+        
+        else: # empty input
+            return render_template("bonus2.html")
 
 
 
@@ -480,14 +516,6 @@ def submit():
         else:
             connection.close()
             return render_template("submit.html", success=False)
-
-    
-
-
-
-
-
-
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()

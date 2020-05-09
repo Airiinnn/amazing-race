@@ -32,8 +32,8 @@ class User(UserMixin):
         )
 
         db.execute(
-            "INSERT INTO progress (email, mainstage, bonus0, bonus1, bonus2, bonus3, psw) "
-            "VALUES (?, 0, 0, 0, 0, 0, '-')",
+            "INSERT INTO progress (email, mainstage, psw) "
+            "VALUES (?, 0, '-')",
             (email,),
         )
 
