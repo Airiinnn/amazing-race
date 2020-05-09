@@ -74,55 +74,45 @@ def index():
         return render_template("login.html")
         
 #STAGE 0: Cyber Security, KEY: --NIL--
-
-#All questions
-questions = []
-with open("stage0.csv", 'r') as file:
-    reader = csv.reader(file)
-    # print('once!')
-    questions = [read for read in reader]
+connection = sqlite3.connect("sqlite_db")
+cursor = connection.cursor()
+cursor.execute("SELECT * FROM stage0questions")
+STAGE0_QUESTIONS = cursor.fetchall()
+connection.close()
     
-@app.route('/stage0')
+@app.route('/stage0', methods=["GET", "POST"])
 @login_required
 def stage0_main():
-    if questions:
-        qn = random.randint(0,len(questions)-1)
-    else:
-        return redirect('stage0/winner')
-    return redirect('stage0/'+str(qn))
+    if request.method == "GET":
+        connection = sqlite3.connect("sqlite_db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM stage0 WHERE email='{}'".format(current_user.email))
+        stage0_progress = cursor.fetchone()
+        connection.close()
+        
+        stage0_incomplete = [i for i in range(1, 21) if stage0_progress[i] == 0]
+        if len(stage0_incomplete) == 0:
+            return render_template("stage0_winner.html")
 
-     
-
-@app.route("/stage0/<int:question_id>")
-#@login_required
-def stage0(question_id):
-    question = questions[question_id]
-    print(question)    
-    return render_template("stage0.html", question = question,question_id = question_id)
-
-
-@app.route("/stage0/<int:question_id>/submission", methods=['POST'])
-@login_required
-def stage0_submission(question_id):
-    question = questions[question_id]
-    tip = question[-1]
-    answer = request.form['question']
-    correct = question[-2]
-    #print(answer)
-    if answer == correct:
-        correct = 'y'
-
-        del questions[question_id]
-        #print(current_user.questions)
+        else:
+            return render_template("stage0.html", question=STAGE0_QUESTIONS[random.choice(stage0_incomplete)-1])
     
-    return render_template("stage0_submission.html", correct=correct, answer = answer,tip = tip, question = question)
+    else:
+        qn = request.form.get("qn")
+        ans = request.form.get("ans")
 
-@app.route('/stage0/winner')
-@login_required
-def stage0_winner():
-    if questions:
-        return render_template("stage0_error.html")
-    return render_template('stage0_winner.html')
+        for question in STAGE0_QUESTIONS:
+            if question[1] == qn:
+                if ans == question[6]: # correct
+                    connection = sqlite3.connect("sqlite_db")
+                    connection.execute("UPDATE stage0 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
+                    connection.commit()
+                    connection.close()
+
+                    return redirect("/stage0")
+
+                else: # incorrect
+                    return render_template("stage0.html", question=question, correct=False)
 
 
 
@@ -530,6 +520,7 @@ def callback():
     # Doesn't exist? Add it to the database.
     if not User.get(unique_id):
         User.create(unique_id, users_name, users_email)
+
 
     # Begin user session by logging the user in
     login_user(user)

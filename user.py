@@ -30,4 +30,40 @@ class User(UserMixin):
             "VALUES (?, ?, ?)",
             (id_, name, email),
         )
+
+        db.execute(
+            "INSERT INTO progress (email, mainstage, bonus0, bonus1, bonus2, bonus3, psw) "
+            "VALUES (?, 0, 0, 0, 0, 0, '-')",
+            (email,),
+        )
+
+        db.execute(
+            "INSERT INTO stage0 (email, q1, q2, q3, q4, q5, q6, q7, q8, q9, q10, q11, q12, q13, q14, q15, q16, q17, q18, q19, q20) "
+            "VALUES (?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)",
+            (email,),
+        )
+
+        db.execute(
+            "INSERT INTO stage1 (email, q1, q2, q3, q4) "
+            "VALUES (?, 0, 0, 0, 0)",
+            (email,),
+        )
+
+        db.execute(
+            "INSERT INTO stage2 (email, q1, q2, q3, q4, q5, q6, q7, q8) "
+            "VALUES (?, 0, 0, 0, 0, 0, 0, 0, 0)",
+            (email,),
+        )
+
+        db.execute(
+            "INSERT INTO stage3 (email, q1, q2, q3) "
+            "VALUES (?, 0, 0, 0)",
+            (email,),
+        )
+
+        db.execute(
+            "INSERT INTO stage7 (email, q1, q2, q3, q4, q5, q6) "
+            "VALUES (?, 0, 0, 0, 0, 0, 0)",
+            (email,),
+        )
         db.commit()
