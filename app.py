@@ -388,13 +388,35 @@ def stage7_submission():
 
 
 # Bonus 0: Computational thinking:
-@app.route("/bonus0")
+@app.route("/bonus0", methods=["GET", "POST"])
 @login_required
 def bonus0():
-    pass
+    connection = sqlite3.connect("sqlite_db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
+    maxstage = cursor.fetchone()[0]
+    connection.close()
+    
+    if maxstage < 2:
+        return redirect("/submit")
 
+    else:
+        if request.method == "GET":
+            return render_template("bonus0.html")
+        
+        else:
+            ans = request.form.get("ans")
 
+            if ans == "Guido van Rossum":
+                connection = sqlite3.connect("sqlite_db")
+                connection.execute("UPDATE progress SET bonus0=(?) WHERE email=(?)", (datetime.datetime.now(), current_user.email))
+                connection.commit()
+                connection.close()
 
+                return render_template("bonus0.html", correct=True)
+
+            else:
+                return render_template("bonus0.html", correct=False)
 
 # Bonus 1: SQL:
 @app.route("/bonus1")

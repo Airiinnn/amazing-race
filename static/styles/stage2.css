@@ -7,6 +7,11 @@ section {
     width: 100%;
 }
 
+.output {
+    text-align: left;
+    line-height: 24pt;
+}
+
 .text {
     width: 120px;
     border-top: None;
