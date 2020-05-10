@@ -123,21 +123,48 @@ def stage0_main():
 
 
 #STAGE 1: PYTHON BASICS, KEY: hi1
+connection = sqlite3.connect("sqlite_db")
+cursor = connection.cursor()
+cursor.execute("SELECT * FROM stage0questions")
+STAGE0_QUESTIONS = cursor.fetchall()
+connection.close()
 
-@app.route("/stage1")
+@app.route("/stage1", methods=["GET", "POST"])
 @login_required
 def stage1():
-    #type here
-    pass
+    if request.method == "GET":
+        connection = sqlite3.connect("sqlite_db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM stage0 WHERE email='{}'".format(current_user.email))
+        stage0_progress = cursor.fetchone()
+        connection.close()
+        
+        stage0_incomplete = [i for i in range(1, 21) if stage0_progress[i] == 0]
+        if len(stage0_incomplete) == 0:
+            return render_template("stage0_success.html")
+
+        else:
+            return render_template("stage0.html", question=STAGE0_QUESTIONS[random.choice(stage0_incomplete)-1], progress=20-len(stage0_incomplete))
+    
+    else:
+        qn = request.form.get("qn")
+        ans = request.form.get("ans")
+        progress = request.form.get("progress")
+
+        for question in STAGE0_QUESTIONS:
+            if question[0] == qn:
+                if ans == question[6]: # correct
+                    connection = sqlite3.connect("sqlite_db")
+                    connection.execute("UPDATE stage0 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
+                    connection.commit()
+                    connection.close()
+
+                    return redirect("/stage0")
+
+                else: # incorrect
+                    return render_template("stage0.html", question=question, correct=False, progress=progress)
 
 
-
-
-@app.route("/stage1/submission", methods=["POST"])
-@login_required
-def stage1_submission():
-    #type here
-    pass
 
 
 
@@ -197,7 +224,13 @@ def stage2():
 
 #STAGE 3: SQL, KEY: hi3
 
-@app.route("/stage3")
+connection = sqlite3.connect("sqlite_db")
+cursor = connection.cursor()
+cursor.execute("SELECT * FROM stage3questions")
+STAGE3_QUESTIONS = cursor.fetchall()
+connection.close()
+
+@app.route("/stage3", methods=["GET", "POST"])
 @login_required
 def stage3():
     connection = sqlite3.connect("sqlite_db")
@@ -208,46 +241,44 @@ def stage3():
     
     if maxstage < 3:
         return redirect("/submit")
-    return render_template("stage3.html")
 
-@app.route("/stage3/submission", methods=["POST"])
-@login_required
-def stage3_submission():
-    corr1 = True
-    corr2 = True
-    corr3 = True
-    q1 = request.form.get("q1")
-    q2 = request.form.get("q2")
-    q3 = request.form.get("q3")
-    if q1 != "SELECT * FROM sql_data":
-        corr1 = False
-    if q2 != "SELECT * FROM sql_data WHERE id=1":
-        corr2 = False
-    if q3 != "INSERT INTO sql_data (id) VALUES (1)":
-        corr3 = False
-    inject = request.form.get("inject")
-    connection = sqlite3.connect("sqlite_db")
-    cursor = connection.cursor()
-    #n = ("test2", "staffkuanxin")
-    #cursor.execute("INSERT INTO sql_test (name, password) VALUES (?, ?)", n)  
-    sq = "SELECT * FROM sql_users WHERE name=\'" + inject + "\'"
-    #ans: 'or''='
-    print(sq)
-    cursor.execute(sq)
-    results = cursor.fetchall()
-    res = ""
-    if not corr1:
-        res = "Error, please enter correct answer for Q1 first"
-        results = None
-    elif not corr2:
-        res = "Error, please enter correct answer for Q2 first"
-        results = None
-    elif not corr3:
-        res = "Error, please enter correcct answer for Q3 first"
-        results = None
+    else:
+        if request.method == "GET":
+            connection = sqlite3.connect("sqlite_db")
+            cursor = connection.cursor()
+            cursor.execute("SELECT * FROM stage3 WHERE email='{}'".format(current_user.email))
+            stage3_progress = cursor.fetchone()
+            connection.close()
+            
+            stage3_incomplete = [i for i in range(1, 4) if stage3_progress[i] == 0]
+            if len(stage3_incomplete) == 0:
+                return render_template("stage3_success.html")
 
-    connection.close()
-    return render_template("stage3_submission.html", results=results, res=res)
+            else:
+                return render_template("stage3.html", question=STAGE3_QUESTIONS[random.choice(stage3_incomplete)-1], progress=3-len(stage3_incomplete))
+        
+        else:
+            qn = request.form.get("qn")
+            ans = request.form.get("ans")
+            progress = request.form.get("progress")
+            #print(qn, ans, progress)
+            for question in STAGE3_QUESTIONS:
+                #print(question, question[0], qn)
+                if question[0] == qn:
+                    #print("A")
+                    if ans == question[3]: # correct
+                        connection = sqlite3.connect("sqlite_db")
+                        connection.execute("UPDATE stage3 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
+                        connection.commit()
+                        connection.close()
+
+                        return redirect("/stage3")
+
+                    else: # incorrect
+                        return render_template("stage3.html", question=question, correct=False, progress=progress)
+                
+                else:
+                    print("B")
 
 
 
@@ -397,10 +428,25 @@ def bonus0():
 
 
 # Bonus 1: SQL:
-@app.route("/bonus1")
+@app.route("/bonus1", methods=["GET","POST"])
 @login_required
 def bonus1():
-    pass
+    if request.method == "POST":
+        inject = request.form.get("inject")
+        connection = sqlite3.connect("stage3.db")
+        cursor = connection.cursor()
+        sq = "SELECT * FROM users WHERE name=\'" + inject + "\'"
+        #ans: 'or''='
+        print(sq)
+        cursor.execute(sq)
+        results = cursor.fetchall()
+        print(results)
+        connection.close()
+        return render_template("bonus1.html", results = results)
+
+    else:
+        return render_template("bonus1.html")
+    
 
 
 
@@ -607,6 +653,6 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     # for normal local testing use this run
-    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     # for deployment to heroku app use this
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #app.run(host='0.0.0.0', port=port, debug=True)
