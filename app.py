@@ -606,7 +606,7 @@ def submit():
         psw = cursor.fetchone()[0]
 
         if userpsw == psw:
-            cursor.execute("UPDATE progress SET mainstage=mainstage+1, lastupdated=(?) WHERE email=(?)", (datetime.datetime.now(), current_user.email,))
+            cursor.execute("UPDATE progress SET mainstage=mainstage+1, main{}=(?) WHERE email=(?)".format(maxstage), (datetime.datetime.now(), current_user.email,))
             connection.commit()
             connection.close()
             return render_template("submit.html", success=True)
