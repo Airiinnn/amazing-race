@@ -686,6 +686,6 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     # for normal local testing use this run
-    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     # for deployment to heroku app use this
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #app.run(host='0.0.0.0', port=port, debug=True)
