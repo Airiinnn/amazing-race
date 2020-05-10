@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link href="static/styles/style.css" rel="stylesheet">
+    <link href="static/styles/stage5.css" rel="stylesheet">
+    <link href="static/styles/codemirror.css" rel="stylesheet">
+    <link href="static/styles/monokai.css" rel="stylesheet">
+    <script src="static/scripts/codemirror.js"></script>
+    <script src="static/scripts/python.js"></script>
+{% endblock %}
+
+{% block body %}
+    <header>
+        <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
+        <h1>Stage 1: Python Basics</h1>
+        <h3>Do you know what you are doing?</h3>
+    </header>
+    
+    <section>
+        <h4>
+            Elder: Solve these arithmetic questions and I will send you on your way.
+        </h4>
+
+        <h3>
+            Answer the following questions.
+            <br><br>
+            Progress: {{ progress }} / 4
+        </h3>
+        <br>
+
+        <h2><b>Toiletpaper</b></h1> 
+        
+        <div class="question">
+            <h2>Problem Description</h2>
+            <h4>
+                {{ question[1] }}
+            </h4>
+            
+
+        <h2 class="IDE"><b>Submit Solution / IDE</b></h2>
+        <h4>Python3</h4>
+
+        <form action="/stage1/q4" method="post">
+            <input type="hidden" name="qn" value="{{ question[0] }}">
+            <input type="hidden" name="progress" value="{{ progress }}">
+            <input type="hidden" name="question" value="{{ question }}">
+            <div class="editor">
+                <textarea id="codeeditor" name="code">{{ code }}</textarea>
+            </div>
+
+            <input type="submit" class="submit" name="Submit">
+        </form>
+        <br>
+
+        {% if error %}
+            <h2 class="output">{{ error }}</h2>
+        {% endif %}
+    </section>
+
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("codeeditor"), {
+            mode: "python",
+            indentUnit: 4,
+            lineNumbers: true,
+            theme: "monokai"
+        });
+    </script>
+{% endblock %}
