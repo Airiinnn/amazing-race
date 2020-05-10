@@ -593,7 +593,22 @@ def bonus2():
 def bonus3():
     pass
 
+ADMIN = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang"]
 
+@app.route("/scoreboard")
+@login_required
+def scoreboard():
+    if current_user.email not in ADMIN:
+        return redirect("/")
+
+    else:
+        connection = sqlite3.connect("sqlite_db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM progress")
+        data = cursor.fetchall()
+        connection.close()
+
+        return render_template("scoreboard.html", data=data)
 
 @app.route("/submit", methods=["GET", "POST"])
 @login_required
