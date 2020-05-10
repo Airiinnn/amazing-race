@@ -140,7 +140,7 @@ def stage1():
     maxstage = cursor.fetchone()[0]
     connection.close()
     
-    if maxstage < 1:
+    if maxstage < 2:
         return redirect("/submit")
     else:
         if request.method == "GET":
