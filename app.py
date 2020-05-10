@@ -222,53 +222,6 @@ def stage1_q4():
                         else:
                             output = "Wrong Answer! Ps: How many days are there?"
                             return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
-=======
-connection = sqlite3.connect("sqlite_db")
-cursor = connection.cursor()
-cursor.execute("SELECT * FROM stage0questions")
-STAGE0_QUESTIONS = cursor.fetchall()
-connection.close()
-
-@app.route("/stage1", methods=["GET", "POST"])
-@login_required
-def stage1():
-    if request.method == "GET":
-        connection = sqlite3.connect("sqlite_db")
-        cursor = connection.cursor()
-        cursor.execute("SELECT * FROM stage0 WHERE email='{}'".format(current_user.email))
-        stage0_progress = cursor.fetchone()
-        connection.close()
-        
-        stage0_incomplete = [i for i in range(1, 21) if stage0_progress[i] == 0]
-        if len(stage0_incomplete) == 0:
-            return render_template("stage0_success.html")
-
-        else:
-            return render_template("stage0.html", question=STAGE0_QUESTIONS[random.choice(stage0_incomplete)-1], progress=20-len(stage0_incomplete))
-    
-    else:
-        qn = request.form.get("qn")
-        ans = request.form.get("ans")
-        progress = request.form.get("progress")
-
-        for question in STAGE0_QUESTIONS:
-            if question[0] == qn:
-                if ans == question[6]: # correct
-                    connection = sqlite3.connect("sqlite_db")
-                    connection.execute("UPDATE stage0 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
-                    connection.commit()
-                    connection.close()
-
-                    return redirect("/stage0")
-
-                else: # incorrect
-                    return render_template("stage0.html", question=question, correct=False, progress=progress)
->>>>>>> Stashed changes
-
-    
-    else: # empty input
-        return render_template("stage1_q4.html", question=question, progress=progress)
-
 
 
 
@@ -327,6 +280,8 @@ def stage2():
                         return render_template("stage2.html", question=question, correct=False, progress=progress)
 
 
+
+#STAGE 3: SQL, KEY: -
 connection = sqlite3.connect("sqlite_db")
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM stage3questions")
@@ -750,6 +705,6 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     # for normal local testing use this run
-    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     # for deployment to heroku app use this
-    #app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)
