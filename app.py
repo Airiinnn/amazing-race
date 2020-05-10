@@ -124,7 +124,7 @@ def stage0_main():
 
 
 
-#STAGE 1: PYTHON BASICS, KEY: hi1
+#STAGE 1: PYTHON BASICS, KEY: nextdoor
 connection = sqlite3.connect("sqlite_db")
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM stage1questions")
@@ -344,9 +344,6 @@ def stage3():
 
                     else: # incorrect
                         return render_template("stage3.html", question=question, correct=False, progress=progress)
-                
-                else:
-                    print("B")
 
 
 

@@ -14,8 +14,11 @@
     
     <section>
         <h4>
-            In order to continue to on your quest, you will need to locate THE BOOK.
+            You arrive at the library and find Ms Gogle arranging books. You approach her and ask Doctor Huh about the portal.
+            <br>
+            She points to a massive booksehlf and says that the way to get to the portal is somewhere in there.
         </h4>
+        <br>
 
         <h3>
             Answer the following questions to find it.
@@ -27,9 +30,9 @@
         <form action="/stage3" method="POST">
             <input type="hidden" name="qn" value="{{ question[0] }}">
             <input type="hidden" name="progress" value="{{ progress }}">
-            <h2>Fill in the blanks</h2>
-            <br>
+
             <h2>Qns: {{ question[1] }}</h2>
+            <h3>{{ question[2] }}</h3>
             <p><input class="inject" name = "ans" type="text" placeholder="{{ question[2] }}"></p>
             
             <input type="submit" value="Submit" class="submit">
