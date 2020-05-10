@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link href="static/styles/style.css" rel="stylesheet">
+    <link href="static/styles/stage3.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <header>
+        <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
+        <h1>Bonus 1: SQL</h1>
+    </header>
+    
+    <section>
+        <form action="/bonus1" method="POST">
+            <h2><b>Find the secret (ps: its in the database)</b></h2>
+            <p><input class= "inject" name="inject" type = "text" placeholder="Enter your username"></p>
+            <input type = "submit" value = "Submit" class="submit">
+        </form>
+    
+    {% if results %}
+        {% for result in results %}
+            <h4>Username: {{ result[0] }}</h4>
+            <h4>Password: {{ result[1] }}</h4>
+        {% endfor %}
+    {% else %}
+        <h3>No results found</h3>
+    {% endif %}  
+    </section>  
+{% endblock %}
