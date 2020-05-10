@@ -1,29 +1,29 @@
-section {
-    padding-left: 20%;
-    padding-right: 20%;
+#codeeditor {
+    height: auto;
 }
 
-.qn {
-    width: 100%;
+#display {
+    height: 800px;
+    width: 48%;
+    float: right;
+    border: 1px solid grey;
 }
 
-.output {
+.desc {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.input {
+    height: 800px;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.editor {
     text-align: left;
-    line-height: 24pt;
-}
-
-.text {
-    width: 120px;
-    border-top: None;
-    border-right: None;
-    border-left: None;
-    border-bottom-width: 3px;
-    border-bottom-color: #8A0303;
-    margin: 20px;
-    padding: 10px;
-    font-size: 16px;
-    text-align: center;
-    margin-bottom: 64px;
+    width: 48%;
+    float: left;
 }
 
 .submit {
@@ -47,10 +47,9 @@ section {
 }
 
 .correct {
-    color: limegreen;
+    background-color: limegreen;
 }
 
 .incorrect {
-    color: crimson;
+    background-color: crimson;
 }
-

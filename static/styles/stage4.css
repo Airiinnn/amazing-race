@@ -3,27 +3,9 @@ section {
     padding-right: 20%;
 }
 
-.qn {
-    width: 100%;
-}
-
-.output {
-    text-align: left;
-    line-height: 24pt;
-}
-
-.text {
-    width: 120px;
-    border-top: None;
-    border-right: None;
-    border-left: None;
-    border-bottom-width: 3px;
-    border-bottom-color: #8A0303;
-    margin: 20px;
-    padding: 10px;
-    font-size: 16px;
-    text-align: center;
-    margin-bottom: 64px;
+a {
+    color: #8A0303;
+    text-decoration: none;
 }
 
 .submit {
@@ -45,12 +27,3 @@ section {
     background-color: #8A0303;
     color: white;
 }
-
-.correct {
-    color: limegreen;
-}
-
-.incorrect {
-    color: crimson;
-}
-

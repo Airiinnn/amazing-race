@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link href="static/styles/style.css" rel="stylesheet">
+    <link href="static/styles/stage2.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <header>
+        <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
+        <h1>Bonus 0: Computational Thinking</h1>
+        <h3>Big think</h3>
+    </header>
+
+    <section>
+        <h4>On the way to the library, you found a magic box on the ground. The box had a puzzle on it. Solve the puzzle and receive the reward hidden inside.</h4>
+        <br>
+        
+        <h2>Output to input</h2>
+        <h3>Find the output from the given input!</h3>
+
+        <form action="/bonus0" method="post">
+            <img src="/static/images/bonus0/bonus0.png" alt="Question" class="qn">
+            <br>
+
+            <h4 class="output">
+                Output (to copy and paste):<br>
+                [7, 15, 5, 9, 12, 1, 10, 2, 6, 3, 8, 11, 0, 4, 14, 13]<br>
+                [5041, 13689, 11025, 625, 12321, 1, 3481, 9409, 3025, 1, 1681, 12321, 13225, 13225, 13689, 11881]<br>
+                [4096, 32768, 128, 524288, 8192, 4, 1024, 1, 4096, 128, 256, 2048, 16, 32768, 16384, 2]
+            </h4>
+            
+            <div style="width:100%;">
+                <input type="text" name="ans" class="text" placeholder="Answer" autocomplete="off" required>
+            </div>
+
+            <input type="submit" name="Submit" class="submit">
+        </form>
+
+        {% if correct == True %}
+            <h2 class="correct"><b>Congratulations!</b></h2>
+            <h4>You unlocked the box and found a lucky charm to boost your luck!</h4>
+            <br><br>
+            <a href="/"><button class="submit">Home</button></a>
+        {% elif correct == False %}
+            <h2 class="incorrect">Incorrect! Try again!</h2>
+        {% endif %}
+    </section>
+{% endblock %}
