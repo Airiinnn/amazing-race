@@ -140,7 +140,7 @@ def stage1():
     maxstage = cursor.fetchone()[0]
     connection.close()
     
-    if maxstage < 2:
+    if maxstage < 1:
         return redirect("/submit")
     else:
         if request.method == "GET":
@@ -197,11 +197,39 @@ def stage1_q4():
                 file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\nsys.modules['flask']=None\nsys.modules['subprocess']=None\nsys.modules['sys']=None\ndel sys\n") # prevent importing os and sqlite3
                 file.write(code)
 
-connection = sqlite3.connect("sqlite_db")
-cursor = connection.cursor()
-cursor.execute("SELECT * FROM stage0questions")
-STAGE0_QUESTIONS = cursor.fetchall()
-connection.close()
+            
+            toiletinput = open("toiletpaper/toiletpaper.in")
+            try:
+                output = subprocess.check_output(["python", "toiletpaper/toiletpaper.py"], timeout=10,stdin=toiletinput).decode("utf-8")
+            except subprocess.TimeoutExpired:
+                output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
+                return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
+            except subprocess.CalledProcessError:
+                output = "There's an error in your code."
+                return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
+            
+            # check answers
+            for question in STAGE1_QUESTIONS:
+                if question[0] == qn:
+                    print(type(question[2]))
+                    print(type(output))
+                    print("A")
+                    print(output)
+                    print("B")
+                    print(question[2])
+                    if str(output).strip() == question[2]: # correct
+                        connection = sqlite3.connect("sqlite_db")
+                        connection.execute("UPDATE stage1 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
+                        connection.commit()
+                        connection.close()
+                        return redirect("/stage1")
+                    else:
+                        output = "Wrong Answer! Ps: How many days are there?"
+                        return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
+
+    
+    else: # empty input
+        return render_template("stage1_q4.html", question=question, progress=progress)
 
 
 
@@ -262,7 +290,8 @@ def stage2():
 
 
 
-#STAGE 3: SQL, KEY: -
+#STAGE 3: SQL, KEY: hi3
+
 connection = sqlite3.connect("sqlite_db")
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM stage3questions")
@@ -686,6 +715,6 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     # for normal local testing use this run
-    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     # for deployment to heroku app use this
-    #app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)
