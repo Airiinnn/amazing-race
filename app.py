@@ -197,31 +197,12 @@ def stage1_q4():
                 file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\nsys.modules['flask']=None\nsys.modules['subprocess']=None\nsys.modules['sys']=None\ndel sys\n") # prevent importing os and sqlite3
                 file.write(code)
 
-            for i in range(3):
-                try:
-                    output = subprocess.check_output(["python", "toiletpaper/toiletpaper.py"], timeout=10).decode("utf-8")
-                except subprocess.TimeoutExpired:
-                    output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
-                    return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
-                except subprocess.CalledProcessError:
-                    output = "There's an error in your code."
-                    return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
-                
-                # check answers
-                for question in STAGE1_QUESTIONS:
-                    if question[0] == qn:
-                        print(type(question[2]))
-                        print(type(output))
-                        print(output, question[2])
-                        if str(output) == question[2]: # correct
-                            connection = sqlite3.connect("sqlite_db")
-                            connection.execute("UPDATE stage1 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
-                            connection.commit()
-                            connection.close()
-                            return redirect("/stage1")
-                        else:
-                            output = "Wrong Answer! Ps: How many days are there?"
-                            return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
+connection = sqlite3.connect("sqlite_db")
+cursor = connection.cursor()
+cursor.execute("SELECT * FROM stage0questions")
+STAGE0_QUESTIONS = cursor.fetchall()
+connection.close()
+
 
 
 
