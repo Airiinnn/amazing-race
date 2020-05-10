@@ -125,7 +125,7 @@ def stage0_main():
 #STAGE 1: PYTHON BASICS, KEY: hi1
 connection = sqlite3.connect("sqlite_db")
 cursor = connection.cursor()
-cursor.execute("SELECT * FROM stage0questions")
+cursor.execute("SELECT * FROM stage1questions")
 STAGE0_QUESTIONS = cursor.fetchall()
 connection.close()
 
