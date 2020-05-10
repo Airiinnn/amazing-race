@@ -1,0 +1,55 @@
+#codeeditor {
+    height: auto;
+}
+
+#display {
+    height: 800px;
+    width: 48%;
+    float: right;
+    border: 1px solid grey;
+}
+
+.desc {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+.input {
+    height: 800px;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.editor {
+    text-align: left;
+    width: 48%;
+    float: left;
+}
+
+.submit {
+    width: 150px;
+    height: 50px;
+    border: 2px solid #8A0303;
+    border-radius: 25px;
+    background-color: white;
+    color: #8A0303;
+    padding: 5px;
+    margin: 20px;
+    font-size: 16px;
+    font-family: 'Barlow', sans-serif;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+.submit:hover {
+    background-color: #8A0303;
+    color: white;
+}
+
+.correct {
+    background-color: limegreen;
+}
+
+.incorrect {
+    background-color: crimson;
+}
