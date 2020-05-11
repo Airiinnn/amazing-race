@@ -435,17 +435,18 @@ def stage5():
 @app.route("/stage6")
 @login_required
 def stage6():
-    #type here
-    pass
+    connection = sqlite3.connect("sqlite_db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
+    maxstage = cursor.fetchone()[0]
+    connection.close()
+
+    if maxstage < 6:
+        return redirect("/submit")
+    return render_template("stage6.html")
 
 
 
-
-@app.route("/stage6/submission", methods=["POST"])
-@login_required
-def stage6_submission():
-    #type here
-    pass
 
 
 
@@ -723,6 +724,6 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     # for normal local testing use this run
-    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     # for deployment to heroku app use this
-    #app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)
