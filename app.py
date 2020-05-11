@@ -150,16 +150,13 @@ def stage1():
             stage1_progress = cursor.fetchone()
             connection.close()
             
-            stage1_incomplete = [i for i in range(1, 5) if stage1_progress[i] == 0]
+            stage1_incomplete = [i for i in range(1, 4) if stage1_progress[i] == 0]
             if len(stage1_incomplete) == 0:
-                return render_template("stage1_success.html")
+                return redirect("/stage1/q4")
 
             else:
                 question = STAGE1_QUESTIONS[random.choice(stage1_incomplete)-1]
-                if question[0] == "q4":
-                    return render_template("stage1_q4.html", question=question, progress=4-len(stage1_incomplete))
-                else:
-                    return render_template("stage1.html", question=question, progress=4-len(stage1_incomplete))
+                return render_template("stage1.html", question=question, progress=4-len(stage1_incomplete))
         
         else:
             qn = request.form.get("qn")
@@ -182,54 +179,67 @@ def stage1():
 @app.route("/stage1/q4", methods=["GET", "POST"])
 @login_required
 def stage1_q4():
-    qn = request.form.get("qn")
-    code = request.form.get("code")
-    progress = request.form.get("progress")
-    question = request.form.get("question")
-    if code:
-        # prevent user for accessing files
-        if "open" in code or "file" in code:
-            output = "No trying to open files!"
-            return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
-        
+    if request.method == "GET":
+        connection = sqlite3.connect("sqlite_db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM stage1 WHERE email='{}'".format(current_user.email))
+        stage1_progress = cursor.fetchone()
+        connection.close()
+
+        for i in range(1, 4):
+            if stage1_progress[i] == 0:
+                return redirect("/stage1")
+
+        if stage1_progress[4] == 1:
+            return render_template("stage1_success.html")
+
         else:
-            with open("toiletpaper/toiletpaper.py", 'w') as file:
-                file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\nsys.modules['flask']=None\nsys.modules['subprocess']=None\nsys.modules['sys']=None\ndel sys\n") # prevent importing os and sqlite3
-                file.write(code)
+            question = STAGE1_QUESTIONS[3]
+            return render_template("stage1_q4.html", question=question, progress=3)
 
+    else:
+        qn = request.form.get("qn")
+        code = request.form.get("code")
+        progress = request.form.get("progress")
+        
+        if code:
+            # prevent user for accessing files
+            if "open" in code or "file" in code:
+                output = "No trying to open files!"
+                return render_template("stage1_q4.html", code=code, error=output, question=STAGE1_QUESTIONS[3], progress=progress)
             
-            toiletinput = open("toiletpaper/toiletpaper.in")
-            try:
-                output = subprocess.check_output(["python", "toiletpaper/toiletpaper.py"], timeout=10,stdin=toiletinput).decode("utf-8")
-            except subprocess.TimeoutExpired:
-                output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
-                return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
-            except subprocess.CalledProcessError:
-                output = "There's an error in your code."
-                return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
-            
-            # check answers
-            for question in STAGE1_QUESTIONS:
-                if question[0] == qn:
-                    print(type(question[2]))
-                    print(type(output))
-                    print("A")
-                    print(output)
-                    print("B")
-                    print(question[2])
-                    if str(output).strip() == question[2]: # correct
-                        connection = sqlite3.connect("sqlite_db")
-                        connection.execute("UPDATE stage1 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
-                        connection.commit()
-                        connection.close()
-                        return redirect("/stage1")
-                    else:
-                        output = "Wrong Answer! Ps: How many days are there?"
-                        return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
+            else:
+                with open("toiletpaper/toiletpaper.py", 'w') as file:
+                    file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\nsys.modules['flask']=None\nsys.modules['subprocess']=None\nsys.modules['sys']=None\ndel sys\n") # prevent importing os and sqlite3
+                    file.write(code)
 
-    
-    else: # empty input
-        return render_template("stage1_q4.html", question=question, progress=progress)
+                
+                toiletinput = open("toiletpaper/toiletpaper.in")
+                try:
+                    output = subprocess.check_output(["python", "toiletpaper/toiletpaper.py"], timeout=1,stdin=toiletinput).decode("utf-8")
+                except subprocess.TimeoutExpired:
+                    output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
+                    return render_template("stage1_q4.html", code=code, error=output, question=STAGE1_QUESTIONS[3], progress=progress)
+                except subprocess.CalledProcessError:
+                    output = "There's an error in your code."
+                    return render_template("stage1_q4.html", code=code, error=output, question=STAGE1_QUESTIONS[3], progress=progress)
+                
+                output = output.split("\n")
+                output = output[0].replace("\r", "")
+
+                # check answers
+                for question in STAGE1_QUESTIONS:
+                    if question[0] == qn:
+                        if output == question[2]: # correct
+                            connection = sqlite3.connect("sqlite_db")
+                            connection.execute("UPDATE stage1 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
+                            connection.commit()
+                            connection.close()
+                            return render_template("stage1_success.html")
+
+                        else:
+                            output = "Wrong Answer! Ps: How many days are there?"
+                            return render_template("stage1_q4.html", code=code, error=output, question=question, progress=progress)
 
 
 
