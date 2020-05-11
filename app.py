@@ -78,7 +78,19 @@ def index():
     else:
         return render_template("login.html")
 
-
+#Stage -1: Demostration, KEY: testrun
+@app.route("/stage-1", methods=["GET", "POST"])
+@login_required
+def stage_demo():
+    if request.method == "GET":
+        return render_template("stage-1.html")
+    else:
+        ans = request.form.get("ans")
+        if ans == "healthy python":
+            return render_template("stage-1_success.html")
+        else:
+            correct = False
+            return render_template("stage-1.html", correct=correct)
 
 #STAGE 0: Cyber Security, KEY: protecc
 connection = sqlite3.connect("sqlite_db")
@@ -766,6 +778,6 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     # for normal local testing use this run
-    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     # for deployment to heroku app use this
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #app.run(host='0.0.0.0', port=port, debug=True)
