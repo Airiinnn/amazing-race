@@ -13,6 +13,15 @@
     </header>
     
     <section>
+        <h2><pre>Hello world</pre></h2>
+        <h4>
+            You wake up in a completely unknown place. Everything around is dark, you see nothing but emptiness in all directions.<br>
+            As you sit there delirious, a buzz comes from a tablet next to you...
+        </h4>
+
+        <h3>Hello <b>{{ name }}</b>, welcome to the cyber world.</h3>
+        <br>
+
         <p class="stage-header">Main stages:</p>
         {% for i in range(main_stages|length) %}
             <a href="/stage{{ main_stages[i][0] }}">
