@@ -2,6 +2,7 @@
 
 {% block head %}
     <link href="static/styles/style.css" rel="stylesheet">
+    <link href="static/styles/scoreboard.css" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
@@ -13,10 +14,26 @@
     </header>
 
     <section>
+
+        <h2>Update participants' final passwords:</h2>
+        <form action="/admin" method="post">
+            <div class="update">
+                <h4>Email: <input name="email" type="text" required></h4>
+
+                <h4>New password: <input name="newpassword" type="text" required></h4>
+            </div>
+
+            <input type="submit" value="Submit">
+        </form>
+
+        <br>
+
+        <a href="sqlite_db" download><button class="submit">Download DB</button></a>
+
         <table class="scoreboard">
             <tr>
                 <th>Email</th>
-                <th>Highest stage</th>
+                <th>Max</th>
                 <th>Bonus0</th>
                 <th>Bonus1</th>
                 <th>Bonus2</th>
@@ -33,7 +50,11 @@
             {% for user in data %}
                 <tr>
                     {% for i in range(14) %}
-                        <th>{{ user[i] }}</th>
+                        {% if user[i] == None %}
+                            <th>-</th>
+                        {% else %}
+                            <th>{{ user[i] }}</th>
+                        {% endif %}
                     {% endfor %}
                 </tr>
             {% endfor %}

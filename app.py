@@ -604,8 +604,6 @@ def bonus2():
 def bonus3():
     pass
 
-
-
 @app.route("/scoreboard")
 @login_required
 def scoreboard():
@@ -643,6 +641,40 @@ def submit():
         else:
             connection.close()
             return render_template("submit.html", success=False)
+
+ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg"]
+
+@app.route("/admin", methods=["GET", "POST"])
+@login_required
+def admin():
+    if request.method == "GET":
+        if current_user.email not in ADMINS:
+            return redirect("/")
+
+        else:
+            connection = sqlite3.connect("sqlite_db")
+            cursor = connection.cursor()
+            cursor.execute("SELECT * FROM progress ORDER BY mainstage DESC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
+            data = cursor.fetchall()
+            connection.close()
+
+            return render_template("admin.html", data=data)
+
+    else:
+        email = request.form.get("email")
+        newpassword = request.form.get("newpassword")
+
+        connection = sqlite3.connect("sqlite_db")
+        connection.execute("UPDATE progress SET psw=(?) WHERE email=(?)", (newpassword, email))
+        connection.commit()
+
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM progress ORDER BY mainstage DESC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
+        data = cursor.fetchall()
+        connection.close()
+
+        return render_template("admin.html", data=data)
+
 
 def get_google_provider_cfg():
     return requests.get(GOOGLE_DISCOVERY_URL).json()
