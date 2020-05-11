@@ -21,45 +21,31 @@
     </ul>
 
     <section>
-        <h2>Update participants' final passwords:</h2>
-        <form action="/admin" method="post">
-            <div class="update">
-                <h4>Email: <input name="email" type="text" required></h4>
-
-                <h4>New password: <input name="newpassword" type="text" required></h4>
-            </div>
-
-            <input type="submit" value="Submit">
-        </form>
+        <h2><b>Leaderboard</b></h2>
+        <h2>Your ranking: <b>{{ pos }}</b></h2>
         <br>
 
-        <table class="leaderboard" style="font-size:14px;">
+        <table class="leaderboard">
             <tr>
-                <th>Rank</th>
+                <th>Ranking</th>
                 <th>Email</th>
-                <th>Max</th>
-                <th>Bonus0</th>
-                <th>Bonus1</th>
-                <th>Bonus2</th>
-                <th>Bonus3</th>
-                <th>Main0</th>
-                <th>Main1</th>
-                <th>Main2</th>
-                <th>Main3</th>
-                <th>Main4</th>
-                <th>Main5</th>
-                <th>Main6</th>
-                <th>Main7</th>
+                <th>Stages completed</th>
+                <th>Bonus 0</th>
+                <th>Bonus 1</th>
+                <th>Bonus 2</th>
+                <th>Bonus 3</th>
             </tr>
 
             {% for i in range(data|length) %}
                 <tr>
                     <td>{{ i + 1 }}</td>
-                    {% for j in range(14) %}
+                    <td>{{ data[i][0] }}</td>
+                    <td>{{ data[i][1] }}</td>
+                    {% for j in range(2, 6) %}
                         {% if data[i][j] == None %}
                             <td>-</td>
                         {% else %}
-                            <td>{{ data[i][j] }}</td>
+                            <td>Done</td>
                         {% endif %}
                     {% endfor %}
                 </tr>

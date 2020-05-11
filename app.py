@@ -605,17 +605,6 @@ def bonus2():
 def bonus3():
     pass
 
-@app.route("/scoreboard")
-@login_required
-def scoreboard():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT * FROM progress")
-    data = cursor.fetchall()
-    connection.close()
-
-    return render_template("scoreboard.html", data=data)
-
 @app.route("/submit", methods=["GET", "POST"])
 @login_required
 def submit():
@@ -642,6 +631,23 @@ def submit():
         else:
             connection.close()
             return render_template("submit.html", success=False)
+
+@app.route("/leaderboard")
+@login_required
+def leaderboard():
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT email, mainstage, bonus0, bonus1, bonus2, bonus3 FROM progress ORDER BY mainstage DESC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
+    data = cursor.fetchall()
+    connection.close()
+
+    n = len(data)
+    for i in range(n):
+        if data[i][0] == current_user.email:
+            pos = i+1
+            break
+
+    return render_template("leaderboard.html", data=data, pos=pos)
 
 ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg"]
 
@@ -767,6 +773,6 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     # for normal local testing use this run
-    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     # for deployment to heroku app use this
-    #app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)
