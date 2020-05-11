@@ -7,145 +7,156 @@
     <link href="static/styles/monokai.css" rel="stylesheet">
     <script src="static/scripts/codemirror.js"></script>
     <script src="static/scripts/xml.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>    
 {% endblock %}
 
 {% block body %}
     <header>
         <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
         <h1>Stage 7: HTML & CSS</h1>
-        <h3>A 'programming' language.</h3>
+        <h3>Websites and stuff</h3>
     </header>
-
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/leaderboard">Leaderboard</a></li>
-      <li><a href="/about">About</a></li>
-      <li style="float:right"><a href="/logout">Logout</a></li>
-    </ul>
     
-    <style>
-        .left {text-align: left;}
-        .hide{display: none;}
-        td{
-            border:1px solid black;
-            height:50%;
-            padding:25px 5px 5px 5px;
-            /*position:left;*/
-            vertical-align:left;
-            width:50%;
-            color: black;
-         }
-         html,body,table,div.content,iframe{
-            border:0;
-            height:100%;
-            margin:0;
-            padding:0;
-            width:100%;
-            diplay: flex;
-            flex-wrap: wrap;
-            /*font-size: 16px;*/
-         }
-    </style>
-      <body onload = 'loadpage()'>
-    <div class = 'questions'>
-      <br>
-      <br>
-      <h3 class = 'left' id = 'qns'></h3>
-      <h3 class = 'left' id = 'note'></h3>
-      <br>
-    </div>
+    <section>
+        <div class="desc">
+            <h4>{{ question[1]|safe }}</h4>
+            
+            <h3>
+                Note: Please refrain from editting the tags (adding id / class) or doing more than required as this may break the spell.
+                <br><br>
+                Progress: {{ progress }} / 6
+            </h3>
+        </div>
+        <br><br>
 
-    <button type = 'button' onclick = 'check()' class = 'submit'>Submit</button>
-    <button type = 'button' id = 'next' class = 'submit' onclick = 'next()'>Next</button>
+        <form action="/stage7" method="post">
+            <input type="hidden" name="qn" value="{{ question[0] }}">
 
-    <table>
-      <tr>
-          <td>
-          <div class="black">HTML</div>
-          <pre><div id="html" class="content" contenteditable></div></pre>
-          </td>
-          </td>
-          <td>
-            <div class="black">Output</div>
-            <iframe id="output"></iframe>
-          </td>
-      </tr>
-      </tr>
-    </table>
+            <div class="input">
+                <div class="editor">
+                    <textarea id="codeeditor" name="code">{{ code }}</textarea>
+                </div>
 
-    <p id = 'print'></p>
-  </body>
+                <iframe id="display" onload="displayHTML()"></iframe>
+            </div>
+            <br>
 
-<script>
-const nextButton = document.getElementById('next');
-const html=document.getElementById("html");
-const output=document.getElementById("output");
-let index = 0
-alert('Click spacebar under \'HTML\' to enable the output display :)')
+            <input type="submit" name="Submit" class="submit">
+        </form>
+    </section>
 
-function loadpage(){
-    var qnPath = '/stage7/qn'+String(index)+'.txt'
-    fetch(qnPath)
-    .then(function(response){
-      return response.text();
-    })
-    .then(function(data){
-      var lines = data.toString().split('|');
-      //console.log(lines[1]);
-      document.getElementById('qns').textContent=lines[0]
-      document.getElementById('note').textContent=lines[1]
-      document.getElementById('html').textContent=lines[2]
-    })
-
-    nextButton.classList.add('hide');
-    var working=false;
-    var fill=function(){
-            if(working){ //ensures it's always true
-                return false;
-            }
-            working=true;
-            var document=output.contentDocument,
-                style=document.createElement("style"),
-                script=document.createElement("script");
-            document.body.innerHTML=html.textContent;
-            document.body.appendChild(style);
-            document.body.appendChild(script);
-            working=false;
+    <script>
+        // setup code editor
+        var mode = {
+            name: "text/html",
+            htmlMode: true,
+            matchClosing: false
         };
 
-    html.onkeyup=fill; //when a user lifts a key
-}
+        var editor = CodeMirror.fromTextArea(document.getElementById("codeeditor"), {
+            mode: mode,
+            indentUnit: 4,
+            lineNumbers: true,
+            theme: "monokai"
+        });
 
-const msg = ['Try again!','Hint: don\'t forget your semi-colons :)','Hint: change the style to #f7f1e3 & ensure blockquote is outisde the pre tag :)', 'Hint: use list :)', 'Hint: use double quotation marks :)', 'Hint: use double quotation marks :)']
-function check(){
-  var userInput = document.getElementById("html").textContent.split(' ').join(''); //string value
-  userInput = userInput.split('\t').join('');
-  userInput = userInput.split('\n').join('');
-  //console.log(userInput);
+        editor.setSize(null, 800);
 
-  fetch('/stage7/ans.txt')
-  .then(function(response){
-    return response.text();
-  })
-  .then(function(data){
-    var lines = data.toString().split('|');
-  //  console.log(lines[index]===userInput)
-    if (userInput==lines[index]){
-      nextButton.classList.remove('hide');
-    }
-    else{
-      alert(msg[index])
-    }
-  })
-}
+        // refresh iframe on key up
+        function displayHTML() {
+            var code = editor.getValue();
 
-function next(){
-  index++
-  console.log(index)
-  if (index !== 5){
-    loadpage()
-  }
-}
+            var iframe = document.getElementById("display"),
+            iframedoc = iframe.contentDocument || iframe.contentWindow.document;
 
-</script>
+            iframedoc.body.innerHTML = code;
+        }
+
+        $(document).ready(displayHTML);
+
+        $(document).ready(function () {
+            editor.on("change", displayHTML);
+        });
+
+        // check answer
+
+
+
+
+
+        /*
+        const nextButton = document.getElementById('next');
+        const html=document.getElementById("html");
+        const output=document.getElementById("output");
+        let index = 0
+        alert("Click spacebar under 'HTML' to enable the output display :)")
+
+        function loadpage(){
+            var qnPath = '../stage7/qn0.txt'
+            fetch(qnPath)
+            .then(function(response){
+                return response.text();
+            })
+            .then(function(data){
+                alert(data)
+                var lines = data.toString().split('|');
+                //console.log('answer',lines[1]);
+                document.getElementById('qns').textContent=lines[0]
+                document.getElementById('note').textContent=lines[1]
+                document.getElementById('html').textContent=lines[2]
+            })
+
+            nextButton.classList.add('hide');
+            var working=false;
+            var fill=function(){
+                    if(working){ //ensures it's always true
+                        return false;
+                    }
+                    working=true;
+                    var document=output.contentDocument,
+                        style=document.createElement("style"),
+                        script=document.createElement("script");
+                    document.body.innerHTML=html.textContent;
+                    document.body.appendChild(style);
+                    document.body.appendChild(script);
+                    working=false;
+                };
+
+            html.onkeyup=fill; //when a user lifts a key
+        }
+
+        const msg = ['Try again!','Hint: don\'t forget your semi-colons :)','Hint: change the style to #f7f1e3 & ensure blockquote is outisde the pre tag :)', 'Hint: use list :)', 'Hint: use double quotation marks :)', 'Hint: use double quotation marks :)']
+        function check(){
+        var userInput = document.getElementById("html").textContent.split(' ').join(''); //string value
+        userInput = userInput.split('\t').join('');
+        userInput = userInput.split('\n').join('');
+        //console.log('input',userInput);
+
+        fetch('stage7/ans.txt')
+        .then(function(response){
+            return response.text();
+        })
+        .then(function(data){
+            var lines = data.toString().split('|');
+            console.log('input',userInput)
+            console.log('answer', lines[index])
+            console.log(lines[index]===userInput)
+            if (userInput==lines[index]){
+            nextButton.classList.remove('hide');
+            }
+            else{
+                alert(msg[index])
+            }
+        })
+        }
+
+        function next(){
+        index++
+        console.log(index)
+        if (index !== 5){
+            loadpage()
+        }
+        }
+        */
+    </script>
 {% endblock %}
