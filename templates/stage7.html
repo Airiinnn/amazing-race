@@ -50,8 +50,8 @@
     <div class = 'questions'>
       <br>
       <br>
-      <h2 class = 'left' id = 'qns'></h2>
-      <h2 class = 'left' id = 'note'></h2>
+      <h3 class = 'left' id = 'qns'></h3>
+      <h3 class = 'left' id = 'note'></h3>
       <br>
     </div>
 
@@ -116,7 +116,7 @@ function loadpage(){
     html.onkeyup=fill; //when a user lifts a key
 }
 
-const msg = ['Try again!','Try again!','Hint: change the style', 'Ensure blockquote is outisde the pre tag!', 'Hint: use list', 'Double check your syntax :)', 'Double check your syntax :)']
+const msg = ['Try again!','Hint: don\'t forget your semi-colons :)','Hint: change the style to #f7f1e3 & ensure blockquote is outisde the pre tag :)', 'Hint: use list :)', 'Hint: use double quotation marks :)', 'Hint: use double quotation marks :)']
 function check(){
   var userInput = document.getElementById("html").textContent.split(' ').join(''); //string value
   userInput = userInput.split('\t').join('');
