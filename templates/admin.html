@@ -28,7 +28,7 @@
 
         <br>
 
-        <a href="sqlite_db" download><button class="submit">Download DB</button></a>
+        <button onclick="downloadURI()" class="submit">Download DB</button>
 
         <table class="scoreboard">
             <tr>
@@ -60,4 +60,13 @@
             {% endfor %}
         </table>
     </section>
+
+    <script>
+        function downloadURI() {
+            var link = document.createElement('a');
+            link.href = "sqlite_db";
+            link.download = 'download';
+            link.click();
+        }
+    </script>
 {% endblock %}
