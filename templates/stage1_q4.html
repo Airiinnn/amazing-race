@@ -18,7 +18,11 @@
     
     <section>
         <h4>
-            Elder: Solve these arithmetic questions and I will send you on your way.
+            You were teleported to see the village elder. You tell him about your predicament.
+            <br>
+            He says that you should visit Doctor Huh in the neighbouring village as he is a portal scientist.
+            <br>
+            However, before leaving, he wants to make sure you're prepared to overcome the challenges in this world.
         </h4>
 
         <h3>
@@ -44,7 +48,7 @@
         <form action="/stage1/q4" method="post">
             <input type="hidden" name="qn" value="{{ question[0] }}">
             <input type="hidden" name="progress" value="{{ progress }}">
-            <input type="hidden" name="question" value="{{ question }}">
+
             <div class="editor">
                 <textarea id="codeeditor" name="code">{{ code }}</textarea>
             </div>

@@ -21,14 +21,3 @@ for _ in range(T):
     M = int(M)
 
     print(fib(N, M))
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

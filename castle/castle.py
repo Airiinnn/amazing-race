@@ -5,19 +5,21 @@ sys.modules['flask']=None
 sys.modules['subprocess']=None
 sys.modules['sys']=None
 del sys
-def fib(n, m):
-    f = [0, 1]
-    
-    for i in range(2, n+1):
-        f.append((f[i-1] + f[i-2]) % m)
-        
-    return f[n]
-
 T = int(input())
 
 for _ in range(T):
-    temp = input().strip().split()
-    N = int(temp[0].strip())
-    M = int(temp[1].strip())
+    cost = 0
+    n = int(input())
+    start = input().strip().split()
+    increase = input().strip().split()
     
-    print(fib(N, M))
+    for i in range(n):
+        start[i] = int(start[i].strip())
+        increase[i] = int(increase[i].strip())
+    
+    increase.sort()
+    
+    for i in range(n):
+        cost += increase[i] * (n-i-1) + start[i]
+        
+    print(cost)

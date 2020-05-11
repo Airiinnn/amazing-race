@@ -70,6 +70,10 @@ h5 {
     margin: 10px;
 }
 
+table, th, td {
+    border: 1px solid #363636;
+}
+
 .main-logo {
     height: 120px;
     width: 120px;
@@ -177,4 +181,8 @@ h5 {
     color: white;
     width: 204px;
     height: 51px;
+}
+
+.scoreboard {
+    text-align: left;
 }

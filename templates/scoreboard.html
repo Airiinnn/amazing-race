@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link href="static/styles/style.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <header>
+        <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
+        <h1>BuildingBloCS2020</h1>
+        <h2 class="race">The Amazing Race</h2>
+        <h3 class="details">Complete as many stages as you can. Good luck and have fun!</h3>
+    </header>
+
+    <section>
+        <table class="scoreboard">
+            <tr>
+                <th>Email</th>
+                <th>Highest stage</th>
+                <th>Bonus0</th>
+                <th>Bonus1</th>
+                <th>Bonus2</th>
+                <th>Bonus3</th>
+                <th>Main0</th>
+                <th>Main1</th>
+                <th>Main2</th>
+                <th>Main3</th>
+                <th>Main4</th>
+                <th>Main5</th>
+                <th>Main6</th>
+                <th>Main7</th>
+            </tr>
+            {% for user in data %}
+                <tr>
+                    {% for i in range(14) %}
+                        <th>{{ user[i] }}</th>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </section>
+{% endblock %}
