@@ -658,6 +658,10 @@ def admin():
             data = cursor.fetchall()
             connection.close()
 
+            with open("results.csv", 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(data)
+
             return render_template("admin.html", data=data)
 
     else:
