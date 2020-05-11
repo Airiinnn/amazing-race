@@ -62,7 +62,7 @@ def unauthorized_callback():
 @app.route("/")
 def index():
     if current_user.is_authenticated:
-        connection = sqlite3.connect("sqlite_db")
+        connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
         cursor.execute("SELECT mainstage, bonus0, bonus1, bonus2, bonus3 FROM progress WHERE email='{}'".format(current_user.email))
         progress = cursor.fetchone()
@@ -81,7 +81,7 @@ def index():
 
 
 #STAGE 0: Cyber Security, KEY: protecc
-connection = sqlite3.connect("sqlite_db")
+connection = sqlite3.connect("database.db")
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM stage0questions")
 STAGE0_QUESTIONS = cursor.fetchall()
@@ -91,7 +91,7 @@ connection.close()
 @login_required
 def stage0_main():
     if request.method == "GET":
-        connection = sqlite3.connect("sqlite_db")
+        connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM stage0 WHERE email='{}'".format(current_user.email))
         stage0_progress = cursor.fetchone()
@@ -112,7 +112,7 @@ def stage0_main():
         for question in STAGE0_QUESTIONS:
             if question[0] == qn:
                 if ans == question[6]: # correct
-                    connection = sqlite3.connect("sqlite_db")
+                    connection = sqlite3.connect("database.db")
                     connection.execute("UPDATE stage0 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
                     connection.commit()
                     connection.close()
@@ -125,7 +125,7 @@ def stage0_main():
 
 
 #STAGE 1: PYTHON BASICS, KEY: nextdoor
-connection = sqlite3.connect("sqlite_db")
+connection = sqlite3.connect("database.db")
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM stage1questions")
 STAGE1_QUESTIONS = cursor.fetchall()
@@ -134,7 +134,7 @@ connection.close()
 @app.route("/stage1", methods=["GET", "POST"])
 @login_required
 def stage1():
-    connection = sqlite3.connect("sqlite_db")
+    connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
     cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
     maxstage = cursor.fetchone()[0]
@@ -144,7 +144,7 @@ def stage1():
         return redirect("/submit")
     else:
         if request.method == "GET":
-            connection = sqlite3.connect("sqlite_db")
+            connection = sqlite3.connect("database.db")
             cursor = connection.cursor()
             cursor.execute("SELECT * FROM stage1 WHERE email='{}'".format(current_user.email))
             stage1_progress = cursor.fetchone()
@@ -166,7 +166,7 @@ def stage1():
             for question in STAGE1_QUESTIONS:
                 if question[0] == qn:
                     if ans == question[2]: # correct
-                        connection = sqlite3.connect("sqlite_db")
+                        connection = sqlite3.connect("database.db")
                         connection.execute("UPDATE stage1 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
                         connection.commit()
                         connection.close()
@@ -180,7 +180,7 @@ def stage1():
 @login_required
 def stage1_q4():
     if request.method == "GET":
-        connection = sqlite3.connect("sqlite_db")
+        connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM stage1 WHERE email='{}'".format(current_user.email))
         stage1_progress = cursor.fetchone()
@@ -231,7 +231,7 @@ def stage1_q4():
                 for question in STAGE1_QUESTIONS:
                     if question[0] == qn:
                         if output == question[2]: # correct
-                            connection = sqlite3.connect("sqlite_db")
+                            connection = sqlite3.connect("database.db")
                             connection.execute("UPDATE stage1 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
                             connection.commit()
                             connection.close()
@@ -248,7 +248,7 @@ def stage1_q4():
 
 
 #STAGE 2: COMPUTATIONAL THINKING, KEY: bigbraintime
-connection = sqlite3.connect("sqlite_db")
+connection = sqlite3.connect("database.db")
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM stage2questions")
 STAGE2_QUESTIONS = cursor.fetchall()
@@ -257,7 +257,7 @@ connection.close()
 @app.route("/stage2", methods=["GET", "POST"])
 @login_required
 def stage2():
-    connection = sqlite3.connect("sqlite_db")
+    connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
     cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
     maxstage = cursor.fetchone()[0]
@@ -268,7 +268,7 @@ def stage2():
 
     else:
         if request.method == "GET":
-            connection = sqlite3.connect("sqlite_db")
+            connection = sqlite3.connect("database.db")
             cursor = connection.cursor()
             cursor.execute("SELECT * FROM stage2 WHERE email='{}'".format(current_user.email))
             stage2_progress = cursor.fetchone()
@@ -288,7 +288,7 @@ def stage2():
             for question in STAGE2_QUESTIONS:
                 if question[0] == qn:
                     if ans == question[2]: # correct
-                        connection = sqlite3.connect("sqlite_db")
+                        connection = sqlite3.connect("database.db")
                         connection.execute("UPDATE stage2 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
                         connection.commit()
                         connection.close()
@@ -302,7 +302,7 @@ def stage2():
 
 #STAGE 3: SQL, KEY: hi3
 
-connection = sqlite3.connect("sqlite_db")
+connection = sqlite3.connect("database.db")
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM stage3questions")
 STAGE3_QUESTIONS = cursor.fetchall()
@@ -311,7 +311,7 @@ connection.close()
 @app.route("/stage3", methods=["GET", "POST"])
 @login_required
 def stage3():
-    connection = sqlite3.connect("sqlite_db")
+    connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
     cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
     maxstage = cursor.fetchone()[0]
@@ -322,7 +322,7 @@ def stage3():
 
     else:
         if request.method == "GET":
-            connection = sqlite3.connect("sqlite_db")
+            connection = sqlite3.connect("database.db")
             cursor = connection.cursor()
             cursor.execute("SELECT * FROM stage3 WHERE email='{}'".format(current_user.email))
             stage3_progress = cursor.fetchone()
@@ -345,7 +345,7 @@ def stage3():
                 if question[0] == qn:
                     #print("A")
                     if ans == question[3]: # correct
-                        connection = sqlite3.connect("sqlite_db")
+                        connection = sqlite3.connect("database.db")
                         connection.execute("UPDATE stage3 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
                         connection.commit()
                         connection.close()
@@ -361,7 +361,7 @@ def stage3():
 @app.route("/stage4")
 @login_required
 def stage4():
-    connection = sqlite3.connect("sqlite_db")
+    connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
     cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
     maxstage = cursor.fetchone()[0]
@@ -378,7 +378,7 @@ def stage4():
 @login_required
 def stage5():
     if request.method == "GET":
-        connection = sqlite3.connect("sqlite_db")
+        connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
         cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
         maxstage = cursor.fetchone()[0]
@@ -445,7 +445,7 @@ def stage5():
 @app.route("/stage6")
 @login_required
 def stage6():
-    connection = sqlite3.connect("sqlite_db")
+    connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
     cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
     maxstage = cursor.fetchone()[0]
@@ -472,7 +472,7 @@ def stage7():
 @app.route("/bonus0", methods=["GET", "POST"])
 @login_required
 def bonus0():
-    connection = sqlite3.connect("sqlite_db")
+    connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
     cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
     maxstage = cursor.fetchone()[0]
@@ -489,7 +489,7 @@ def bonus0():
             ans = request.form.get("ans")
 
             if ans == "Guido van Rossum":
-                connection = sqlite3.connect("sqlite_db")
+                connection = sqlite3.connect("database.db")
                 connection.execute("UPDATE progress SET bonus0=(?) WHERE email=(?)", (datetime.datetime.now(), current_user.email))
                 connection.commit()
                 connection.close()
@@ -529,7 +529,7 @@ def bonus1():
 @login_required
 def bonus2():
     if request.method == "GET":
-        connection = sqlite3.connect("sqlite_db")
+        connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
         cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
         maxstage = cursor.fetchone()[0]
@@ -586,7 +586,7 @@ def bonus2():
                         subtasks.append(correct)
 
                 if subtasks[0] == True and subtasks[1] == True:
-                    connection = sqlite3.connect("sqlite_db")
+                    connection = sqlite3.connect("database.db")
                     connection.execute("UPDATE progress SET bonus2=(?) WHERE email=(?)", (datetime.datetime.now(), current_user.email))
                     connection.commit()
                     connection.close()
@@ -607,7 +607,7 @@ def bonus3():
 @app.route("/scoreboard")
 @login_required
 def scoreboard():
-    connection = sqlite3.connect("sqlite_db")
+    connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
     cursor.execute("SELECT * FROM progress")
     data = cursor.fetchall()
@@ -624,7 +624,7 @@ def submit():
     else:
         userpsw = request.form.get("psw")
 
-        connection = sqlite3.connect("sqlite_db")
+        connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
         cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
         maxstage = cursor.fetchone()[0]
@@ -652,7 +652,7 @@ def admin():
             return redirect("/")
 
         else:
-            connection = sqlite3.connect("sqlite_db")
+            connection = sqlite3.connect("database.db")
             cursor = connection.cursor()
             cursor.execute("SELECT * FROM progress ORDER BY mainstage DESC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
             data = cursor.fetchall()
@@ -664,7 +664,7 @@ def admin():
         email = request.form.get("email")
         newpassword = request.form.get("newpassword")
 
-        connection = sqlite3.connect("sqlite_db")
+        connection = sqlite3.connect("database.db")
         connection.execute("UPDATE progress SET psw=(?) WHERE email=(?)", (newpassword, email))
         connection.commit()
 
