@@ -59,35 +59,35 @@ def unauthorized_callback():
 # Models
 class Bonusstage(db.Model):
     stageid = db.Column(db.Integer, index=True, primary_key=True)
-    stagename = db.Column(db.String(120), index=True)
-    requirement = db.Column(db.Integer, index=True)
+    stagename = db.Column(db.Text, index=True)
+    requirement = db.Column(db.Text, index=True)
 
 class Mainstage(db.Model):
     stageid = db.Column(db.Integer, index=True, primary_key=True)
-    stagename = db.Column(db.String(120), index=True)
-    psw = db.Column(db.String(20), index=True)
+    stagename = db.Column(db.Text, index=True)
+    psw = db.Column(db.Text, index=True)
 
 class Player(db.Model):
-    id = db.Column(db.String(20), primary_key=True)
-    name = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
+    id = db.Column(db.Text, primary_key=True)
+    name = db.Column(db.Text, index=True, unique=True)
+    email = db.Column(db.Text, index=True, unique=True)
 
 class Progress(db.Model):
-    email = db.Column(db.String(120), index=True, primary_key=True)
+    email = db.Column(db.Text, index=True, primary_key=True)
     mainstage = db.Column(db.Integer, index=True, default=0)
-    bonus0 = db.Column(db.String(50), index=True)
-    bonus1 = db.Column(db.String(50), index=True)
-    bonus2 = db.Column(db.String(50), index=True)
-    bonus3 = db.Column(db.String(50), index=True)
-    main0 = db.Column(db.String(50), index=True)
-    main1 = db.Column(db.String(50), index=True)
-    main2 = db.Column(db.String(50), index=True)
-    main3 = db.Column(db.String(50), index=True)
-    main4 = db.Column(db.String(50), index=True)
-    main5 = db.Column(db.String(50), index=True)
-    main6 = db.Column(db.String(50), index=True)
-    main7 = db.Column(db.String(50), index=True)
-    end = db.Column(db.String(50), index=True)
+    bonus0 = db.Column(db.Text, index=True)
+    bonus1 = db.Column(db.Text, index=True)
+    bonus2 = db.Column(db.Text, index=True)
+    bonus3 = db.Column(db.Text, index=True)
+    main0 = db.Column(db.Text, index=True)
+    main1 = db.Column(db.Text, index=True)
+    main2 = db.Column(db.Text, index=True)
+    main3 = db.Column(db.Text, index=True)
+    main4 = db.Column(db.Text, index=True)
+    main5 = db.Column(db.Text, index=True)
+    main6 = db.Column(db.Text, index=True)
+    main7 = db.Column(db.Text, index=True)
+    end = db.Column(db.Text, index=True)
     psw = db.Column(db.String(20), index=True, default="goodmorning")
 
 class Stage0(db.Model):
