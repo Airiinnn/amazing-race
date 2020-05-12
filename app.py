@@ -68,7 +68,7 @@ class Mainstage(db.Model):
     psw = db.Column(db.String(20), index=True)
 
 class Player(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(20), primary_key=True)
     name = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
 
