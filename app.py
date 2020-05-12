@@ -88,10 +88,10 @@ class Progress(db.Model):
     main6 = db.Column(db.Text, index=True)
     main7 = db.Column(db.Text, index=True)
     end = db.Column(db.Text, index=True)
-    psw = db.Column(db.String(20), index=True, default="goodmorning")
+    psw = db.Column(db.Text, index=True, default="goodmorning")
 
 class Stage0(db.Model):
-    email = db.Column(db.String(120), index=True, primary_key=True)
+    email = db.Column(db.Text, index=True, primary_key=True)
     q1 = db.Column(db.Integer, index=True, default=0)
     q2 = db.Column(db.Integer, index=True, default=0)
     q3 = db.Column(db.Integer, index=True, default=0)
@@ -114,14 +114,14 @@ class Stage0(db.Model):
     q20 = db.Column(db.Integer, index=True, default=0)
 
 class Stage1(db.Model):
-    email = db.Column(db.String(120), index=True, primary_key=True)
+    email = db.Column(db.Text, index=True, primary_key=True)
     q1 = db.Column(db.Integer, index=True, default=0)
     q2 = db.Column(db.Integer, index=True, default=0)
     q3 = db.Column(db.Integer, index=True, default=0)
     q4 = db.Column(db.Integer, index=True, default=0)
 
 class Stage2(db.Model):
-    email = db.Column(db.String(120), index=True, primary_key=True)
+    email = db.Column(db.Text, index=True, primary_key=True)
     q1 = db.Column(db.Integer, index=True, default=0)
     q2 = db.Column(db.Integer, index=True, default=0)
     q3 = db.Column(db.Integer, index=True, default=0)
@@ -132,13 +132,13 @@ class Stage2(db.Model):
     q8 = db.Column(db.Integer, index=True, default=0)
 
 class Stage3(db.Model):
-    email = db.Column(db.String(120), index=True, primary_key=True)
+    email = db.Column(db.Text, index=True, primary_key=True)
     q1 = db.Column(db.Integer, index=True, default=0)
     q2 = db.Column(db.Integer, index=True, default=0)
     q3 = db.Column(db.Integer, index=True, default=0)
 
 class Stage7(db.Model):
-    email = db.Column(db.String(120), index=True, primary_key=True)
+    email = db.Column(db.Text, index=True, primary_key=True)
     q1 = db.Column(db.Integer, index=True, default=0)
     q2 = db.Column(db.Integer, index=True, default=0)
     q3 = db.Column(db.Integer, index=True, default=0)
