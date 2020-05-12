@@ -16,6 +16,13 @@
         <h1>Stage 7: HTML & CSS</h1>
         <h3>Websites and stuff</h3>
     </header>
+
+    <ul class="navbar">
+        <li class="navitem"><a href="/">Home</a></li>
+        <li class="navitem"><a href="/leaderboard">Leaderboard</a></li>
+        <li class="navitem"><a href="/about">About</a></li>
+        <li class="navitem" style="float:right"><a href="/logout">Logout</a></li>
+    </ul>
     
     <section>
         <div class="desc">
@@ -41,6 +48,11 @@
             </div>
             <br>
 
+            {% if correct == False %}
+                <h2 class="incorrect">Incorrect!</h2>
+                <h3>{{ question[3] }}</h3>
+            {% endif %}
+
             <input type="submit" name="Submit" class="submit">
         </form>
     </section>
@@ -56,6 +68,7 @@
         var editor = CodeMirror.fromTextArea(document.getElementById("codeeditor"), {
             mode: mode,
             indentUnit: 4,
+            indentWithTabs: true,
             lineNumbers: true,
             theme: "monokai"
         });
@@ -77,86 +90,5 @@
         $(document).ready(function () {
             editor.on("change", displayHTML);
         });
-
-        // check answer
-
-
-
-
-
-        /*
-        const nextButton = document.getElementById('next');
-        const html=document.getElementById("html");
-        const output=document.getElementById("output");
-        let index = 0
-        alert("Click spacebar under 'HTML' to enable the output display :)")
-
-        function loadpage(){
-            var qnPath = '../stage7/qn0.txt'
-            fetch(qnPath)
-            .then(function(response){
-                return response.text();
-            })
-            .then(function(data){
-                alert(data)
-                var lines = data.toString().split('|');
-                //console.log('answer',lines[1]);
-                document.getElementById('qns').textContent=lines[0]
-                document.getElementById('note').textContent=lines[1]
-                document.getElementById('html').textContent=lines[2]
-            })
-
-            nextButton.classList.add('hide');
-            var working=false;
-            var fill=function(){
-                    if(working){ //ensures it's always true
-                        return false;
-                    }
-                    working=true;
-                    var document=output.contentDocument,
-                        style=document.createElement("style"),
-                        script=document.createElement("script");
-                    document.body.innerHTML=html.textContent;
-                    document.body.appendChild(style);
-                    document.body.appendChild(script);
-                    working=false;
-                };
-
-            html.onkeyup=fill; //when a user lifts a key
-        }
-
-        const msg = ['Try again!','Hint: don\'t forget your semi-colons :)','Hint: change the style to #f7f1e3 & ensure blockquote is outisde the pre tag :)', 'Hint: use list :)', 'Hint: use double quotation marks :)', 'Hint: use double quotation marks :)']
-        function check(){
-        var userInput = document.getElementById("html").textContent.split(' ').join(''); //string value
-        userInput = userInput.split('\t').join('');
-        userInput = userInput.split('\n').join('');
-        //console.log('input',userInput);
-
-        fetch('stage7/ans.txt')
-        .then(function(response){
-            return response.text();
-        })
-        .then(function(data){
-            var lines = data.toString().split('|');
-            console.log('input',userInput)
-            console.log('answer', lines[index])
-            console.log(lines[index]===userInput)
-            if (userInput==lines[index]){
-            nextButton.classList.remove('hide');
-            }
-            else{
-                alert(msg[index])
-            }
-        })
-        }
-
-        function next(){
-        index++
-        console.log(index)
-        if (index !== 5){
-            loadpage()
-        }
-        }
-        */
     </script>
 {% endblock %}

@@ -12,25 +12,40 @@
         <h3 class="details">Complete as many stages as you can. Good luck and have fun!</h3>
     </header>
 
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/leaderboard">Leaderboard</a></li>
-        <li><a href="/about">About</a></li>
-        <li style="float:right"><a href="/logout">Logout</a></li>
+    <ul class="navbar">
+        <li class="navitem"><a href="/">Home</a></li>
+        <li class="navitem"><a href="/leaderboard">Leaderboard</a></li>
+        <li class="navitem"><a href="/about">About</a></li>
+        <li class="navitem" style="float:right"><a href="/logout">Logout</a></li>
     </ul>
     
     <section>
-        <h2><pre>Hello world</pre></h2>
-        <h4>
-            You wake up in a completely unknown place. Everything around is dark, you see nothing but emptiness in all directions.<br>
-            As you sit there delirious, a buzz comes from a tablet next to you...
-        </h4>
+        {% if finished == 1 %}
+            <h2><pre>Goodbye world</pre></h2>
+            <h4>
+                After a long, arduous journey, the portal is finally within reach...<br>
+                It's time to go back...
+            </h4>
 
-        <h3>Hello <b>{{ name }}</b>, welcome to the cyber world.</h3>
-        <br>
+            <h3>Goodbye <b>{{ name }}</b>, hope you enjoyed your stay in the cyber world...</h3>
+            <br>
+            <div class="portal-area">
+                <a href="/portal"><img src="static/images/portal.png" alt="Portal" class="portal"></a>
+            </div>
+            <br><br>
+        {% else %}
+            <h2><pre>Hello world</pre></h2>
+            <h4>
+                You wake up in a completely unknown place. Everything around is dark, you see nothing but emptiness in all directions.<br>
+                As you sit there delirious, a buzz comes from a tablet next to you...
+            </h4>
+
+            <h3>Hello <b>{{ name }}</b>, welcome to the cyber world.</h3>
+            <br>
+        {% endif %}
 
         <p class="stage-header">Main stages:</p>
-        {% for i in range(main_stages|length) %}
+        {% for i in range(main_stages|length - 1) %}
             <a href="/stage{{ main_stages[i][0] }}">
             {% if i <= progress[0] %}
                 <button class="stage unlocked">{{ main_stages[i][1] }}</button>

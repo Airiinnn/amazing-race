@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link href="static/styles/style.css" rel="stylesheet">
+    <link href="static/styles/about.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <header>
+        <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
+        <h1>About</h1>
+        <h3>Oh wow hello there</h3>
+    </header>
+
+    <ul class="navbar">
+        <li class="navitem"><a href="/">Home</a></li>
+        <li class="navitem"><a href="/leaderboard">Leaderboard</a></li>
+        <li class="navitem"><a href="/about">About</a></li>
+        <li class="navitem" style="float:right"><a href="/logout">Logout</a></li>
+    </ul>
+
+    <section>
+        <h2><b>About</b></h2>
+        <h4>
+            The Amazing Race is a programming game created for BuildingBloCS 2020, with the aim of cultivating Secondary school students' interest in programming. 
+            It is a beginner-friendly online competition with multiple programming related stages and tasks.
+            <br><br>
+            Each stage of the game focuses on a basic computing topic, namely:
+        </h4>
+
+        <ul>
+            <li>Cyber Security, Ethics and Practices</li>
+            <li>Python Basics</li>
+            <li>Computational Thinking</li>
+            <li>SQL</li>
+            <li>NoSQL</li>
+            <li>Competitive Programming</li>
+            <li>Socket Programming</li>
+            <li>HTML and CSS</li>
+        </ul>
+
+        <h2><b>Developers</b></h2>
+        <h4>The Amazing Race was brought to you by BuildingBloCS 2020 Games Committee.</h4>
+
+        <h4><b>Main developers:</b></h4>
+        <ul>
+            <li><a href="https://github.com/Airiinnn">Alexander Liswandy</a></li>
+            <li><a href="https://github.com/boyuan618">Gu Boyuan</a></li>
+            <li><a href="https://github.com/UwUUwU">Zhang Yuxiang</a></li>
+        </ul>
+
+        <h4><b>Special thanks to:</b></h4>
+        <ul>
+            <li><a href="https://github.com/joelleoqiyi">Leo Qiyi Joel</a> <i>for the NoSQL stage</i></li>
+            <li>Liu Hongshuo <i>for the HTML & CSS stage</i></li>
+            <li>Ng Jia Xiang <i>for the HTML & CSS stage</i></li>
+            <li>Rose Evangeline Anne D. Destor <i>for the HTML & CSS stage</i></li>
+            <li>and all the other games committee members for their support &#x2764</li>
+        </ul>
+
+        <h2><b>Links</b></h2>
+        <br>
+        <div class="about-links">
+            <img src="/static/images/githubdark.png" alt="GitHub" class="about-logo">
+            <a href="https://github.com/Airiinnn/amazing-race" class="about-link">GitHub</a>
+        </div>
+        <br>
+        <div class="about-links">
+            <img src="/static/images/logoblack.svg" alt="GitHub" class="about-logo">
+            <a href="https://buildingblocs.github.io" class="about-link">BuildingBloCS</a>
+        </div>
+    </section>
+{% endblock %}

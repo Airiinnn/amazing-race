@@ -59,7 +59,9 @@ def load_user(user_id):
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     return redirect('/')
-    
+
+
+
 @app.route("/")
 def index():
     if current_user.is_authenticated:
@@ -73,11 +75,16 @@ def index():
 
         cursor.execute("SELECT * FROM bonusstage")
         bonus_stages = cursor.fetchall()
+
+        cursor.execute("SELECT q6 FROM stage7 WHERE email='{}'".format(current_user.email))
+        finished = cursor.fetchone()[0]
         connection.close()
 
-        return render_template("index.html", name=current_user.name, progress=progress, main_stages=main_stages, bonus_stages=bonus_stages)
+        return render_template("index.html", name=current_user.name, progress=progress, main_stages=main_stages, bonus_stages=bonus_stages, finished=finished)
     else:
         return render_template("login.html")
+
+
 
 #Stage -1: Demostration, KEY: testrun
 @app.route("/stage-1", methods=["GET", "POST"])
@@ -92,6 +99,8 @@ def stage_demo():
         else:
             correct = False
             return render_template("stage-1.html", correct=correct)
+
+
 
 #STAGE 0: Cyber Security, KEY: protecc
 connection = sqlite3.connect("database.db")
@@ -267,10 +276,6 @@ def stage1_q4():
 
 
 
-
-
-
-
 #STAGE 2: COMPUTATIONAL THINKING, KEY: bigbraintime
 connection = sqlite3.connect("database.db")
 cursor = connection.cursor()
@@ -325,7 +330,6 @@ def stage2():
 
 
 #STAGE 3: SQL, KEY: hi3
-
 connection = sqlite3.connect("database.db")
 cursor = connection.cursor()
 cursor.execute("SELECT * FROM stage3questions")
@@ -482,9 +486,6 @@ def stage6():
 
 
 
-
-
-
 #STAGE 7: HTML / CSS, KEY: hi7
 connection = sqlite3.connect("database.db")
 cursor = connection.cursor()
@@ -516,7 +517,12 @@ def stage7():
                 if stage7_progress[i] == 0:
                     return render_template("stage7.html", question=STAGE7_QUESTIONS[i-1], code=STAGE7_QUESTIONS[i-1][2], progress=i-1)
 
-            return render_template("stage7_success.html")
+            connection = sqlite3.connect("database.db")
+            cursor = connection.cursor()
+            cursor.execute("SELECT psw FROM progress WHERE email='{}'".format(current_user.email))
+            psw = cursor.fetchone()
+            connection.close()
+            return render_template("stage7_success.html", psw=psw)
         
         else:
             qn = request.form.get("qn")
@@ -565,7 +571,6 @@ def stage7():
 
                     for tag in tags:
                         temp = userans.find(tag)
-                        print(tag, temp)
                         if temp == -1: # incorrect
                             return render_template("stage7.html", question=STAGE7_QUESTIONS[1], code=code, progress=1, correct=False)
                         
@@ -581,12 +586,143 @@ def stage7():
 
                     else: # incorrect
                         return render_template("stage7.html", question=STAGE7_QUESTIONS[1], code=code, progress=1, correct=False)
-
-
-
+            
+            elif qn == "q3": # question 3
+                pos = []
+                tags = ["<!doctypehtml>", "<html>", "<head>", "<style>", "blockquote{background-color:#f7f1e3;}", "</style>" "</head>", "<body>", "<blockquote>", "<pre>", "</pre>", "</blockquote>", "</body>", "</html>"]
                 
-                
+                for tag in tags:
+                    temp = userans.find(tag)
 
+                    if temp == -1: # incorrect
+                        return render_template("stage7.html", question=STAGE7_QUESTIONS[2], code=code, progress=2, correct=False)
+
+                    pos.append(temp)
+
+                if pos == sorted(pos): # correct
+                    connection = sqlite3.connect("database.db")
+                    connection.execute("UPDATE stage7 SET q3=1 WHERE email=(?)", (current_user.email,))
+                    connection.commit()
+                    connection.close()
+
+                    return redirect("/stage7")
+
+                else: # incorrect
+                    return render_template("stage7.html", question=STAGE7_QUESTIONS[2], code=code, progress=2, correct=False)
+
+            elif qn == "q4": # question 4
+                closingbracket = False
+                    
+                padding = userans.find("padding:0;")
+                if padding != -1:
+                    if userans.find("padding:0;}") != -1:
+                        closingbracket = True
+                    
+                else:
+                    padding = userans.find("padding:0px;")
+                    if padding != -1:
+                        if userans.find("padding:0px;}") != -1:
+                            closingbracket = True
+                    
+                font_size = userans.find("font-size:18px;")
+                if font_size != -1:
+                    if userans.find("font-size:18px;}") != -1:
+                        closingbracket = True
+                    
+                if not closingbracket or padding == -1 or font_size == -1: # incorrect
+                    return render_template("stage7.html", question=STAGE7_QUESTIONS[3], code=code, progress=3, correct=False)
+
+                else:
+                    pos = []
+                    tags = ["<!doctypehtml>", "<html>", "<head>", "<style>", "ol{", "</style>" "</head>", "<body>", "<ol>", "<li>introduction</li>", "<li>therootsofhtml</li>", "<li>beingamarkuplanguage</li>", "</ol>", "</body>", "</html>"]
+
+                    for tag in tags:
+                        temp = userans.find(tag)
+                        if temp == -1: # incorrect
+                            return render_template("stage7.html", question=STAGE7_QUESTIONS[3], code=code, progress=3, correct=False)
+
+                        pos.append(temp)
+
+                    if pos == sorted(pos) and padding > pos[3] and font_size > pos[3] and padding < pos[5] and font_size < pos[5]: # correct
+                        connection = sqlite3.connect("database.db")
+                        connection.execute("UPDATE stage7 SET q4=1 WHERE email=(?)", (current_user.email,))
+                        connection.commit()
+                        connection.close()
+
+                        return redirect("/stage7")
+
+                    else: # incorrect
+                        return render_template("stage7.html", question=STAGE7_QUESTIONS[3], code=code, progress=3, correct=False)
+
+            elif qn == "q5": # question 5
+                if userans.find("<ahref='https://www.informit.com/articles/article.aspx?p=24021&seqnum=0'>article</a>") == -1 and userans.find("<ahref=\"https://www.informit.com/articles/article.aspx?p=24021&seqnum=0\">article</a>") == -1: # incorrect
+                    print("what")
+                    return render_template("stage7.html", question=STAGE7_QUESTIONS[4], code=code, progress=4, correct=False)
+
+                else:
+                    if userans.find("<ahref='https://www.informit.com/articles/article.aspx?p=24021&seqnum=0'>article</a>") != -1:
+                        a = userans.find("<ahref='https://www.informit.com/articles/article.aspx?p=24021&seqnum=0'>article</a>")
+                    else:
+                        a = userans.find("<ahref=\"https://www.informit.com/articles/article.aspx?p=24021&seqnum=0\">article</a>")
+                    
+                    pos = []
+                    tags = ["<!doctypehtml>", "<html>", "<head>", "<style>", "</style>", "</head>", "<body>", "<p1>", "</p1>", "</body>", "</html>"]
+                    
+                    for tag in tags:
+                        temp = userans.find(tag)
+
+                        if temp == -1: # incorrect
+                            return render_template("stage7.html", question=STAGE7_QUESTIONS[4], code=code, progress=4, correct=False)
+
+                        pos.append(temp)
+
+                    if pos == sorted(pos) and a > pos[7] and a < pos[8]: # correct
+                        connection = sqlite3.connect("database.db")
+                        connection.execute("UPDATE stage7 SET q5=1 WHERE email=(?)", (current_user.email,))
+                        connection.commit()
+                        connection.close()
+
+                        return redirect("/stage7")
+                        
+                    else: # incorrect
+                        return render_template("stage7.html", question=STAGE7_QUESTIONS[4], code=code, progress=4, correct=False)
+
+            else: # question 6
+                targets = ["<imgsrc='static/images/stage7/italic_tag.jpg'alt='htmlirl'>", "<imgsrc='static/images/stage7/italic_tag.jpg'alt=\"htmlirl\">", "<imgsrc=\"static/images/stage7/italic_tag.jpg\"alt='htmlirl'>", "<imgsrc=\"static/images/stage7/italic_tag.jpg\"alt=\"htmlirl\">"]
+                targets += ["<imgalt='htmlirl'src='static/images/stage7/italic_tag.jpg'>", "<imgalt=\"htmlirl\"src='static/images/stage7/italic_tag.jpg'>", "<imgalt='htmlirl'src=\"static/images/stage7/italic_tag.jpg\">", "<imgalt=\"htmlirl\">src=\"static/images/stage7/italic_tag.jpg\""]
+                
+                for target in targets:
+                    img = userans.find(target)
+                    print(target, img)
+                    if img != -1:
+                        break
+
+                if img == -1: # incorrect
+                    return render_template("stage7.html", question=STAGE7_QUESTIONS[5], code=code, progress=5, correct=False)
+
+                else:
+                    pos = []
+                    tags = ["<!doctypehtml>", "<html>", "<head>", "</head>", "<body>", "<p4>", "</body>", "</html>"]
+                    
+                    for tag in tags:
+                        temp = userans.find(tag)
+                        print(tag, temp)
+                        if temp == -1: # incorrect
+                            return render_template("stage7.html", question=STAGE7_QUESTIONS[5], code=code, progress=5, correct=False)
+
+                        pos.append(temp)
+
+                    if pos == sorted(pos) and img > pos[5]: # correct
+                        connection = sqlite3.connect("database.db")
+                        connection.execute("UPDATE stage7 SET q6=1 WHERE email=(?)", (current_user.email,))
+                        connection.commit()
+                        connection.close()
+
+                        return redirect("/stage7")
+                        
+                    else: # incorrect
+                        return render_template("stage7.html", question=STAGE7_QUESTIONS[5], code=code, progress=5, correct=False)
+                
 
 
 # Bonus 0: Computational thinking:
@@ -642,7 +778,6 @@ def bonus1():
     else:
         return render_template("bonus1.html")
     
-
 
 
 # Bonus 2: Competitive programming:
@@ -723,8 +858,19 @@ def bonus2():
 @app.route("/bonus3")
 @login_required
 def bonus3():
-    pass
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
+    maxstage = cursor.fetchone()[0]
+    connection.close()
 
+    if maxstage < 7:
+        return redirect("/submit")
+    return render_template("bonus3.html")
+
+
+
+# MOVE UP STAGE PAGE
 @app.route("/submit", methods=["GET", "POST"])
 @login_required
 def submit():
@@ -752,12 +898,62 @@ def submit():
             connection.close()
             return render_template("submit.html", success=False)
 
+
+
+# FINAL PORTAL
+@app.route("/portal", methods=["GET", "POST"])
+@login_required
+def portal():
+    if request.method == "GET":
+        connection = sqlite3.connect("database.db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT q6 FROM stage7 WHERE email='{}'".format(current_user.email))
+        finished = cursor.fetchone()[0]
+        connection.close()
+
+        if finished == 1:
+            return render_template("portal.html")
+
+        else:
+            return redirect("/")
+
+    else:
+        psw = request.form.get("psw")
+
+        connection = sqlite3.connect("database.db")
+        cursor = connection.cursor()
+        cursor.execute("SELECT psw FROM mainstage WHERE stageid=8")
+        password = cursor.fetchone()[0]
+        connection.close()
+
+        if psw == password:
+            connection = sqlite3.connect("database.db")
+            connection.execute("UPDATE progress SET mainstage=mainstage+1, end=(?) WHERE email=(?)", (datetime.datetime.now(), current_user.email))
+            connection.commit()
+            connection.close()
+            return render_template("congratulations.html")
+
+        else:
+            return render_template("portal.html", correct=False)
+
+
+
+@app.route("/about")
+@login_required
+def about():
+    return render_template("about.html")
+
+
+
+ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg"]
+
+# LEADERBOARDS
 @app.route("/leaderboard")
 @login_required
 def leaderboard():
     connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
-    cursor.execute("SELECT email, mainstage, bonus0, bonus1, bonus2, bonus3 FROM progress ORDER BY mainstage DESC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
+    cursor.execute("SELECT email, mainstage, bonus0, bonus1, bonus2, bonus3 FROM progress ORDER BY mainstage DESC, end ASC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
     data = cursor.fetchall()
     connection.close()
 
@@ -767,40 +963,46 @@ def leaderboard():
             pos = i+1
             break
 
-    return render_template("leaderboard.html", data=data, pos=pos)
+    return render_template("leaderboard.html", data=data, pos=pos, admin=ADMIN)
 
-ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg"]
 
+
+# ADMINS PAGE
 @app.route("/admin", methods=["GET", "POST"])
 @login_required
 def admin():
-    if request.method == "GET":
-        if current_user.email not in ADMINS:
+    if current_user.email not in ADMINS:
             return redirect("/")
 
+    else:
+        if request.method == "GET":
+            if current_user.email not in ADMINS:
+                return redirect("/")
+
+            else:
+                connection = sqlite3.connect("database.db")
+                cursor = connection.cursor()
+                cursor.execute("SELECT * FROM progress ORDER BY mainstage DESC, end ASC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
+                data = cursor.fetchall()
+                connection.close()
+
+                return render_template("admin.html", data=data, admin=ADMIN)
+
         else:
+            email = request.form.get("email")
+            newpassword = request.form.get("newpassword")
+
             connection = sqlite3.connect("database.db")
+            connection.execute("UPDATE progress SET psw=(?) WHERE email=(?)", (newpassword, email))
+            connection.commit()
+
             cursor = connection.cursor()
             cursor.execute("SELECT * FROM progress ORDER BY mainstage DESC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
             data = cursor.fetchall()
             connection.close()
 
-            return render_template("admin.html", data=data)
+            return render_template("admin.html", data=data, admin=ADMIN)
 
-    else:
-        email = request.form.get("email")
-        newpassword = request.form.get("newpassword")
-
-        connection = sqlite3.connect("database.db")
-        connection.execute("UPDATE progress SET psw=(?) WHERE email=(?)", (newpassword, email))
-        connection.commit()
-
-        cursor = connection.cursor()
-        cursor.execute("SELECT * FROM progress ORDER BY mainstage DESC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
-        data = cursor.fetchall()
-        connection.close()
-
-        return render_template("admin.html", data=data)
 
 
 def get_google_provider_cfg():

@@ -30,7 +30,8 @@ class User(UserMixin):
             "VALUES (?, ?, ?)",
             (id_, name, email),
         )
-
+        
+        # DELETE THIS AFTER MANUALLY SETTING PASSWORDS
         db.execute(
             "INSERT INTO progress (email, mainstage, psw) "
             "VALUES (?, 0, '-')",

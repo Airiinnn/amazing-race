@@ -14,11 +14,11 @@
         <h3 class="details">Complete as many stages as you can. Good luck and have fun!</h3>
     </header>
 
-    <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/leaderboard">Leaderboard</a></li>
-        <li><a href="/about">About</a></li>
-        <li style="float:right"><a href="/logout">Logout</a></li>
+    <ul class="navbar">
+        <li class="navitem"><a href="/">Home</a></li>
+        <li class="navitem"><a href="/leaderboard">Leaderboard</a></li>
+        <li class="navitem"><a href="/about">About</a></li>
+        <li class="navitem" style="float:right"><a href="/logout">Logout</a></li>
     </ul>
 
     <section>
@@ -38,18 +38,20 @@
             </tr>
 
             {% for i in range(data|length) %}
-                <tr>
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ data[i][0] }}</td>
-                    <td>{{ data[i][1] }}</td>
-                    {% for j in range(2, 6) %}
-                        {% if data[i][j] == None %}
-                            <td>-</td>
-                        {% else %}
-                            <td>Done</td>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
+                {% if data[i] not in admin %}
+                    <tr>
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ data[i][0] }}</td>
+                        <td>{{ data[i][1] }}</td>
+                        {% for j in range(2, 6) %}
+                            {% if data[i][j] == None %}
+                                <td>-</td>
+                            {% else %}
+                                <td>Done</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endif %}
             {% endfor %}
         </table>
     </section>

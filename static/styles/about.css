@@ -1,0 +1,50 @@
+h2 {
+    margin: 0;
+}
+
+p {
+    color: #363636;
+}
+
+section {
+    padding-left: 20%;
+    padding-right: 20%;
+    text-align: left;
+}
+
+li {
+    font-size: 16px;
+    font-weight: lighter;
+}
+
+i {
+    font-size: 14px;
+}
+
+a {
+    color: #363636;
+}
+
+.ps {
+    text-align: center;
+}
+
+.about-links {
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    margin: 0;
+}
+
+.about-link {
+    text-decoration: none;
+    color: #363636;
+}
+
+.about-logo {
+    height: 24px;
+    width: 24px;
+    margin-right: 10px;
+}

@@ -70,7 +70,7 @@ h5 {
     margin: 10px;
 }
 
-ul {
+.navbar {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -82,14 +82,14 @@ ul {
     top: 0;
 }
 
-li {
+.navitem {
     margin: 8px;
     float: left;
     border: 1px solid transparent;
     border-radius: 25px;
 }
 
-li a {
+.navitem a {
     display: block;
     color: white;
     text-align: center;
@@ -101,7 +101,7 @@ li a {
     transition-duration: 0.4s;
 }
 
-li a:hover {
+.navitem a:hover {
     background-color: white;
     color: #363636;
 }
@@ -115,8 +115,6 @@ li a:hover {
     height: 80px;
     width: 80px;
     margin: 0px 20px;
-    -webkit-transition-duration: 0.4s;
-    transition-duration: 0.4s;
 }
 
 .github-logo {
@@ -191,4 +189,20 @@ li a:hover {
     color: white;
     background-color: limegreen;
     border: 3px solid limegreen;
+}
+
+.portal-area {
+    height: 270px;
+}
+
+.portal {
+    height: 256px;
+    width: 256px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+}
+
+.portal:hover {
+    height: 270px;
+    width: 270px;
 }

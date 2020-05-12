@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <link href="static/styles/style.css" rel="stylesheet">
+    <link href="static/styles/congratulations.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <header>
+        <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
+        <h1>Earth</h1>
+        <h3>Feels good to be back</h3>
+    </header>
+
+    <ul class="navbar">
+        <li class="navitem"><a href="/">Home</a></li>
+        <li class="navitem"><a href="/leaderboard">Leaderboard</a></li>
+        <li class="navitem"><a href="/about">About</a></li>
+        <li class="navitem" style="float:right"><a href="/logout">Logout</a></li>
+    </ul>
+
+    <section>
+        <h2>Congratulations!</h2>
+        <h4>
+            You wake up, finding yourself back at home, in your comfy bed, as if nothing has ever happen.<br>
+            Everything is back to normal. No more running going around overcoming challenges to get back home.<br>
+            As much as you feel relieved, a small part of you misses the cyber world...
+            <br><br>
+            As you get up to leave the room, a message was sent to your phone:
+        </h4>
+        <br>
+
+        <div class="message">
+            <p>
+                Congratulations on finishing the game!
+                <br><br>
+                It's really impressive that you were able to complete all the stages in such a short period of time.
+                We hope that you've enjoyed playing The Amazing Race as much as we did creating it. 
+                Hopefully our game has helped you learn something new and develop a stronger interest in programming.
+                <br><br>
+                If you haven't already, go ahead and try the bonus stages. They're similar to the main stages, just a <i>little</i> bit harder. >~<
+                <br><br>
+                Lastly, thank you for attending BuildingBloCS 2020! Hope to see you again next year!
+                <br><br>
+                Sincerely,
+                <br>
+                <i>
+                    Alex
+                    <br>
+                    On behalf of BBCS2020 Games Committee
+                </i>
+            </p>
+        </div>
+        <br>
+        
+        <a href="/"><button class="submit">Home</button></a>
+    </section>
+{% endblock %}

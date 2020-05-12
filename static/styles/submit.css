@@ -28,3 +28,7 @@
     background-color: #8A0303;
     color: white;
 }
+
+.incorrect {
+    color: crimson;
+}
