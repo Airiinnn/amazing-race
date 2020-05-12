@@ -38,20 +38,15 @@
             </tr>
 
             {% for i in range(data|length) %}
-                {% if data[i] not in admin %}
-                    <tr>
-                        <td>{{ i + 1 }}</td>
-                        <td>{{ data[i][0] }}</td>
-                        <td>{{ data[i][1] }}</td>
-                        {% for j in range(2, 6) %}
-                            {% if data[i][j] == None %}
-                                <td>-</td>
-                            {% else %}
-                                <td>Done</td>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                {% endif %}
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data[i].email }}</td>
+                    <td>{{ data[i].mainstage }}</td>
+                    <td>{{ data[i].bonus0 }}</td>
+                    <td>{{ data[i].bonus1 }}</td>
+                    <td>{{ data[i].bonus2 }}</td>
+                    <td>{{ data[i].bonus3 }}</td>
+                </tr>
             {% endfor %}
         </table>
     </section>

@@ -6,7 +6,6 @@ import csv
 import random
 import subprocess
 import datetime
-import zipfile
 
 # Third-party libraries
 from flask import Flask, render_template, redirect, request, url_for
@@ -17,12 +16,13 @@ from flask_login import (
     login_user,
     logout_user,
 )
+from flask_sqlalchemy import SQLAlchemy
 from oauthlib.oauth2 import WebApplicationClient
 import requests
 
 # Internal imports
-from db import init_db_command
 from user import User
+from config import Config
 
 # Configuration
 GOOGLE_CLIENT_ID = "685992959593-701prlcssas6vu8h87srulmbr6t40hg2.apps.googleusercontent.com"
@@ -33,6 +33,8 @@ GOOGLE_DISCOVERY_URL = (
 
 # Flask app setup
 app = Flask(__name__)
+app.config.from_object(Config)
+db = SQLAlchemy(app)
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 
 # User session management setup
@@ -40,25 +42,109 @@ app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(24)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# Naive database setup
-try:
-    init_db_command()
-except sqlite3.OperationalError:
-    # Assume it's already been created
-    pass
-
 # OAuth 2 client setup
 client = WebApplicationClient(GOOGLE_CLIENT_ID)
 
 # Flask-Login helper to retrieve a user from our db
 @login_manager.user_loader
 def load_user(user_id):
-    return User.get(user_id)
+    player = Player.query.filter_by(id=user_id).first()
+    return User(player.id, player.name, player.email)
 
 # Redirect unauthorized users to login
 @login_manager.unauthorized_handler
 def unauthorized_callback():
     return redirect('/')
+
+# Models
+class Bonusstage(db.Model):
+    stageid = db.Column(db.Integer, index=True, primary_key=True)
+    stagename = db.Column(db.String(120), index=True)
+    requirement = db.Column(db.Integer, index=True)
+
+class Mainstage(db.Model):
+    stageid = db.Column(db.Integer, index=True, primary_key=True)
+    stagename = db.Column(db.String(120), index=True)
+    psw = db.Column(db.String(20), index=True)
+
+class Player(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    email = db.Column(db.String(120), index=True, unique=True)
+
+class Progress(db.Model):
+    email = db.Column(db.String(120), index=True, primary_key=True)
+    mainstage = db.Column(db.Integer, index=True, default=0)
+    bonus0 = db.Column(db.String(50), index=True)
+    bonus1 = db.Column(db.String(50), index=True)
+    bonus2 = db.Column(db.String(50), index=True)
+    bonus3 = db.Column(db.String(50), index=True)
+    main0 = db.Column(db.String(50), index=True)
+    main1 = db.Column(db.String(50), index=True)
+    main2 = db.Column(db.String(50), index=True)
+    main3 = db.Column(db.String(50), index=True)
+    main4 = db.Column(db.String(50), index=True)
+    main5 = db.Column(db.String(50), index=True)
+    main6 = db.Column(db.String(50), index=True)
+    main7 = db.Column(db.String(50), index=True)
+    end = db.Column(db.String(50), index=True)
+    psw = db.Column(db.String(20), index=True, default="goodmorning")
+
+class Stage0(db.Model):
+    email = db.Column(db.String(120), index=True, primary_key=True)
+    q1 = db.Column(db.Integer, index=True, default=0)
+    q2 = db.Column(db.Integer, index=True, default=0)
+    q3 = db.Column(db.Integer, index=True, default=0)
+    q4 = db.Column(db.Integer, index=True, default=0)
+    q5 = db.Column(db.Integer, index=True, default=0)
+    q6 = db.Column(db.Integer, index=True, default=0)
+    q7 = db.Column(db.Integer, index=True, default=0)
+    q8 = db.Column(db.Integer, index=True, default=0)
+    q9 = db.Column(db.Integer, index=True, default=0)
+    q10 = db.Column(db.Integer, index=True, default=0)
+    q11 = db.Column(db.Integer, index=True, default=0)
+    q12 = db.Column(db.Integer, index=True, default=0)
+    q13 = db.Column(db.Integer, index=True, default=0)
+    q14 = db.Column(db.Integer, index=True, default=0)
+    q15 = db.Column(db.Integer, index=True, default=0)
+    q16 = db.Column(db.Integer, index=True, default=0)
+    q17 = db.Column(db.Integer, index=True, default=0)
+    q18 = db.Column(db.Integer, index=True, default=0)
+    q19 = db.Column(db.Integer, index=True, default=0)
+    q20 = db.Column(db.Integer, index=True, default=0)
+
+class Stage1(db.Model):
+    email = db.Column(db.String(120), index=True, primary_key=True)
+    q1 = db.Column(db.Integer, index=True, default=0)
+    q2 = db.Column(db.Integer, index=True, default=0)
+    q3 = db.Column(db.Integer, index=True, default=0)
+    q4 = db.Column(db.Integer, index=True, default=0)
+
+class Stage2(db.Model):
+    email = db.Column(db.String(120), index=True, primary_key=True)
+    q1 = db.Column(db.Integer, index=True, default=0)
+    q2 = db.Column(db.Integer, index=True, default=0)
+    q3 = db.Column(db.Integer, index=True, default=0)
+    q4 = db.Column(db.Integer, index=True, default=0)
+    q5 = db.Column(db.Integer, index=True, default=0)
+    q6 = db.Column(db.Integer, index=True, default=0)
+    q7 = db.Column(db.Integer, index=True, default=0)
+    q8 = db.Column(db.Integer, index=True, default=0)
+
+class Stage3(db.Model):
+    email = db.Column(db.String(120), index=True, primary_key=True)
+    q1 = db.Column(db.Integer, index=True, default=0)
+    q2 = db.Column(db.Integer, index=True, default=0)
+    q3 = db.Column(db.Integer, index=True, default=0)
+
+class Stage7(db.Model):
+    email = db.Column(db.String(120), index=True, primary_key=True)
+    q1 = db.Column(db.Integer, index=True, default=0)
+    q2 = db.Column(db.Integer, index=True, default=0)
+    q3 = db.Column(db.Integer, index=True, default=0)
+    q4 = db.Column(db.Integer, index=True, default=0)
+    q5 = db.Column(db.Integer, index=True, default=0)
+    q6 = db.Column(db.Integer, index=True, default=0)
 
 
 
@@ -67,18 +153,16 @@ def index():
     if current_user.is_authenticated:
         connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
-        cursor.execute("SELECT mainstage, bonus0, bonus1, bonus2, bonus3 FROM progress WHERE email='{}'".format(current_user.email))
-        progress = cursor.fetchone()
-        
         cursor.execute("SELECT * FROM mainstage")
         main_stages = cursor.fetchall()
-
         cursor.execute("SELECT * FROM bonusstage")
         bonus_stages = cursor.fetchall()
-
-        cursor.execute("SELECT q6 FROM stage7 WHERE email='{}'".format(current_user.email))
-        finished = cursor.fetchone()[0]
         connection.close()
+
+        q = Progress.query.filter_by(email=current_user.email).first()
+        progress = [q.mainstage, q.bonus0, q.bonus1, q.bonus2, q.bonus3]
+
+        finished = Stage7.query.filter_by(email=current_user.email).first().q6
 
         return render_template("index.html", name=current_user.name, progress=progress, main_stages=main_stages, bonus_stages=bonus_stages, finished=finished)
     else:
@@ -113,18 +197,16 @@ connection.close()
 @login_required
 def stage0_main():
     if request.method == "GET":
-        connection = sqlite3.connect("database.db")
-        cursor = connection.cursor()
-        cursor.execute("SELECT * FROM stage0 WHERE email='{}'".format(current_user.email))
-        stage0_progress = cursor.fetchone()
-        connection.close()
-        
-        stage0_incomplete = [i for i in range(1, 21) if stage0_progress[i] == 0]
+        q = Stage0.query.filter_by(email=current_user.email).first()
+        stage0_progress = [q.q1, q.q2, q.q3, q.q4, q.q5, q.q6, q.q7, q.q8, q.q9, q.q10, q.q11, q.q12, q.q13, q.q14, q.q15, q.q16, q.q17, q.q18, q.q19, q.q20]
+
+        stage0_incomplete = [i for i in range(20) if stage0_progress[i] == 0]
+
         if len(stage0_incomplete) == 0:
             return render_template("stage0_success.html")
 
         else:
-            return render_template("stage0.html", question=STAGE0_QUESTIONS[random.choice(stage0_incomplete)-1], progress=20-len(stage0_incomplete))
+            return render_template("stage0.html", question=STAGE0_QUESTIONS[random.choice(stage0_incomplete)], progress=20-len(stage0_incomplete))
     
     else:
         qn = request.form.get("qn")
@@ -133,11 +215,10 @@ def stage0_main():
 
         for question in STAGE0_QUESTIONS:
             if question[0] == qn:
-                if ans == question[6]: # correct
-                    connection = sqlite3.connect("database.db")
-                    connection.execute("UPDATE stage0 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
-                    connection.commit()
-                    connection.close()
+                if ans == question[6]: # correct          
+                    stage0 = Stage0.query.filter_by(email=current_user.email).first()
+                    setattr(stage0, qn, 1)
+                    db.session.commit()
 
                     return redirect("/stage0")
 
@@ -156,29 +237,22 @@ connection.close()
 @app.route("/stage1", methods=["GET", "POST"])
 @login_required
 def stage1():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
     
     if maxstage < 1:
         return redirect("/submit")
     
     else:
         if request.method == "GET":
-            connection = sqlite3.connect("database.db")
-            cursor = connection.cursor()
-            cursor.execute("SELECT * FROM stage1 WHERE email='{}'".format(current_user.email))
-            stage1_progress = cursor.fetchone()
-            connection.close()
+            q = Stage1.query.filter_by(email=current_user.email).first()
+            stage1_progress = [q.q1, q.q2, q.q3]
             
-            stage1_incomplete = [i for i in range(1, 4) if stage1_progress[i] == 0]
+            stage1_incomplete = [i for i in range(3) if stage1_progress[i] == 0]
             if len(stage1_incomplete) == 0:
                 return redirect("/stage1/q4")
 
             else:
-                question = STAGE1_QUESTIONS[random.choice(stage1_incomplete)-1]
+                question = STAGE1_QUESTIONS[random.choice(stage1_incomplete)]
                 return render_template("stage1.html", question=question, progress=4-len(stage1_incomplete))
         
         else:
@@ -189,10 +263,9 @@ def stage1():
             for question in STAGE1_QUESTIONS:
                 if question[0] == qn:
                     if ans == question[2]: # correct
-                        connection = sqlite3.connect("database.db")
-                        connection.execute("UPDATE stage1 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
-                        connection.commit()
-                        connection.close()
+                        stage1 = Stage1.query.filter_by(email=current_user.email).first()
+                        setattr(stage1, qn, 1)
+                        db.session.commit()
 
                         return redirect("/stage1")
 
@@ -202,28 +275,21 @@ def stage1():
 @app.route("/stage1/q4", methods=["GET", "POST"])
 @login_required
 def stage1_q4():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
-    
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
+
     if maxstage < 1:
         return redirect("/submit")
     
     else:
         if request.method == "GET":
-            connection = sqlite3.connect("database.db")
-            cursor = connection.cursor()
-            cursor.execute("SELECT * FROM stage1 WHERE email='{}'".format(current_user.email))
-            stage1_progress = cursor.fetchone()
-            connection.close()
+            q = Stage1.query.filter_by(email=current_user.email).first()
+            stage1_progress = [q.q1, q.q2, q.q3, q.q4]
 
-            for i in range(1, 4):
+            for i in range(3):
                 if stage1_progress[i] == 0:
                     return redirect("/stage1")
 
-            if stage1_progress[4] == 1:
+            if stage1_progress[3] == 1:
                 return render_template("stage1_success.html")
 
             else:
@@ -264,10 +330,10 @@ def stage1_q4():
                     for question in STAGE1_QUESTIONS:
                         if question[0] == qn:
                             if output == question[2]: # correct
-                                connection = sqlite3.connect("database.db")
-                                connection.execute("UPDATE stage1 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
-                                connection.commit()
-                                connection.close()
+                                stage1 = Stage1.query.filter_by(email=current_user.email).first()
+                                setattr(stage1, qn, 1)
+                                db.session.commit()
+                                
                                 return render_template("stage1_success.html")
 
                             else:
@@ -286,26 +352,20 @@ connection.close()
 @app.route("/stage2", methods=["GET", "POST"])
 @login_required
 def stage2():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
     
     if maxstage < 2:
         return redirect("/submit")
 
     else:
         if request.method == "GET":
-            connection = sqlite3.connect("database.db")
-            cursor = connection.cursor()
-            cursor.execute("SELECT * FROM stage2 WHERE email='{}'".format(current_user.email))
-            stage2_progress = cursor.fetchone()
-            connection.close()
+            q = Stage2.query.filter_by(email=current_user.email).first()
+            stage2_progress = [q.q1, q.q2, q.q3, q.q4, q.q5, q.q6, q.q7, q.q8]
 
-            for i in range(1, 9):
+
+            for i in range(8):
                 if stage2_progress[i] == 0:
-                    return render_template("stage2.html", question=STAGE2_QUESTIONS[i-1], progress=i-1)
+                    return render_template("stage2.html", question=STAGE2_QUESTIONS[i], progress=i)
 
             return render_template("stage2_success.html")
         
@@ -317,10 +377,9 @@ def stage2():
             for question in STAGE2_QUESTIONS:
                 if question[0] == qn:
                     if ans == question[2]: # correct
-                        connection = sqlite3.connect("database.db")
-                        connection.execute("UPDATE stage2 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
-                        connection.commit()
-                        connection.close()
+                        stage2 = Stage2.query.filter_by(email=current_user.email).first()
+                        setattr(stage2, qn, 1)
+                        db.session.commit()
 
                         return redirect("/stage2")
 
@@ -339,44 +398,34 @@ connection.close()
 @app.route("/stage3", methods=["GET", "POST"])
 @login_required
 def stage3():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
     
     if maxstage < 3:
         return redirect("/submit")
 
     else:
         if request.method == "GET":
-            connection = sqlite3.connect("database.db")
-            cursor = connection.cursor()
-            cursor.execute("SELECT * FROM stage3 WHERE email='{}'".format(current_user.email))
-            stage3_progress = cursor.fetchone()
-            connection.close()
+            q = Stage3.query.filter_by(email=current_user.email).first()
+            stage3_progress = [q.q1, q.q2, q.q3]
             
-            stage3_incomplete = [i for i in range(1, 4) if stage3_progress[i] == 0]
+            stage3_incomplete = [i for i in range(3) if stage3_progress[i] == 0]
             if len(stage3_incomplete) == 0:
                 return render_template("stage3_success.html")
 
             else:
-                return render_template("stage3.html", question=STAGE3_QUESTIONS[random.choice(stage3_incomplete)-1], progress=3-len(stage3_incomplete))
+                return render_template("stage3.html", question=STAGE3_QUESTIONS[random.choice(stage3_incomplete)], progress=3-len(stage3_incomplete))
         
         else:
             qn = request.form.get("qn")
             ans = request.form.get("ans")
             progress = request.form.get("progress")
-            #print(qn, ans, progress)
+
             for question in STAGE3_QUESTIONS:
-                #print(question, question[0], qn)
                 if question[0] == qn:
-                    #print("A")
                     if ans == question[3]: # correct
-                        connection = sqlite3.connect("database.db")
-                        connection.execute("UPDATE stage3 SET {}=1 WHERE email='{}'".format(question[0], current_user.email))
-                        connection.commit()
-                        connection.close()
+                        stage3 = Stage3.query.filter_by(email=current_user.email).first()
+                        setattr(stage3, qn, 1)
+                        db.session.commit()
 
                         return redirect("/stage3")
 
@@ -389,11 +438,7 @@ def stage3():
 @app.route("/stage4")
 @login_required
 def stage4():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
 
     if maxstage < 4:
         return redirect("/submit")
@@ -405,14 +450,11 @@ def stage4():
 @app.route("/stage5", methods=["GET", "POST"])
 @login_required
 def stage5():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
 
     if maxstage < 5:
         return redirect("/submit")
+    
     else:
         if request.method == "GET":
             return render_template("stage5.html")
@@ -474,11 +516,7 @@ def stage5():
 @app.route("/stage6")
 @login_required
 def stage6():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
 
     if maxstage < 6:
         return redirect("/submit")
@@ -496,32 +534,22 @@ connection.close()
 @app.route("/stage7", methods=["GET", "POST"])
 @login_required
 def stage7():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
 
     if maxstage < 7:
         return redirect("/submit")
 
     else:
         if request.method == "GET":
-            connection = sqlite3.connect("database.db")
-            cursor = connection.cursor()
-            cursor.execute("SELECT * FROM stage7 WHERE email='{}'".format(current_user.email))
-            stage7_progress = cursor.fetchone()
-            connection.close()
+            q = Stage7.query.filter_by(email=current_user.email).first()
+            stage7_progress = [q.q1, q.q2, q.q3, q.q4, q.q5, q.q6]
 
-            for i in range(1, 7):
+            for i in range(6):
                 if stage7_progress[i] == 0:
-                    return render_template("stage7.html", question=STAGE7_QUESTIONS[i-1], code=STAGE7_QUESTIONS[i-1][2], progress=i-1)
+                    return render_template("stage7.html", question=STAGE7_QUESTIONS[i], code=STAGE7_QUESTIONS[i][2], progress=i)
 
-            connection = sqlite3.connect("database.db")
-            cursor = connection.cursor()
-            cursor.execute("SELECT psw FROM progress WHERE email='{}'".format(current_user.email))
-            psw = cursor.fetchone()
-            connection.close()
+            # if finished all 6 questions
+            psw = Progress.query.filter_by(email=current_user.email).first().psw
             return render_template("stage7_success.html", psw=psw)
         
         else:
@@ -543,10 +571,9 @@ def stage7():
                     pos.append(temp)
 
                 if pos == sorted(pos): # correct
-                    connection = sqlite3.connect("database.db")
-                    connection.execute("UPDATE stage7 SET q1=1 WHERE email=(?)", (current_user.email,))
-                    connection.commit()
-                    connection.close()
+                    stage7 = Stage7.query.filter_by(email=current_user.email).first()
+                    setattr(stage7, qn, 1)
+                    db.session.commit()
 
                     return redirect("/stage7")
 
@@ -577,10 +604,9 @@ def stage7():
                         pos.append(temp)
 
                     if pos == sorted(pos) and body > pos[3] and h1 > pos[3] and p > pos[3] and body < pos[4] and h1 < pos[4] and p < pos[4]: # correct
-                        connection = sqlite3.connect("database.db")
-                        connection.execute("UPDATE stage7 SET q2=1 WHERE email=(?)", (current_user.email,))
-                        connection.commit()
-                        connection.close()
+                        stage7 = Stage7.query.filter_by(email=current_user.email).first()
+                        setattr(stage7, qn, 1)
+                        db.session.commit()
 
                         return redirect("/stage7")
 
@@ -600,10 +626,9 @@ def stage7():
                     pos.append(temp)
 
                 if pos == sorted(pos): # correct
-                    connection = sqlite3.connect("database.db")
-                    connection.execute("UPDATE stage7 SET q3=1 WHERE email=(?)", (current_user.email,))
-                    connection.commit()
-                    connection.close()
+                    stage7 = Stage7.query.filter_by(email=current_user.email).first()
+                    setattr(stage7, qn, 1)
+                    db.session.commit()
 
                     return redirect("/stage7")
 
@@ -644,10 +669,9 @@ def stage7():
                         pos.append(temp)
 
                     if pos == sorted(pos) and padding > pos[3] and font_size > pos[3] and padding < pos[5] and font_size < pos[5]: # correct
-                        connection = sqlite3.connect("database.db")
-                        connection.execute("UPDATE stage7 SET q4=1 WHERE email=(?)", (current_user.email,))
-                        connection.commit()
-                        connection.close()
+                        stage7 = Stage7.query.filter_by(email=current_user.email).first()
+                        setattr(stage7, qn, 1)
+                        db.session.commit()
 
                         return redirect("/stage7")
 
@@ -677,10 +701,9 @@ def stage7():
                         pos.append(temp)
 
                     if pos == sorted(pos) and a > pos[7] and a < pos[8]: # correct
-                        connection = sqlite3.connect("database.db")
-                        connection.execute("UPDATE stage7 SET q5=1 WHERE email=(?)", (current_user.email,))
-                        connection.commit()
-                        connection.close()
+                        stage7 = Stage7.query.filter_by(email=current_user.email).first()
+                        setattr(stage7, qn, 1)
+                        db.session.commit()
 
                         return redirect("/stage7")
                         
@@ -713,10 +736,9 @@ def stage7():
                         pos.append(temp)
 
                     if pos == sorted(pos) and img > pos[5]: # correct
-                        connection = sqlite3.connect("database.db")
-                        connection.execute("UPDATE stage7 SET q6=1 WHERE email=(?)", (current_user.email,))
-                        connection.commit()
-                        connection.close()
+                        stage7 = Stage7.query.filter_by(email=current_user.email).first()
+                        setattr(stage7, qn, 1)
+                        db.session.commit()
 
                         return redirect("/stage7")
                         
@@ -725,15 +747,11 @@ def stage7():
                 
 
 
-# Bonus 0: Computational thinking:
+# Bonus 0: Computational thinking
 @app.route("/bonus0", methods=["GET", "POST"])
 @login_required
 def bonus0():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
     
     if maxstage < 2:
         return redirect("/submit")
@@ -746,10 +764,9 @@ def bonus0():
             ans = request.form.get("ans")
 
             if ans == "Guido van Rossum":
-                connection = sqlite3.connect("database.db")
-                connection.execute("UPDATE progress SET bonus0=(?) WHERE email=(?)", (datetime.datetime.now(), current_user.email))
-                connection.commit()
-                connection.close()
+                progress = Progress.query.filter_by(email=current_user.email).first()
+                progress.bonus0 = datetime.datetime.now()
+                db.session.commit()
 
                 return render_template("bonus0.html", correct=True)
 
@@ -758,111 +775,110 @@ def bonus0():
 
 
 
-# Bonus 1: SQL:
+# Bonus 1: SQL
 @app.route("/bonus1", methods=["GET","POST"])
 @login_required
 def bonus1():
-    if request.method == "POST":
-        inject = request.form.get("inject")
-        connection = sqlite3.connect("stage3.db")
-        cursor = connection.cursor()
-        sq = "SELECT * FROM users WHERE name=\'" + inject + "\'"
-        #ans: 'or''='
-        print(sq)
-        cursor.execute(sq)
-        results = cursor.fetchall()
-        print(results)
-        connection.close()
-        return render_template("bonus1.html", results = results)
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
 
+    if maxstage < 3:
+        return redirect("/submit")
+    
     else:
-        return render_template("bonus1.html")
+        if request.method == "POST":
+            inject = request.form.get("inject")
+            connection = sqlite3.connect("stage3.db")
+            cursor = connection.cursor()
+            sq = "SELECT * FROM users WHERE name=\'" + inject + "\'"
+            #ans: 'or''='
+            print(sq)
+            cursor.execute(sq)
+            results = cursor.fetchall()
+            print(results)
+            connection.close()
+            return render_template("bonus1.html", results = results)
+
+        else:
+            return render_template("bonus1.html")
     
 
 
-# Bonus 2: Competitive programming:
+# Bonus 2: Competitive programming
 @app.route("/bonus2", methods=["GET", "POST"])
 @login_required
 def bonus2():
-    if request.method == "GET":
-        connection = sqlite3.connect("database.db")
-        cursor = connection.cursor()
-        cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-        maxstage = cursor.fetchone()[0]
-        connection.close()
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
 
-        if maxstage < 5:
-            return redirect("/submit")
-        return render_template("bonus2.html")
-    
+    if maxstage < 5:
+        return redirect("/submit")
+
     else:
-        code = request.form.get("code")
-        if code:
-            # prevent user for accessing files
-            if "open" in code or "file" in code:
-                output = "No trying to open files!"
-                return render_template("bonus2.html", code=code, error=output)
-            
-            else:
-                subtasks = []
-
-                with open("fibo/fibo.py", 'w') as file:
-                    file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\nsys.modules['flask']=None\nsys.modules['subprocess']=None\nsys.modules['sys']=None\ndel sys\n") # prevent importing os and sqlite3
-                    file.write(code)
-
-                for i in range(2):
-                    fiboInput = open("fibo/fibo-{}.in".format(i))
-                    try:
-                        output = subprocess.check_output(["python", "fibo/fibo.py"], timeout=1, stdin=fiboInput).decode("utf-8")
-                    except subprocess.TimeoutExpired:
-                        output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
-                        return render_template("bonus2.html", code=code, error=output)
-                    except subprocess.CalledProcessError:
-                        output = "There's an error in your code."
-                        return render_template("bonus2.html", code=code, error=output)
-                    
-                    # check answers
-                    with open("fibo/fibo-ans-{}.txt".format(i), 'r') as file:
-                        ans = list(file)
-                    
-                    output = output.split("\n")
-                    n = len(output) - 1
-                    if n != len(ans):
-                        subtasks.append(False)
-                    
-                    else:
-                        correct = True
-                        for i in range(n):
-                            output[i].strip()
-                            output[i] = output[i].replace("\r", "")
-
-                            if output[i] != ans[i].strip():
-                                correct = False
-
-                        subtasks.append(correct)
-
-                if subtasks[0] == True and subtasks[1] == True:
-                    connection = sqlite3.connect("database.db")
-                    connection.execute("UPDATE progress SET bonus2=(?) WHERE email=(?)", (datetime.datetime.now(), current_user.email))
-                    connection.commit()
-                    connection.close()
-
-                return render_template("bonus2.html", code=code, subtasks=subtasks)
-        
-        else: # empty input
+        if request.method == "GET":
             return render_template("bonus2.html")
+        
+        else:
+            code = request.form.get("code")
+            if code:
+                # prevent user for accessing files
+                if "open" in code or "file" in code:
+                    output = "No trying to open files!"
+                    return render_template("bonus2.html", code=code, error=output)
+                
+                else:
+                    subtasks = []
+
+                    with open("fibo/fibo.py", 'w') as file:
+                        file.write("import sys\nsys.modules['os']=None\nsys.modules['sqlite3']=None\nsys.modules['flask']=None\nsys.modules['subprocess']=None\nsys.modules['sys']=None\ndel sys\n") # prevent importing os and sqlite3
+                        file.write(code)
+
+                    for i in range(2):
+                        fiboInput = open("fibo/fibo-{}.in".format(i))
+                        try:
+                            output = subprocess.check_output(["python", "fibo/fibo.py"], timeout=1, stdin=fiboInput).decode("utf-8")
+                        except subprocess.TimeoutExpired:
+                            output = "Time Limit Exceed. Is your code stuck in an infinite loop? Or is it inefficient?"
+                            return render_template("bonus2.html", code=code, error=output)
+                        except subprocess.CalledProcessError:
+                            output = "There's an error in your code."
+                            return render_template("bonus2.html", code=code, error=output)
+                        
+                        # check answers
+                        with open("fibo/fibo-ans-{}.txt".format(i), 'r') as file:
+                            ans = list(file)
+                        
+                        output = output.split("\n")
+                        n = len(output) - 1
+                        if n != len(ans):
+                            subtasks.append(False)
+                        
+                        else:
+                            correct = True
+                            for i in range(n):
+                                output[i].strip()
+                                output[i] = output[i].replace("\r", "")
+
+                                if output[i] != ans[i].strip():
+                                    correct = False
+
+                            subtasks.append(correct)
+
+                    if subtasks[0] == True and subtasks[1] == True:
+                        progress = Progress.query.filter_by(email=current_user.email).first()
+                        progress.bonus2 = datetime.datetime.now()
+                        db.session.commit()
+
+                    return render_template("bonus2.html", code=code, subtasks=subtasks)
+            
+            else: # empty input
+                return render_template("bonus2.html")
 
 
 
-# Bonus 3: HTML / CSS:
+# Bonus 3: HTML / CSS
 @app.route("/bonus3")
 @login_required
 def bonus3():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-    maxstage = cursor.fetchone()[0]
-    connection.close()
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
 
     if maxstage < 7:
         return redirect("/submit")
@@ -874,29 +890,31 @@ def bonus3():
 @app.route("/submit", methods=["GET", "POST"])
 @login_required
 def submit():
-    if request.method == "GET":
-        return render_template("submit.html")
+    maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
+
+    if maxstage > 7:
+        return redirect("/")
     
     else:
-        userpsw = request.form.get("psw")
-
-        connection = sqlite3.connect("database.db")
-        cursor = connection.cursor()
-        cursor.execute("SELECT mainstage FROM progress WHERE email='{}'".format(current_user.email))
-        maxstage = cursor.fetchone()[0]
-
-        cursor.execute("SELECT psw FROM mainstage WHERE stageid='{}'".format(maxstage))
-        psw = cursor.fetchone()[0]
-
-        if userpsw == psw:
-            cursor.execute("UPDATE progress SET mainstage=mainstage+1, main{}=(?) WHERE email=(?)".format(maxstage), (datetime.datetime.now(), current_user.email,))
-            connection.commit()
-            connection.close()
-            return render_template("submit.html", success=True)
-
+        if request.method == "GET":
+            return render_template("submit.html")
+        
         else:
-            connection.close()
-            return render_template("submit.html", success=False)
+            userpsw = request.form.get("psw")
+
+            psw = Mainstage.query.filter_by(stageid=maxstage).first().psw
+
+            if userpsw == psw:
+                progress = Progress.query.filter_by(email=current_user.email).first()
+                progress.mainstage += 1
+                setattr(progress, "main{}".format(maxstage), datetime.datetime.now())
+                db.session.commit()
+
+                return render_template("submit.html", success=True)
+
+            else:
+                connection.close()
+                return render_template("submit.html", success=False)
 
 
 
@@ -905,11 +923,7 @@ def submit():
 @login_required
 def portal():
     if request.method == "GET":
-        connection = sqlite3.connect("database.db")
-        cursor = connection.cursor()
-        cursor.execute("SELECT q6 FROM stage7 WHERE email='{}'".format(current_user.email))
-        finished = cursor.fetchone()[0]
-        connection.close()
+        finished = Stage7.query.filter_by(email=current_user.email).first().q6
 
         if finished == 1:
             return render_template("portal.html")
@@ -920,17 +934,14 @@ def portal():
     else:
         psw = request.form.get("psw")
 
-        connection = sqlite3.connect("database.db")
-        cursor = connection.cursor()
-        cursor.execute("SELECT psw FROM mainstage WHERE stageid=8")
-        password = cursor.fetchone()[0]
-        connection.close()
+        password = Mainstage.query.filter_by(stageid=8).first().psw
 
         if psw == password:
-            connection = sqlite3.connect("database.db")
-            connection.execute("UPDATE progress SET mainstage=mainstage+1, end=(?) WHERE email=(?)", (datetime.datetime.now(), current_user.email))
-            connection.commit()
-            connection.close()
+            progress = Progress.query.filter_by(email=current_user.email).first()
+            progress.mainstage += 1
+            progress.end = datetime.datetime.now()
+            db.session.commit()
+
             return render_template("congratulations.html")
 
         else:
@@ -951,19 +962,15 @@ ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg
 @app.route("/leaderboard")
 @login_required
 def leaderboard():
-    connection = sqlite3.connect("database.db")
-    cursor = connection.cursor()
-    cursor.execute("SELECT email, mainstage, bonus0, bonus1, bonus2, bonus3 FROM progress ORDER BY mainstage DESC, end ASC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
-    data = cursor.fetchall()
-    connection.close()
-
+    data = Progress.query.order_by(Progress.mainstage.desc(), Progress.end.asc(), Progress.main7.asc(), Progress.main6.asc(), Progress.main5.asc(), Progress.main4.asc(), Progress.main3.asc(), Progress.main2.asc(), Progress.main1.asc(), Progress.main0.asc()).all()
+    
     n = len(data)
     for i in range(n):
-        if data[i][0] == current_user.email:
+        if data[i].email == current_user.email:
             pos = i+1
             break
 
-    return render_template("leaderboard.html", data=data, pos=pos, admin=ADMIN)
+    return render_template("leaderboard.html", data=data, pos=pos)
 
 
 
@@ -980,28 +987,19 @@ def admin():
                 return redirect("/")
 
             else:
-                connection = sqlite3.connect("database.db")
-                cursor = connection.cursor()
-                cursor.execute("SELECT * FROM progress ORDER BY mainstage DESC, end ASC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
-                data = cursor.fetchall()
-                connection.close()
+                data = Progress.query.order_by(Progress.mainstage.desc(), Progress.end.asc(), Progress.main7.asc(), Progress.main6.asc(), Progress.main5.asc(), Progress.main4.asc(), Progress.main3.asc(), Progress.main2.asc(), Progress.main1.asc(), Progress.main0.asc()).all()
 
-                return render_template("admin.html", data=data, admin=ADMIN)
+                return render_template("admin.html", data=data)
 
         else:
             email = request.form.get("email")
             newpassword = request.form.get("newpassword")
 
-            connection = sqlite3.connect("database.db")
-            connection.execute("UPDATE progress SET psw=(?) WHERE email=(?)", (newpassword, email))
-            connection.commit()
+            progress = Progress.query.filter_by(email=current_user.email).first()
+            progress.psw = newpassword
+            db.session.commit()
 
-            cursor = connection.cursor()
-            cursor.execute("SELECT * FROM progress ORDER BY mainstage DESC, main7 ASC, main6 ASC, main5 ASC, main4 ASC, main3 ASC, main2 ASC, main1 ASC, main0 ASC")
-            data = cursor.fetchall()
-            connection.close()
-
-            return render_template("admin.html", data=data, admin=ADMIN)
+            return redirect("/admin")
 
 
 
@@ -1074,9 +1072,17 @@ def callback():
     )
 
     # Doesn't exist? Add it to the database.
-    if not User.get(unique_id):
-        User.create(unique_id, users_name, users_email)
-
+    player = Player.query.filter_by(id=unique_id).first()
+    if player is None:
+        player = Player(id=unique_id, name=users_name, email=users_email)
+        progress = Progress(email=users_email)
+        stage0 = Stage0(email=users_email)
+        stage1 = Stage1(email=users_email)
+        stage2 = Stage2(email=users_email)
+        stage3 = Stage3(email=users_email)
+        stage7 = Stage7(email=users_email)
+        db.session.add_all([player, progress, stage0, stage1, stage2, stage3, stage7])
+        db.session.commit()
 
     # Begin user session by logging the user in
     login_user(user)

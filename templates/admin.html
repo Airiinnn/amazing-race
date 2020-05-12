@@ -50,21 +50,30 @@
                 <th>Main5</th>
                 <th>Main6</th>
                 <th>Main7</th>
+                <th>End</th>
+                <th>Psw</th>
             </tr>
 
             {% for i in range(data|length) %}
-                {% if data[i] not in admin %}
-                    <tr>
-                        <td>{{ i + 1 }}</td>
-                        {% for j in range(14) %}
-                            {% if data[i][j] == None %}
-                                <td>-</td>
-                            {% else %}
-                                <td>{{ data[i][j] }}</td>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
-                {% endif %}
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ data[i].email }}</td>
+                    <td>{{ data[i].mainstage }}</td>
+                    <td>{{ data[i].bonus0 }}</td>
+                    <td>{{ data[i].bonus1 }}</td>
+                    <td>{{ data[i].bonus2 }}</td>
+                    <td>{{ data[i].bonus3 }}</td>
+                    <td>{{ data[i].main0 }}</td>
+                    <td>{{ data[i].main1 }}</td>
+                    <td>{{ data[i].main2 }}</td>
+                    <td>{{ data[i].main3 }}</td>
+                    <td>{{ data[i].main4 }}</td>
+                    <td>{{ data[i].main5 }}</td>
+                    <td>{{ data[i].main6 }}</td>
+                    <td>{{ data[i].main7 }}</td>
+                    <td>{{ data[i].end }}</td>
+                    <td>{{ data[i].psw }}</td>
+                </tr>
             {% endfor %}
         </table>
     </section>
