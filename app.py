@@ -146,6 +146,8 @@ class Stage7(db.Model):
     q5 = db.Column(db.Integer, index=True, default=0)
     q6 = db.Column(db.Integer, index=True, default=0)
 
+with app.app_context():
+    db.create_all()
 
 
 @app.route("/")
