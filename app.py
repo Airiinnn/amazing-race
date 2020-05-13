@@ -149,7 +149,7 @@ class Stage7(db.Model):
 """
 with app.app_context():
     db.create_all()
-"""
+
 
 bonus0 = Bonusstage(stageid=0, stagename="Bonus 0: Computational Thinking", requirement=2)
 bonus1 = Bonusstage(stageid=1, stagename="Bonus 1: SQL", requirement=3)
@@ -166,6 +166,7 @@ main7 = Mainstage(stageid=7, stagename="Stage 7: HTML & CSS", psw="protecc")
 main8 = Mainstage(stageid=8, stagename="Portal", psw="goodmorning")
 db.session.add_all([bonus0, bonus1, bonus2, bonus3, main0, main1, main2, main3, main4, main5, main6, main7, main8])
 db.session.commit()
+"""
 
 @app.route("/")
 def index():
