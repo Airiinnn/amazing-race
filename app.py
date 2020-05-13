@@ -139,7 +139,7 @@ class Stage7(db.Model):
 
 
 
-
+'''
 with app.app_context():
     db.create_all()
 
@@ -171,7 +171,7 @@ for player in player:
     p = Progress(email=player[2], psw=player[3], group=int(player[0]))
     db.session.add(p)
     db.session.commit()
-
+'''
 
 
 
