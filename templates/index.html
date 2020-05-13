@@ -59,7 +59,7 @@
         <p class="stage-header" style="margin-top:128px;">Bonus stages:</p>
         {% for i in range(bonus_stages|length) %}
             <a href="/bonus{{ bonus_stages[i].stageid }}">
-            {% if bonus_stages[i].requirement <= progress[0] %}
+            {% if bonus_stages[i].requirement|int <= progress[0] %}
                 {% if progress[i+1] %}
                     <button class="stage completed">{{ bonus_stages[i].stagename }}</button>
                 {% else %}
