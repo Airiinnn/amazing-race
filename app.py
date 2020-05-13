@@ -991,15 +991,19 @@ ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg
 def leaderboard():
     data = Progress.query.order_by(Progress.mainstage.desc(), Progress.end.asc(), Progress.main7.asc(), Progress.main6.asc(), Progress.main5.asc(), Progress.main4.asc(), Progress.main3.asc(), Progress.main2.asc(), Progress.main1.asc(), Progress.main0.asc()).all()
     
-    data = data[3:]
+    for i in range(3):
+        for player in data:
+            if player.email == ADMINS[i]:
+                data.remove(player)
+                break
 
     pos = 0
     n = len(data)
     for i in range(n):
         if data[i].email == current_user.email:
-            pos = i+1
+            pos = i + 1
             break
-
+   
     return render_template("leaderboard.html", data=data, pos=pos)
 
 
