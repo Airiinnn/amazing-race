@@ -139,7 +139,7 @@ class Stage7(db.Model):
 
 
 
-'''
+
 with app.app_context():
     db.create_all()
 
@@ -155,7 +155,7 @@ main4 = Mainstage(stageid=4, stagename="Stage 4: NoSQL", psw="3213b5")
 main5 = Mainstage(stageid=5, stagename="Stage 5: Competitive Programming", psw="fastgame")
 main6 = Mainstage(stageid=6, stagename="Stage 6: Socket Programming", psw="z cfmv jftbvkzf")
 main7 = Mainstage(stageid=7, stagename="Stage 7: HTML & CSS", psw="-")
-main8 = Mainstage(stageid=8, stagename="Portal", psw="goodmorning")
+main8 = Mainstage(stageid=8, stagename="Portal", psw="python4life")
 db.session.add_all([bonus0, bonus1, bonus2, bonus3, main0, main1, main2, main3, main4, main5, main6, main7, main8])
 db.session.commit()
 
@@ -168,10 +168,10 @@ with open("group_psw.csv", 'r') as file:
         players.append(line)
 
 for player in players:
-    p = Progress(email=player[2], psw=player[3], group=int(player[0]))
+    p = Progress(email=player[1], psw=player[2], group=int(player[0]))
     db.session.add(p)
     db.session.commit()
-'''
+
 
 
 
