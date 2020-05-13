@@ -139,7 +139,7 @@ class Stage7(db.Model):
 
 
 
-'''
+
 with app.app_context():
     db.create_all()
 
@@ -171,7 +171,7 @@ for player in player:
     p = Progress(email=player[2], psw=player[3], group=int(player[0]))
     db.session.add(p)
     db.session.commit()
-'''
+
 
 
 
@@ -1127,7 +1127,7 @@ def callback():
         stage2 = Stage2(email=users_email)
         stage3 = Stage3(email=users_email)
         stage7 = Stage7(email=users_email)
-        db.session.add_all([player, progress, stage0, stage1, stage2, stage3, stage7])
+        db.session.add_all([player, stage0, stage1, stage2, stage3, stage7])
         db.session.commit()
 
     # Begin user session by logging the user in
