@@ -30,22 +30,22 @@
             <tr>
                 <th>Ranking</th>
                 <th>Email</th>
+                <th>Group</th>
                 <th>Stages completed</th>
                 <th>Bonus 0</th>
                 <th>Bonus 1</th>
                 <th>Bonus 2</th>
-                <th>Bonus 3</th>
             </tr>
 
             {% for i in range(data|length) %}
                 <tr>
                     <td>{{ i + 1 }}</td>
                     <td>{{ data[i].email }}</td>
+                    <td>{{ data[i].group }}</td>
                     <td>{{ data[i].mainstage }}</td>
                     <td>{{ data[i].bonus0 }}</td>
                     <td>{{ data[i].bonus1 }}</td>
                     <td>{{ data[i].bonus2 }}</td>
-                    <td>{{ data[i].bonus3 }}</td>
                 </tr>
             {% endfor %}
         </table>

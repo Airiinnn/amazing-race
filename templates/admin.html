@@ -21,19 +21,27 @@
     </ul>
 
     <section>
-        <h2>Update participants' final passwords:</h2>
+        <h2>Update database:</h2>
         <form action="/admin" method="post">
             <div class="update">
-                <h4>Email: <input name="email" type="text" required></h4>
+                <select name="operation">
+                    <option value="addtoprogress">Add user to Progress</option>
+                    <option value="changepsw">Update password</option>
+                    <option value="changegrp">Update group</option>
+                </select>
 
-                <h4>New password: <input name="newpassword" type="text" required></h4>
+                <h4>Email:<br><input name="email" type="text" required></h4>
+
+                <h4>New password (If needed):<br><input name="password" type="text"></h4>
+
+                <h4>Group (If needed. Must be int):<br><input name="group" type="text"></h4>
             </div>
 
             <input type="submit" value="Submit">
         </form>
         <br>
 
-        <table class="leaderboard" style="font-size:14px;">
+        <table class="leaderboard" style="font-size:12px;">
             <tr>
                 <th>Rank</th>
                 <th>Email</th>
@@ -41,7 +49,6 @@
                 <th>Bonus0</th>
                 <th>Bonus1</th>
                 <th>Bonus2</th>
-                <th>Bonus3</th>
                 <th>Main0</th>
                 <th>Main1</th>
                 <th>Main2</th>
@@ -52,6 +59,7 @@
                 <th>Main7</th>
                 <th>End</th>
                 <th>Psw</th>
+                <th>Group</th>
             </tr>
 
             {% for i in range(data|length) %}
@@ -62,7 +70,6 @@
                     <td>{{ data[i].bonus0 }}</td>
                     <td>{{ data[i].bonus1 }}</td>
                     <td>{{ data[i].bonus2 }}</td>
-                    <td>{{ data[i].bonus3 }}</td>
                     <td>{{ data[i].main0 }}</td>
                     <td>{{ data[i].main1 }}</td>
                     <td>{{ data[i].main2 }}</td>
@@ -73,6 +80,7 @@
                     <td>{{ data[i].main7 }}</td>
                     <td>{{ data[i].end }}</td>
                     <td>{{ data[i].psw }}</td>
+                    <td>{{ data[i].group }}</td>
                 </tr>
             {% endfor %}
         </table>

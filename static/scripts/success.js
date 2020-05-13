@@ -1,3 +1,3 @@
 function showPassword(psw) {
-    alert(psw);
+    alert("password:"+psw);
 }

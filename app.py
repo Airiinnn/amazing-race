@@ -89,6 +89,7 @@ class Progress(db.Model):
     main7 = db.Column(db.Text, index=True)
     end = db.Column(db.Text, index=True)
     psw = db.Column(db.Text, index=True, default="goodmorning")
+    group = db.Column(db.Integer, index=True, default=0)
 
 class Stage0(db.Model):
     email = db.Column(db.Text, index=True, primary_key=True)
@@ -102,16 +103,6 @@ class Stage0(db.Model):
     q8 = db.Column(db.Integer, index=True, default=0)
     q9 = db.Column(db.Integer, index=True, default=0)
     q10 = db.Column(db.Integer, index=True, default=0)
-    q11 = db.Column(db.Integer, index=True, default=0)
-    q12 = db.Column(db.Integer, index=True, default=0)
-    q13 = db.Column(db.Integer, index=True, default=0)
-    q14 = db.Column(db.Integer, index=True, default=0)
-    q15 = db.Column(db.Integer, index=True, default=0)
-    q16 = db.Column(db.Integer, index=True, default=0)
-    q17 = db.Column(db.Integer, index=True, default=0)
-    q18 = db.Column(db.Integer, index=True, default=0)
-    q19 = db.Column(db.Integer, index=True, default=0)
-    q20 = db.Column(db.Integer, index=True, default=0)
 
 class Stage1(db.Model):
     email = db.Column(db.Text, index=True, primary_key=True)
@@ -146,7 +137,6 @@ class Stage7(db.Model):
     q5 = db.Column(db.Integer, index=True, default=0)
     q6 = db.Column(db.Integer, index=True, default=0)
 
-"""
 with app.app_context():
     db.create_all()
 
@@ -166,7 +156,20 @@ main7 = Mainstage(stageid=7, stagename="Stage 7: HTML & CSS", psw="-")
 main8 = Mainstage(stageid=8, stagename="Portal", psw="goodmorning")
 db.session.add_all([bonus0, bonus1, bonus2, bonus3, main0, main1, main2, main3, main4, main5, main6, main7, main8])
 db.session.commit()
-"""
+
+players = []
+
+with open("group_psw.csv", 'r') as file:
+    reader = csv.reader(file, delimiter=",")
+    next(reader)
+    for line in reader:
+        players.append(line)
+
+for player in player:
+    p = Progress(email=player[2], psw=player[3], group=int(player[0]))
+    db.session.add(p)
+    db.session.commit()
+
 
 @app.route("/")
 def index():
@@ -213,15 +216,15 @@ connection.close()
 def stage0_main():
     if request.method == "GET":
         q = Stage0.query.filter_by(email=current_user.email).first()
-        stage0_progress = [q.q1, q.q2, q.q3, q.q4, q.q5, q.q6, q.q7, q.q8, q.q9, q.q10, q.q11, q.q12, q.q13, q.q14, q.q15, q.q16, q.q17, q.q18, q.q19, q.q20]
+        stage0_progress = [q.q1, q.q2, q.q3, q.q4, q.q5, q.q6, q.q7, q.q8, q.q9, q.q10]
 
-        stage0_incomplete = [i for i in range(20) if stage0_progress[i] == 0]
+        stage0_incomplete = [i for i in range(10) if stage0_progress[i] == 0]
 
         if len(stage0_incomplete) == 0:
             return render_template("stage0_success.html")
 
         else:
-            return render_template("stage0.html", question=STAGE0_QUESTIONS[random.choice(stage0_incomplete)], progress=20-len(stage0_incomplete))
+            return render_template("stage0.html", question=STAGE0_QUESTIONS[random.choice(stage0_incomplete)], progress=10-len(stage0_incomplete))
     
     else:
         qn = request.form.get("qn")
@@ -551,7 +554,7 @@ connection.close()
 def stage7():
     maxstage = Progress.query.filter_by(email=current_user.email).first().mainstage
 
-    if maxstage < 0: # TESING!!! SHOULD BE 7
+    if maxstage < 7:
         return redirect("/submit")
 
     else:
@@ -744,7 +747,7 @@ def stage7():
                     
                     for tag in tags:
                         temp = userans.find(tag)
-                        print(tag, temp)
+
                         if temp == -1: # incorrect
                             return render_template("stage7.html", question=STAGE7_QUESTIONS[5], code=code, progress=5, correct=False)
 
@@ -802,16 +805,23 @@ def bonus1():
     else:
         if request.method == "POST":
             inject = request.form.get("inject")
-            connection = sqlite3.connect("stage3.db")
-            cursor = connection.cursor()
-            sq = "SELECT * FROM users WHERE name=\'" + inject + "\'"
-            #ans: 'or''='
-            print(sq)
-            cursor.execute(sq)
-            results = cursor.fetchall()
-            print(results)
-            connection.close()
-            return render_template("bonus1.html", results = results)
+
+            if inject == "tHiS_sItE_nOt_SaFe":
+                progress = Progress.query.filter_by(email=current_user.email).first()
+                progress.bonus1 = datetime.datetime.now()
+                db.session.commit()
+
+                return render_template("bonus1.html", correct=True)
+
+            else:
+                connection = sqlite3.connect("stage3.db")
+                cursor = connection.cursor()
+                sq = "SELECT * FROM users WHERE name=\'" + inject + "\'"
+                cursor.execute(sq)
+                results = cursor.fetchall()
+                connection.close()
+
+                return render_template("bonus1.html", results = results)
 
         else:
             return render_template("bonus1.html")
@@ -978,6 +988,11 @@ ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg
 def leaderboard():
     data = Progress.query.order_by(Progress.mainstage.desc(), Progress.end.asc(), Progress.main7.asc(), Progress.main6.asc(), Progress.main5.asc(), Progress.main4.asc(), Progress.main3.asc(), Progress.main2.asc(), Progress.main1.asc(), Progress.main0.asc()).all()
     
+    for player in data:
+        if player.email in ADMINS:
+            data.remove(player)
+
+    pos = 0
     n = len(data)
     for i in range(n):
         if data[i].email == current_user.email:
@@ -1006,12 +1021,25 @@ def admin():
                 return render_template("admin.html", data=data)
 
         else:
+            operation = request.form.get("operation")
             email = request.form.get("email")
-            newpassword = request.form.get("newpassword")
+            password = request.form.get("password")
+            group = request.form.get("group")
 
-            progress = Progress.query.filter_by(email=current_user.email).first()
-            progress.psw = newpassword
-            db.session.commit()
+            if operation == "addtoprogress":
+                progress = Progress(email=email, psw=password, group=group)
+                db.session.add(progress)
+                db.session.commit()
+            
+            elif operation == "changepsw":
+                progress = Progress.query.filter_by(email=email).first()
+                progress.psw = password
+                db.session.commit()
+
+            elif operation == "changegrp":
+                progress = Progress.query.filter_by(email=email).first()
+                progress.group = int(group)
+                db.session.commit()
 
             return redirect("/admin")
 
@@ -1089,7 +1117,7 @@ def callback():
     player = Player.query.filter_by(id=unique_id).first()
     if player is None:
         player = Player(id=unique_id, name=users_name, email=users_email)
-        progress = Progress(email=users_email)
+        # progress = Progress(email=users_email)
         stage0 = Stage0(email=users_email)
         stage1 = Stage1(email=users_email)
         stage2 = Stage2(email=users_email)

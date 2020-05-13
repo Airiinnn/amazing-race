@@ -9,6 +9,7 @@
     <header>
         <a href="/"><img src="/static/images/logowhite.svg" alt="BuildingBlocs2020" class="main-logo"></a>
         <h1>Bonus 1: SQL</h1>
+        <h3>Relational</h3>
     </header>
 
     <ul class="navbar">
@@ -21,9 +22,16 @@
     <section>
         <form action="/bonus1" method="POST">
             <h2><b>Find the secret (ps: its in the database)</b></h2>
-            <p><input class= "inject" name="inject" type = "text" placeholder="Enter your username"></p>
+            <p><input class= "inject" name="inject" type = "text" placeholder="Enter password"></p>
             <input type = "submit" value = "Submit" class="submit">
         </form>
+
+    {% if correct %}
+        <h2 class="correct"><b>Congratulations!</b></h2>
+        <h4>You found the exploit, boosting your luck!</h4>
+        <br><br>
+        <a href="/"><button class="submit">Home</button></a>
+    {% endif %}
     
     {% if results %}
         {% for result in results %}
