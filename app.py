@@ -139,7 +139,7 @@ class Stage7(db.Model):
 
 
 
-'''
+
 with app.app_context():
     db.create_all()
 
@@ -167,11 +167,11 @@ with open("group_psw.csv", 'r') as file:
     for line in reader:
         players.append(line)
 
-for player in player:
+for player in players:
     p = Progress(email=player[2], psw=player[3], group=int(player[0]))
     db.session.add(p)
     db.session.commit()
-'''
+
 
 
 
