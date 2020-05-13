@@ -171,13 +171,8 @@ db.session.commit()
 @app.route("/")
 def index():
     if current_user.is_authenticated:
-        connection = sqlite3.connect("database.db")
-        cursor = connection.cursor()
-        cursor.execute("SELECT * FROM mainstage")
-        main_stages = cursor.fetchall()
-        cursor.execute("SELECT * FROM bonusstage")
-        bonus_stages = cursor.fetchall()
-        connection.close()
+        main_stages = Mainstage.query.all()
+        bonus_stages = Bonuesstage.query.all()
 
         q = Progress.query.filter_by(email=current_user.email).first()
         progress = [q.mainstage, q.bonus0, q.bonus1, q.bonus2, q.bonus3]
@@ -933,7 +928,6 @@ def submit():
                 return render_template("submit.html", success=True)
 
             else:
-                connection.close()
                 return render_template("submit.html", success=False)
 
 

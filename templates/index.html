@@ -46,11 +46,11 @@
 
         <p class="stage-header">Main stages:</p>
         {% for i in range(main_stages|length - 1) %}
-            <a href="/stage{{ main_stages[i][0] }}">
+            <a href="/stage{{ main_stages[i].stageid }}">
             {% if i <= progress[0] %}
-                <button class="stage unlocked">{{ main_stages[i][1] }}</button>
+                <button class="stage unlocked">{{ main_stages[i].stagename }}</button>
             {% else %}
-                <button class="stage locked">{{ main_stages[i][1] }} (Locked)</button>
+                <button class="stage locked">{{ main_stages[i].stagename }} (Locked)</button>
             {% endif %}
             </a>
         {% endfor %}
@@ -58,15 +58,15 @@
 
         <p class="stage-header" style="margin-top:128px;">Bonus stages:</p>
         {% for i in range(bonus_stages|length) %}
-            <a href="/bonus{{ bonus_stages[i][0] }}">
+            <a href="/bonus{{ bonus_stages[i].stageid }}">
             {% if bonus_stages[i][2]|int <= progress[0] %}
                 {% if progress[i+1] %}
-                    <button class="stage completed">{{ bonus_stages[i][1] }}</button>
+                    <button class="stage completed">{{ bonus_stages[i].stagename }}</button>
                 {% else %}
-                    <button class="stage unlocked">{{ bonus_stages[i][1] }}</button>
+                    <button class="stage unlocked">{{ bonus_stages[i].stagename }}</button>
                 {% endif %}
             {% else %}
-                <button class="stage locked">{{ bonus_stages[i][1] }} (Locked)</button>
+                <button class="stage locked">{{ bonus_stages[i].stagename }} (Locked)</button>
             {% endif %}
             </a>
         {% endfor %}
