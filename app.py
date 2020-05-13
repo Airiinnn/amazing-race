@@ -139,7 +139,7 @@ class Stage7(db.Model):
 
 
 
-'''
+
 with app.app_context():
     db.create_all()
 
@@ -163,7 +163,6 @@ players = []
 
 with open("group_psw.csv", 'r') as file:
     reader = csv.reader(file, delimiter=",")
-    next(reader)
     for line in reader:
         players.append(line)
 
@@ -171,7 +170,7 @@ for player in players:
     p = Progress(email=player[1], psw=player[2], group=int(player[0]))
     db.session.add(p)
     db.session.commit()
-'''
+
 
 
 
@@ -984,7 +983,7 @@ def about():
 
 
 
-ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg"]
+ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg"	zhang.yuxiang@dhs.sg]
 
 # LEADERBOARDS
 @app.route("/leaderboard")
@@ -992,9 +991,7 @@ ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg
 def leaderboard():
     data = Progress.query.order_by(Progress.mainstage.desc(), Progress.end.asc(), Progress.main7.asc(), Progress.main6.asc(), Progress.main5.asc(), Progress.main4.asc(), Progress.main3.asc(), Progress.main2.asc(), Progress.main1.asc(), Progress.main0.asc()).all()
     
-    for player in data:
-        if player.email in ADMINS:
-            data.remove(player)
+    data = data[3:]
 
     pos = 0
     n = len(data)
