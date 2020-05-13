@@ -164,6 +164,8 @@ main5 = Mainstage(stageid=5, stagename="Stage 5: Competitive Programming", psw="
 main6 = Mainstage(stageid=6, stagename="Stage 6: Socket Programming", psw="protecc")
 main7 = Mainstage(stageid=7, stagename="Stage 7: HTML & CSS", psw="protecc")
 main8 = Mainstage(stageid=8, stagename="Portal", psw="goodmorning")
+db.session.add_all([bonus0, bonus1, bonus2, bonus3, main0, main1, main2, main3, main4, main5, main6, main7, main8])
+db.session.commit()
 
 @app.route("/")
 def index():
