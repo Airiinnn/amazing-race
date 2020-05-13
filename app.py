@@ -137,9 +137,11 @@ class Stage7(db.Model):
     q5 = db.Column(db.Integer, index=True, default=0)
     q6 = db.Column(db.Integer, index=True, default=0)
 
+
+
+'''
 with app.app_context():
     db.create_all()
-
 
 bonus0 = Bonusstage(stageid=0, stagename="Bonus 0: Computational Thinking", requirement=2)
 bonus1 = Bonusstage(stageid=1, stagename="Bonus 1: SQL", requirement=3)
@@ -169,6 +171,8 @@ for player in player:
     p = Progress(email=player[2], psw=player[3], group=int(player[0]))
     db.session.add(p)
     db.session.commit()
+'''
+
 
 
 @app.route("/")
