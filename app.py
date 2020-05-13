@@ -983,7 +983,7 @@ def about():
 
 
 
-ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg"	zhang.yuxiang@dhs.sg]
+ADMINS = ["alexander.liswandy@dhs.sg", "gu.boyuan@dhs.sg", "zhang.yuxiang@dhs.sg"]
 
 # LEADERBOARDS
 @app.route("/leaderboard")
