@@ -820,9 +820,12 @@ def bonus1():
                 connection = sqlite3.connect("stage3.db")
                 cursor = connection.cursor()
                 sq = "SELECT * FROM users WHERE name=\'" + inject + "\'"
-                cursor.execute(sq)
-                results = cursor.fetchall()
-                connection.close()
+                try:
+                    cursor.execute(sq)
+                    results = cursor.fetchall()
+                    connection.close()
+                except:
+                    return render_template("bonus1.html")
 
                 return render_template("bonus1.html", results = results)
 
