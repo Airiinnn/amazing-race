@@ -74,6 +74,7 @@ class Player(db.Model):
 
 class Progress(db.Model):
     email = db.Column(db.Text, index=True, primary_key=True)
+    name = db.Column(db.Text, index=True)
     mainstage = db.Column(db.Integer, index=True, default=0)
     bonus0 = db.Column(db.Text, index=True)
     bonus1 = db.Column(db.Text, index=True)
@@ -139,7 +140,7 @@ class Stage7(db.Model):
 
 
 
-'''
+
 with app.app_context():
     db.create_all()
 
@@ -167,10 +168,10 @@ with open("group_psw.csv", 'r') as file:
         players.append(line)
 
 for player in players:
-    p = Progress(email=player[1], psw=player[2], group=int(player[0]))
+    p = Progress(email=player[2], name=player[1], psw=player[3], group=int(player[0]))
     db.session.add(p)
     db.session.commit()
-'''
+
 
 
 
@@ -181,8 +182,11 @@ def index():
         bonus_stages = Bonusstage.query.all()
 
         q = Progress.query.filter_by(email=current_user.email).first()
-        progress = [q.mainstage, q.bonus0, q.bonus1, q.bonus2, q.bonus3]
 
+        if q is None:
+            return render_template("error.html")
+
+        progress = [q.mainstage, q.bonus0, q.bonus1, q.bonus2, q.bonus3]
         finished = Stage7.query.filter_by(email=current_user.email).first().q6
 
         return render_template("index.html", name=current_user.name, progress=progress, main_stages=main_stages, bonus_stages=bonus_stages, finished=finished)
@@ -1016,7 +1020,7 @@ def leaderboard():
 @login_required
 def admin():
     if current_user.email not in ADMINS:
-            return redirect("/")
+        return redirect("/")
 
     else:
         if request.method == "GET":
@@ -1050,6 +1054,37 @@ def admin():
                 db.session.commit()
 
             return redirect("/admin")
+
+
+
+@app.route("/points")
+@login_required
+def points():
+    if current_user.email not in ADMINS:
+        return redirect("/")
+
+    else:
+        data = Progress.query.order_by(Progress.grp.asc()).all()
+        pts = []
+
+        for player in data:
+            score = player.mainstage * 3
+            if player.bonus0 is not None:
+                score += 5
+            
+            if player.bonus1 is not None:
+                score += 5
+
+            if player.bonus2 is not None:
+                score += 5
+
+            if player.end is not None:
+                score += 10
+
+            pts.append(score)
+
+        return render_template("points.html", data=data, pts=pts)
+
 
 
 

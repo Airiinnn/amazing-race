@@ -22,30 +22,23 @@
     </ul>
 
     <section>
-        <h2><b>Leaderboard</b></h2>
-        <h2>Your ranking: <b>{{ pos }}</b></h2>
+        <h2><b>Points</b></h2>
         <br>
 
         <table class="leaderboard">
             <tr>
-                <th>Ranking</th>
-                <th>Email</th>
                 <th>Group</th>
-                <th>Stages completed</th>
-                <th>Bonus 0</th>
-                <th>Bonus 1</th>
-                <th>Bonus 2</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Points</th>
             </tr>
 
             {% for i in range(data|length) %}
                 <tr>
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ data[i].name }}</td>
                     <td>{{ data[i].group }}</td>
-                    <td>{{ data[i].mainstage }}</td>
-                    <td>{{ data[i].bonus0 }}</td>
-                    <td>{{ data[i].bonus1 }}</td>
-                    <td>{{ data[i].bonus2 }}</td>
+                    <td>{{ data[i].name }}</td>
+                    <td>{{ data[i].email }}</td>
+                    <td>{{ pts[i] }}</td>
                 </tr>
             {% endfor %}
         </table>
