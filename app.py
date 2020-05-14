@@ -1082,7 +1082,6 @@ def admin():
 
                 db.session.commit()
 
-
             return redirect("/admin")
 
 
