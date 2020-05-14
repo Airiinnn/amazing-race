@@ -79,7 +79,6 @@ class Progress(db.Model):
     bonus0 = db.Column(db.Text, index=True)
     bonus1 = db.Column(db.Text, index=True)
     bonus2 = db.Column(db.Text, index=True)
-    bonus3 = db.Column(db.Text, index=True)
     main0 = db.Column(db.Text, index=True)
     main1 = db.Column(db.Text, index=True)
     main2 = db.Column(db.Text, index=True)
@@ -140,7 +139,7 @@ class Stage7(db.Model):
 
 
 
-'''
+
 with app.app_context():
     db.create_all()
 
@@ -171,7 +170,7 @@ for player in players:
     p = Progress(email=player[2], name=player[1], psw=player[3], group=int(player[0]))
     db.session.add(p)
     db.session.commit()
-'''
+
 
 
 
@@ -186,7 +185,7 @@ def index():
         if q is None:
             return render_template("error.html")
 
-        progress = [q.mainstage, q.bonus0, q.bonus1, q.bonus2, q.bonus3]
+        progress = [q.mainstage, q.bonus0, q.bonus1, q.bonus2, None]
         finished = Stage7.query.filter_by(email=current_user.email).first().q6
 
         return render_template("index.html", name=current_user.name, progress=progress, main_stages=main_stages, bonus_stages=bonus_stages, finished=finished)
@@ -1064,7 +1063,7 @@ def points():
         return redirect("/")
 
     else:
-        data = Progress.query.order_by(Progress.grp.asc()).all()
+        data = Progress.query.order_by(Progress.group.asc()).all()
         pts = []
 
         for player in data:
@@ -1079,7 +1078,7 @@ def points():
                 score += 5
 
             if player.end is not None:
-                score += 10
+                score += 13 # Stage 7 + Completed
 
             pts.append(score)
 
@@ -1186,6 +1185,6 @@ os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     # for normal local testing use this run
-    #app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
+    app.run(ssl_context="adhoc",host='127.0.0.1', port=port, debug=True)
     # for deployment to heroku app use this
-    app.run(host='0.0.0.0', port=port, debug=True)
+    #app.run(host='0.0.0.0', port=port, debug=True)

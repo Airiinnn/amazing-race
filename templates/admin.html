@@ -44,6 +44,7 @@
         <table class="leaderboard" style="font-size:12px;">
             <tr>
                 <th>Rank</th>
+                <th>Name</th>
                 <th>Email</th>
                 <th>Max</th>
                 <th>Bonus0</th>
@@ -65,6 +66,7 @@
             {% for i in range(data|length) %}
                 <tr>
                     <td>{{ i + 1 }}</td>
+                    <td>{{ data[i].name }}</td>
                     <td>{{ data[i].email }}</td>
                     <td>{{ data[i].mainstage }}</td>
                     <td>{{ data[i].bonus0 }}</td>
