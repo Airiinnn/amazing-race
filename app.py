@@ -1023,6 +1023,66 @@ def admin():
                 progress.group = int(group)
                 db.session.commit()
 
+            elif operation == "reset":
+                progress = Progress.query.filter_by(email=email).first()
+                progress.mainstage = 0
+                progress.bonus0 = None
+                progress.bonus1 = None
+                progress.bonus2 = None
+                progress.stage0 = None
+                progress.stage1 = None
+                progress.stage2 = None
+                progress.stage3 = None
+                progress.stage4 = None
+                progress.stage5 = None
+                progress.stage6 = None
+                progress.stage7 = None
+                progress.end = None
+                
+                stage0 = Stage0.query.filter_by(email=email).first()
+                stage0.q1 = 0
+                stage0.q2 = 0
+                stage0.q3 = 0
+                stage0.q4 = 0
+                stage0.q5 = 0
+                stage0.q6 = 0
+                stage0.q7 = 0
+                stage0.q8 = 0
+                stage0.q9 = 0
+                stage0.q10 = 0
+
+                stage1 = Stage1.query.filter_by(email=email).first()
+                stage1.q1 = 0
+                stage2.q2 = 0
+                stage3.q3 = 0
+                stage4.q4 = 0
+
+                stage2 = Stage2.query.filter_by(email=email).first()
+                stage2.q1 = 0
+                stage2.q2 = 0
+                stage2.q3 = 0
+                stage2.q4 = 0
+                stage2.q5 = 0
+                stage2.q6 = 0
+                stage2.q7 = 0
+                stage2.q8 = 0
+
+                stage3 = Stage3.query.filter_by(email=email).first()
+                stage3.q1 = 0
+                stage3.q2 = 0
+                stage3.q3 = 0
+
+                stage7 = Stage7.query.filter_by(email=email).first()
+                stage7.q1 = 0
+                stage7.q2 = 0
+                stage7.q3 = 0
+                stage7.q4 = 0
+                stage7.q5 = 0
+                stage7.q6 = 0
+
+                db.session.commit()
+
+
             return redirect("/admin")
 
 
