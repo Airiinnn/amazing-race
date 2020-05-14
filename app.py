@@ -1029,14 +1029,14 @@ def admin():
                 progress.bonus0 = None
                 progress.bonus1 = None
                 progress.bonus2 = None
-                progress.stage0 = None
-                progress.stage1 = None
-                progress.stage2 = None
-                progress.stage3 = None
-                progress.stage4 = None
-                progress.stage5 = None
-                progress.stage6 = None
-                progress.stage7 = None
+                progress.main0 = None
+                progress.main1 = None
+                progress.main2 = None
+                progress.main3 = None
+                progress.main4 = None
+                progress.main5 = None
+                progress.main6 = None
+                progress.main7 = None
                 progress.end = None
                 
                 stage0 = Stage0.query.filter_by(email=email).first()
@@ -1053,9 +1053,9 @@ def admin():
 
                 stage1 = Stage1.query.filter_by(email=email).first()
                 stage1.q1 = 0
-                stage2.q2 = 0
-                stage3.q3 = 0
-                stage4.q4 = 0
+                stage1.q2 = 0
+                stage1.q3 = 0
+                stage1.q4 = 0
 
                 stage2 = Stage2.query.filter_by(email=email).first()
                 stage2.q1 = 0
