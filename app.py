@@ -140,36 +140,7 @@ class Stage7(db.Model):
 
 
 '''
-with app.app_context():
-    db.create_all()
-
-bonus0 = Bonusstage(stageid=0, stagename="Bonus 0: Computational Thinking", requirement=2)
-bonus1 = Bonusstage(stageid=1, stagename="Bonus 1: SQL", requirement=3)
-bonus2 = Bonusstage(stageid=2, stagename="Bonus 2: Competitive Programming", requirement=5)
-bonus3 = Bonusstage(stageid=3, stagename="Bonus 3: HTML & CSS", requirement=7)
-main0 = Mainstage(stageid=0, stagename="Stage 0: Cyber Security, Ethics & Practices", psw="protecc")
-main1 = Mainstage(stageid=1, stagename="Stage 1: Python Basics", psw="nextdoor")
-main2 = Mainstage(stageid=2, stagename="Stage 2: Computational Thinking", psw="bigbraintime")
-main3 = Mainstage(stageid=3, stagename="Stage 3: SQL", psw="bbcsland")
-main4 = Mainstage(stageid=4, stagename="Stage 4: NoSQL", psw="3213b5")
-main5 = Mainstage(stageid=5, stagename="Stage 5: Competitive Programming", psw="fastgame")
-main6 = Mainstage(stageid=6, stagename="Stage 6: Socket Programming", psw="z cfmv jftbvkzf")
-main7 = Mainstage(stageid=7, stagename="Stage 7: HTML & CSS", psw="-")
-main8 = Mainstage(stageid=8, stagename="Portal", psw="python4life")
-db.session.add_all([bonus0, bonus1, bonus2, bonus3, main0, main1, main2, main3, main4, main5, main6, main7, main8])
-db.session.commit()
-
-players = []
-
-with open("group_psw.csv", 'r') as file:
-    reader = csv.reader(file, delimiter=",")
-    for line in reader:
-        players.append(line)
-
-for player in players:
-    p = Progress(email=player[2], name=player[1], psw=player[3], group=int(player[0]))
-    db.session.add(p)
-    db.session.commit()
+INITIALIZE DATABASE HERE
 '''
 
 
