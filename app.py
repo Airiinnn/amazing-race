@@ -170,7 +170,7 @@ for player in players:
     p = Progress(email=player[2], name=player[1], psw=player[3], group=int(player[0]))
     db.session.add(p)
     db.session.commit()
-''''
+'''
 
 
 
