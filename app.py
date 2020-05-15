@@ -88,7 +88,7 @@ class Progress(db.Model):
     main6 = db.Column(db.Text, index=True)
     main7 = db.Column(db.Text, index=True)
     end = db.Column(db.Text, index=True)
-    psw = db.Column(db.Text, index=True, default="goodmorning")
+    psw = db.Column(db.Text, index=True, default="python4life")
     group = db.Column(db.Integer, index=True, default=0)
 
 class Stage0(db.Model):
@@ -1190,7 +1190,7 @@ def callback():
     player = Player.query.filter_by(id=unique_id).first()
     if player is None:
         player = Player(id=unique_id, name=users_name, email=users_email)
-        # progress = Progress(email=users_email)
+        progress = Progress(email=users_email, name=users_name)
         stage0 = Stage0(email=users_email)
         stage1 = Stage1(email=users_email)
         stage2 = Stage2(email=users_email)
