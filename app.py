@@ -1005,11 +1005,12 @@ def admin():
         else:
             operation = request.form.get("operation")
             email = request.form.get("email")
+            name = request.form.get("name")
             password = request.form.get("password")
             group = request.form.get("group")
 
             if operation == "addtoprogress":
-                progress = Progress(email=email, psw=password, group=group)
+                progress = Progress(email=email, name=name, psw=password, group=group)
                 db.session.add(progress)
                 db.session.commit()
             
