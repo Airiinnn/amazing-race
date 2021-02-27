@@ -30,6 +30,6 @@ The Amazing Race was brought to you by BuildingBloCS 2020 Games Committee.
 - and all the other games committee members for their support ❤
 
 ## Links
-- [Heroku Application](bbcs-amazingrace.herokuapp.com)
+- [Heroku Application](https://bbcs-amazingrace.herokuapp.com/)
 - [Socket.IO Game Repository](https://github.com/UwUUwU/socket-io-game)
 - [BuildingBloCS](https://buildingblocs.github.io/)
