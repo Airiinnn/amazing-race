@@ -1,6 +1,6 @@
-# The Amazing Race
+# The Amazing Race (DISCONTINUED)
 
-[The Amazing Race](bbcs-amazingrace.herokuapp.com) is a programming game created for BuildingBloCS 2020, with the aim of cultivating Secondary school students' interest in programming. It is a beginner-friendly online competition with multiple programming related stages and tasks.
+The Amazing Race is a programming game created for BuildingBloCS 2020, with the aim of cultivating Secondary school students' interest in programming. It is a beginner-friendly online competition with multiple programming related stages and tasks.
 
 Each stage of the game focuses on a basic computing topic, namely:
 
@@ -30,6 +30,6 @@ The Amazing Race was brought to you by BuildingBloCS 2020 Games Committee.
 - and all the other games committee members for their support ❤
 
 ## Links
-- [Heroku Application](https://bbcs-amazingrace.herokuapp.com/)
+- Heroku Application
 - [Socket.IO Game Repository](https://github.com/UwUUwU/socket-io-game)
 - [BuildingBloCS](https://buildingblocs.github.io/)
